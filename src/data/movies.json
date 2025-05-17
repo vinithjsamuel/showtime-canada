@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "title": "The Last Adventure",
+    "genre": "Action/Adventure",
+    "releaseDate": "2023-11-15",
+    "director": "Christopher Johnson",
+    "duration": 128,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?movie,action",
+    "description": "A thrilling adventure that takes viewers on an epic journey across unexplored territories."
+  },
+  {
+    "id": 2,
+    "title": "Midnight Whispers",
+    "genre": "Horror/Thriller",
+    "releaseDate": "2023-12-01",
+    "director": "Elizabeth Scott",
+    "duration": 115,
+    "rating": "R",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?movie,horror",
+    "description": "When strange events begin happening at midnight, a small town discovers a terrifying secret."
+  },
+  {
+    "id": 3,
+    "title": "Love in Paris",
+    "genre": "Romance",
+    "releaseDate": "2023-10-20",
+    "director": "Sophie Laurent",
+    "duration": 105,
+    "rating": "PG",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?paris,romance",
+    "description": "Two strangers meet in the city of love and find their lives forever changed."
+  },
+  {
+    "id": 4,
+    "title": "The Quantum Theory",
+    "genre": "Sci-Fi",
+    "releaseDate": "2023-09-15",
+    "director": "Robert Chen",
+    "duration": 142,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?scifi,future",
+    "description": "A brilliant physicist discovers a way to travel between parallel universes, with unforeseen consequences."
+  },
+  {
+    "id": 5,
+    "title": "Laugh Out Loud",
+    "genre": "Comedy",
+    "releaseDate": "2023-08-30",
+    "director": "Michael Rodriguez",
+    "duration": 98,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?comedy,funny",
+    "description": "A stand-up comedian finds himself in increasingly absurd situations after a chance encounter."
+  },
+  {
+    "id": 6,
+    "title": "The Detective's Last Case",
+    "genre": "Mystery/Crime",
+    "releaseDate": "2023-11-05",
+    "director": "James Wilson",
+    "duration": 125,
+    "rating": "R",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?detective,mystery",
+    "description": "A retiring detective takes on one final case that proves to be the most challenging of his career."
+  },
+  {
+    "id": 7,
+    "title": "Mountain Peak",
+    "genre": "Adventure/Drama",
+    "releaseDate": "2023-10-10",
+    "director": "David Thompson",
+    "duration": 135,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?mountain,climbing",
+    "description": "A group of climbers face the ultimate test of survival when stranded on the world's highest peak."
+  },
+  {
+    "id": 8,
+    "title": "The Magical Kingdom",
+    "genre": "Fantasy/Family",
+    "releaseDate": "2023-12-15",
+    "director": "Karen Lewis",
+    "duration": 110,
+    "rating": "G",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?fantasy,magic",
+    "description": "A young girl discovers a hidden realm where magic is real and she may be its prophesied savior."
+  },
+  {
+    "id": 9,
+    "title": "The Final Battle",
+    "genre": "Action/Fantasy",
+    "releaseDate": "2023-11-20",
+    "director": "Marcus King",
+    "duration": 155,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?battle,fantasy",
+    "description": "Ancient enemies must unite against a common threat that endangers all of existence."
+  },
+  {
+    "id": 10,
+    "title": "Digital Dreams",
+    "genre": "Sci-Fi/Thriller",
+    "releaseDate": "2023-09-25",
+    "director": "Linda Park",
+    "duration": 118,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?digital,future",
+    "description": "When dreams become indistinguishable from reality, one programmer tries to find the line between the two."
+  },
+  {
+    "id": 11,
+    "title": "The Long Road Home",
+    "genre": "Drama",
+    "releaseDate": "2023-10-05",
+    "director": "Samuel Green",
+    "duration": 130,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?road,journey",
+    "description": "After losing everything, a man embarks on a cross-country journey to rediscover purpose."
+  },
+  {
+    "id": 12,
+    "title": "Haunted Mansion",
+    "genre": "Horror/Supernatural",
+    "releaseDate": "2023-10-31",
+    "director": "Victoria Adams",
+    "duration": 112,
+    "rating": "R",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?haunted,house",
+    "description": "A family moves into their dream home, only to discover the horrifying secrets within its walls."
+  },
+  {
+    "id": 13,
+    "title": "The Champion",
+    "genre": "Sports/Drama",
+    "releaseDate": "2023-09-05",
+    "director": "Derek Johnson",
+    "duration": 122,
+    "rating": "PG",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?sports,champion",
+    "description": "An underdog athlete overcomes incredible odds to compete at the highest level of competition."
+  },
+  {
+    "id": 14,
+    "title": "Beyond the Stars",
+    "genre": "Sci-Fi/Adventure",
+    "releaseDate": "2023-12-10",
+    "director": "Thomas Nelson",
+    "duration": 145,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?space,stars",
+    "description": "The first interstellar expedition faces unexpected challenges that test humanity's resolve."
+  },
+  {
+    "id": 15,
+    "title": "The Perfect Heist",
+    "genre": "Crime/Thriller",
+    "releaseDate": "2023-11-10",
+    "director": "Nicole Garcia",
+    "duration": 120,
+    "rating": "R",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?heist,bank",
+    "description": "A master thief assembles a team for one last job that could set them up for life - or cost them everything."
+  },
+  {
+    "id": 16,
+    "title": "Melody of the Heart",
+    "genre": "Musical/Romance",
+    "releaseDate": "2023-08-15",
+    "director": "Emily Watson",
+    "duration": 118,
+    "rating": "PG",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?music,romance",
+    "description": "A struggling musician finds inspiration and love in the most unexpected places."
+  },
+  {
+    "id": 17,
+    "title": "The Ancient Curse",
+    "genre": "Horror/Mystery",
+    "releaseDate": "2023-10-25",
+    "director": "Howard Mitchell",
+    "duration": 114,
+    "rating": "R",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?ancient,curse",
+    "description": "Archaeologists unearth an artifact that brings an ancient curse upon themselves and their city."
+  },
+  {
+    "id": 18,
+    "title": "Furry Friends",
+    "genre": "Family/Comedy",
+    "releaseDate": "2023-12-05",
+    "director": "Patricia Brown",
+    "duration": 95,
+    "rating": "G",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?animals,funny",
+    "description": "When animals at the local shelter develop the ability to talk, chaos and comedy ensue."
+  },
+  {
+    "id": 19,
+    "title": "Corporate Espionage",
+    "genre": "Thriller/Drama",
+    "releaseDate": "2023-09-20",
+    "director": "Richard Taylor",
+    "duration": 128,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?corporate,business",
+    "description": "An executive discovers a conspiracy within her company that could have global implications."
+  },
+  {
+    "id": 20,
+    "title": "World Tour",
+    "genre": "Comedy/Adventure",
+    "releaseDate": "2023-08-25",
+    "director": "Greg Williams",
+    "duration": 105,
+    "rating": "PG-13",
+    "posterUrl": "https://source.unsplash.com/random/300x450/?travel,world",
+    "description": "Four friends embark on a spontaneous trip around the world, with hilarious and life-changing results."
+  }
+] 
