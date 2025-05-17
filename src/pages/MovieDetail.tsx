@@ -165,7 +165,7 @@ const MovieDetail: React.FC = () => {
 
               <Box>
                 <Typography variant="h6" gutterBottom sx={{ color: '#6a5acd' }}>
-                  Today's Showtimes in Waterloo
+                  Today's Showtimes in Canada
                 </Typography>
 
                 <Stack

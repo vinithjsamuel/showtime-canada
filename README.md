@@ -1,24 +1,25 @@
 ## ShowTime Canada
 
-ShowTime Canada is an intuitive event and movie booking platform designed for Canadian users. It empowers users to seamlessly discover events, book tickets, and receive personalized notifications. With a focus on simplicity and secure transactions, ShowTime Canada bridges the gap between event organizers and attendees, delivering a smooth and engaging booking experience.
+ShowTime Canada is a modern movie browsing and booking platform designed for Canadian cinema enthusiasts. It provides an intuitive interface for users to discover movies, view details, and book tickets at various cinema locations across Canada. The application features a responsive design that works seamlessly across desktop and mobile devices.
 
 ### Features
-- User Registration & Profile Management
-- Event Discovery & Filtering
-- Event Details and Booking
-- Ticket Booking & Checkout
-- Multiple Payment Options
-- Notifications & Reminders
-- Reviews and Ratings
-- Admin & Partner Portal
+- User Authentication (Login, Register, Password Recovery)
+- Movie Browsing with Search and Filter Functionality
+- Detailed Movie Information Pages
+- Showtimes Display for Movie Screenings
+- Responsive Design for All Devices
+- User Profile Management
+- Dark/Light Theme Support with Material UI
 
 ### Technologies Used
-- **Backend:** PHP (Laravel), MySQL
-- **Frontend:** HTML, CSS, JavaScript, Bootstrap
-- **Cloud Services:** To be decided
-- **Containerization:** Docker
+- **Frontend:** React, TypeScript, Material UI
+- **State Management:** React Context API
+- **Routing:** React Router v7
+- **Form Handling:** Formik, Yup
+- **UI Components:** Material UI v7
+- **Notifications:** React Toastify
+- **Development:** Node.js, npm
 - **Version Control:** Git, GitHub
-- **DevOps:** Ubuntu, CyberPanel
 
 ### Installation
 ```bash
@@ -29,40 +30,18 @@ git clone https://github.com/your-username/showtime-canada.git
 cd showtime-canada
 
 # Install dependencies
-composer install
 npm install
 
-# Create environment file
-cp .env.example .env
-
-# Generate application key
-php artisan key:generate
-
-# Migrate the database
-php artisan migrate
-
 # Serve the application
-php artisan serve
+npm start
 ```
 
 ### Usage
-- Visit `http://localhost:8000` in your browser.
-- Register or log in to explore events.
-- Use filters to discover events by category, location, and date.
-- Securely book tickets and manage your reservations in your profile.
-
-### Contributing
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature-branch-name`)
-3. Commit your changes (`git commit -m 'Add new feature'`)
-4. Push to the branch (`git push origin feature-branch-name`)
-5. Open a Pull Request
-
-### License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-### Contact
-For any inquiries or collaboration opportunities, reach out to us at [contact@showtimecanada.com](mailto:contact@showtimecanada.com).
+- Visit `http://localhost:3000` in your browser.
+- Browse movies on the homepage or navigate to the Movies page.
+- Use filters and search to find specific movies.
+- Click on a movie to view its details and available showtimes.
+- Register or log in to access additional features like profile management.
 
 ### Acknowledgements
 - Team members: Vinith Johnsonroy Samuel, Ancy Johnson, Sahan Cava, Yamini Ravikumar, Ruwini, Nikesh

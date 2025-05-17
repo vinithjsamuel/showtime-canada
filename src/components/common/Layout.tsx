@@ -65,7 +65,7 @@ const Layout: React.FC = () => {
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <LocalMoviesIcon sx={{ mr: 1 }} />
-        Waterloo Cinema
+        Showtime Canada
       </Typography>
       <Divider />
       <List>
@@ -137,7 +137,7 @@ const Layout: React.FC = () => {
             }}
           >
             <LocalMoviesIcon sx={{ mr: 1 }} />
-            Waterloo Cinema
+            Showtime Canada
           </Typography>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <Button color="inherit" component={Link} to="/">
@@ -212,7 +212,7 @@ const Layout: React.FC = () => {
       >
         <Container maxWidth="md">
           <Typography variant="body2" color="text.secondary" align="center">
-            © {new Date().getFullYear()} Waterloo Cinema. All rights reserved.
+            © {new Date().getFullYear()} Showtime Canada. All rights reserved.
           </Typography>
         </Container>
       </Box>

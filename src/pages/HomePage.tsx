@@ -64,10 +64,10 @@ const HomePage: React.FC = () => {
               gutterBottom
               sx={{ fontWeight: 'bold' }}
             >
-              Waterloo Cinema Experience
+              Showtime Canada Experience
             </Typography>
             <Typography variant={isMobile ? 'body1' : 'h6'} paragraph>
-              Book tickets for the latest movies in Waterloo's premier cinema locations.
+              Book tickets for the latest movies in Canada's premier cinema locations.
               Comfortable seating, immersive sound, and unforgettable experiences await.
             </Typography>
             <Button
