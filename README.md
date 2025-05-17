@@ -9,7 +9,7 @@ ShowTime Canada is a modern movie browsing and booking platform designed for Can
 - Showtimes Display for Movie Screenings
 - Responsive Design for All Devices
 - User Profile Management
-- Dark/Light Theme Support with Material UI
+- Theme Support with Material UI
 
 ### Technologies Used
 - **Frontend:** React, TypeScript, Material UI
@@ -24,7 +24,7 @@ ShowTime Canada is a modern movie browsing and booking platform designed for Can
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/showtime-canada.git
+git clone https://github.com/vinithjsamuel/showtime-canada.git
 
 # Navigate to the project directory
 cd showtime-canada
