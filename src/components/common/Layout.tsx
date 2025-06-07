@@ -24,6 +24,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 import { useAuth } from '../../contexts/AuthContext';
+import settings from '../../data/settings.json';
 
 const drawerWidth = 240;
 
@@ -74,11 +75,13 @@ const Layout: React.FC = () => {
             <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleNavigate('/movies')}>
-            <ListItemText primary="Movies" />
-          </ListItemButton>
-        </ListItem>
+        {settings.features.showMovies && (
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleNavigate('/movies')}>
+              <ListItemText primary="Movies" />
+            </ListItemButton>
+          </ListItem>
+        )}
         {!isAuthenticated ? (
           <>
             <ListItem disablePadding>
@@ -143,9 +146,11 @@ const Layout: React.FC = () => {
             <Button color="inherit" component={Link} to="/">
               Home
             </Button>
-            <Button color="inherit" component={Link} to="/movies">
-              Movies
-            </Button>
+            {settings.features.showMovies && (
+              <Button color="inherit" component={Link} to="/movies">
+                Movies
+              </Button>
+            )}
             {!isAuthenticated ? (
               <>
                 <Button color="inherit" component={Link} to="/login">

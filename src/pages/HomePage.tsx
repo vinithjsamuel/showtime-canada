@@ -18,6 +18,7 @@ import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import moviesData from '../data/movies.json';
+import settings from '../data/settings.json';
 import { useAuth } from '../contexts/AuthContext';
 
 const featuredMovies = moviesData.slice(0, 3);
@@ -67,101 +68,107 @@ const HomePage: React.FC = () => {
               Showtime Canada Experience
             </Typography>
             <Typography variant={isMobile ? 'body1' : 'h6'} paragraph>
-              Book tickets for the latest movies in Canada's premier cinema locations.
-              Comfortable seating, immersive sound, and unforgettable experiences await.
+              {settings.features.showMovies 
+                ? "Book tickets for the latest movies in Canada's premier cinema locations. Comfortable seating, immersive sound, and unforgettable experiences await."
+                : "Your premier entertainment platform in Canada. Discover amazing experiences and stay tuned for exciting new features coming soon."
+              }
             </Typography>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => navigate('/movies')}
-              sx={{
-                mt: 2,
-                bgcolor: '#6a5acd',
-                '&:hover': {
-                  bgcolor: '#5b4cbb'
-                },
-                px: 4,
-                py: 1.5
-              }}
-            >
-              Browse Movies
-            </Button>
+            {settings.features.showMovies && (
+              <Button
+                variant="contained"
+                size="large"
+                onClick={() => navigate('/movies')}
+                sx={{
+                  mt: 2,
+                  bgcolor: '#6a5acd',
+                  '&:hover': {
+                    bgcolor: '#5b4cbb'
+                  },
+                  px: 4,
+                  py: 1.5
+                }}
+              >
+                Browse Movies
+              </Button>
+            )}
           </Box>
         </Container>
       </Paper>
 
-      {/* Featured Movies Section */}
-      <Container maxWidth="lg">
-        <Typography
-          variant="h4"
-          component="h2"
-          gutterBottom
-          sx={{ mb: 4, textAlign: 'center', color: '#6a5acd' }}
-        >
-          Featured Movies
-        </Typography>
+      {/* Featured Movies Section - Only show if movies feature is enabled */}
+      {settings.features.showMovies && (
+        <Container maxWidth="lg">
+          <Typography
+            variant="h4"
+            component="h2"
+            gutterBottom
+            sx={{ mb: 4, textAlign: 'center', color: '#6a5acd' }}
+          >
+            Featured Movies
+          </Typography>
 
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={4}
-          justifyContent="center"
-          alignItems="stretch"
-        >
-          {featuredMovies.map(movie => (
-            <Card
-              key={movie.id}
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={4}
+            justifyContent="center"
+            alignItems="stretch"
+          >
+            {featuredMovies.map(movie => (
+              <Card
+                key={movie.id}
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: '0.3s',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: 6
+                  },
+                  borderRadius: 2
+                }}
+              >
+                <CardActionArea onClick={() => navigate(`/movies/${movie.id}`)}>
+                  <CardMedia
+                    component="img"
+                    height="300"
+                    image={movie.posterUrl}
+                    alt={movie.title}
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography gutterBottom variant="h5" component="h3">
+                      {movie.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {movie.genre} • {movie.duration} min
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                      {movie.description.substring(0, 100)}...
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            ))}
+          </Stack>
+
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/movies')}
               sx={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                transition: '0.3s',
+                color: '#6a5acd',
+                borderColor: '#6a5acd',
                 '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: 6
-                },
-                borderRadius: 2
+                  borderColor: '#5b4cbb',
+                  backgroundColor: 'rgba(106, 90, 205, 0.04)'
+                }
               }}
             >
-              <CardActionArea onClick={() => navigate(`/movies/${movie.id}`)}>
-                <CardMedia
-                  component="img"
-                  height="300"
-                  image={movie.posterUrl}
-                  alt={movie.title}
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h3">
-                    {movie.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {movie.genre} • {movie.duration} min
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    {movie.description.substring(0, 100)}...
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          ))}
-        </Stack>
-
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <Button
-            variant="outlined"
-            onClick={() => navigate('/movies')}
-            sx={{
-              color: '#6a5acd',
-              borderColor: '#6a5acd',
-              '&:hover': {
-                borderColor: '#5b4cbb',
-                backgroundColor: 'rgba(106, 90, 205, 0.04)'
-              }
-            }}
-          >
-            View All Movies
-          </Button>
-        </Box>
-      </Container>
+              View All Movies
+            </Button>
+          </Box>
+        </Container>
+      )}
 
       {/* Features Section */}
       <Box sx={{ bgcolor: '#f9f7ff', py: 8, mt: 8 }}>
@@ -196,7 +203,10 @@ const HomePage: React.FC = () => {
                   Premium Experience
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  State-of-the-art projection and sound systems in all our theaters for an immersive viewing experience.
+                  {settings.features.showMovies 
+                    ? "State-of-the-art projection and sound systems in all our theaters for an immersive viewing experience."
+                    : "Premium quality entertainment experiences designed for the Canadian audience."
+                  }
                 </Typography>
               </CardContent>
             </Card>
@@ -213,10 +223,13 @@ const HomePage: React.FC = () => {
                   <EventSeatIcon sx={{ fontSize: 60, color: '#6a5acd' }} />
                 </Box>
                 <Typography gutterBottom variant="h5" component="div">
-                  Comfortable Seating
+                  {settings.features.showMovies ? "Comfortable Seating" : "User-Friendly Platform"}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Enjoy the movie with our plush reclining seats and ample legroom for maximum comfort.
+                  {settings.features.showMovies 
+                    ? "Enjoy the movie with our plush reclining seats and ample legroom for maximum comfort."
+                    : "Easy-to-use interface designed with the user experience in mind for seamless navigation."
+                  }
                 </Typography>
               </CardContent>
             </Card>
@@ -233,10 +246,13 @@ const HomePage: React.FC = () => {
                   <ConfirmationNumberIcon sx={{ fontSize: 60, color: '#6a5acd' }} />
                 </Box>
                 <Typography gutterBottom variant="h5" component="div">
-                  Easy Booking
+                  {settings.features.showMovies ? "Easy Booking" : "Secure Platform"}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Reserve your seats online with our simple and convenient booking system. No more waiting in line!
+                  {settings.features.showMovies 
+                    ? "Reserve your seats online with our simple and convenient booking system. No more waiting in line!"
+                    : "Your data and privacy are protected with our secure platform and reliable user management system."
+                  }
                 </Typography>
               </CardContent>
             </Card>
@@ -248,28 +264,32 @@ const HomePage: React.FC = () => {
       <Box sx={{ bgcolor: '#6a5acd', color: 'white', py: 6, textAlign: 'center' }}>
         <Container maxWidth="md">
           <Typography variant="h4" component="h2" gutterBottom>
-            Ready for the Movie Experience?
+            {settings.features.showMovies ? "Ready to Watch?" : "Ready to Get Started?"}
           </Typography>
-          <Typography variant="body1" paragraph>
-            Sign up now to receive updates on the latest releases and special offers.
+          <Typography variant="h6" paragraph>
+            {settings.features.showMovies 
+              ? "Join thousands of movie lovers who trust Showtime Canada for their entertainment needs."
+              : "Join thousands of users who trust Showtime Canada for their entertainment needs."
+            }
           </Typography>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => navigate(isAuthenticated ? '/movies' : '/register')}
-            sx={{
-              mt: 2,
-              bgcolor: 'white',
-              color: '#6a5acd',
-              '&:hover': {
-                bgcolor: '#f0f0f0'
-              },
-              px: 4,
-              py: 1.5
-            }}
-          >
-            {isAuthenticated ? 'Browse Movies' : 'Sign Up Now'}
-          </Button>
+          {!isAuthenticated && (
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => navigate('/register')}
+              sx={{
+                bgcolor: 'white',
+                color: '#6a5acd',
+                '&:hover': {
+                  bgcolor: '#f5f5f5'
+                },
+                px: 4,
+                py: 1.5
+              }}
+            >
+              {settings.features.showMovies ? "Book Your First Movie" : "Get Started Today"}
+            </Button>
+          )}
         </Container>
       </Box>
     </Box>
