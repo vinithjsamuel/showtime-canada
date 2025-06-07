@@ -6,8 +6,6 @@ import {
   Paper,
   TextField,
   Typography,
-  FormControlLabel,
-  Switch,
   Chip,
   FormControl,
   InputLabel,
@@ -47,9 +45,7 @@ const Profile: React.FC = () => {
       lastName: user?.lastName || '',
       email: user?.email || '',
       preferences: {
-        favoriteGenres: user?.preferences.favoriteGenres || [],
-        notificationEnabled: user?.preferences.notificationEnabled || false,
-        language: user?.preferences.language || 'en'
+        favoriteGenres: user?.preferences.favoriteGenres || []
       }
     },
     validationSchema: profileSchema,
@@ -81,14 +77,6 @@ const Profile: React.FC = () => {
       (genre) => genre !== genreToDelete
     );
     formik.setFieldValue('preferences.favoriteGenres', updatedGenres);
-  };
-
-  const handleLanguageChange = (event: SelectChangeEvent<string>) => {
-    formik.setFieldValue('preferences.language', event.target.value);
-  };
-
-  const handleNotificationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    formik.setFieldValue('preferences.notificationEnabled', event.target.checked);
   };
 
   if (!user) {
@@ -212,53 +200,23 @@ const Profile: React.FC = () => {
                 </Button>
               </Box>
             </Box>
-
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <FormControl fullWidth>
-                <InputLabel id="language-select-label">Language</InputLabel>
-                <Select
-                  labelId="language-select-label"
-                  id="language-select"
-                  value={formik.values.preferences.language}
-                  label="Language"
-                  onChange={handleLanguageChange}
-                >
-                  <MenuItem value="en">English</MenuItem>
-                  <MenuItem value="fr">French</MenuItem>
-                  <MenuItem value="es">Spanish</MenuItem>
-                </Select>
-              </FormControl>
-
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formik.values.preferences.notificationEnabled}
-                      onChange={handleNotificationChange}
-                      name="notificationEnabled"
-                      color="primary"
-                    />
-                  }
-                  label="Enable Notifications"
-                />
-              </Box>
-            </Stack>
           </Stack>
 
           <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
             <Button
               type="submit"
               variant="contained"
+              size="large"
+              disabled={loading}
               sx={{
                 bgcolor: '#6a5acd',
                 '&:hover': {
                   bgcolor: '#5b4cbb'
                 },
-                minWidth: 200
+                px: 4
               }}
-              disabled={loading}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : 'Save Changes'}
+              {loading ? <CircularProgress size={24} color="inherit" /> : 'Update Profile'}
             </Button>
           </Box>
         </Box>

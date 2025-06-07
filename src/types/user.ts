@@ -8,8 +8,6 @@ export interface User {
 
 export interface UserPreferences {
   favoriteGenres: string[];
-  notificationEnabled: boolean;
-  language: string;
 }
 
 export interface AuthState {

@@ -27,9 +27,7 @@ const initDB = async () => {
       firstName: 'John',
       lastName: 'Doe',
       preferences: {
-        favoriteGenres: ['Action', 'Comedy'],
-        notificationEnabled: true,
-        language: 'en'
+        favoriteGenres: ['Action', 'Comedy']
       }
     });
   }
@@ -198,9 +196,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         firstName: data.firstName,
         lastName: data.lastName,
         preferences: {
-          favoriteGenres: [],
-          notificationEnabled: true,
-          language: 'en'
+          favoriteGenres: []
         }
       };
       
