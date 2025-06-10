@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
           mb: 4,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://source.unsplash.com/random/1200x600/?cinema)`,
+          backgroundImage: `url(https://t3.ftcdn.net/jpg/05/00/81/96/360_F_500819621_7bRfuKkKyaRYU6aJ1Sa9RBCPdscka6Iq.jpg)`,
           height: isMobile ? '300px' : '500px',
           borderRadius: 2,
           display: 'flex',
