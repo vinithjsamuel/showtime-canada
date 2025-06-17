@@ -75,6 +75,11 @@ const Layout: React.FC = () => {
             <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleNavigate('/events/categories')}>
+            <ListItemText primary="Events" />
+          </ListItemButton>
+        </ListItem>
         {settings.features.showMovies && (
           <ListItem disablePadding>
             <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleNavigate('/movies')}>
@@ -145,6 +150,9 @@ const Layout: React.FC = () => {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <Button color="inherit" component={Link} to="/">
               Home
+            </Button>
+            <Button color="inherit" component={Link} to="/events/categories">
+              Events
             </Button>
             {settings.features.showMovies && (
               <Button color="inherit" component={Link} to="/movies">

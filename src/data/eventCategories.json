@@ -1,0 +1,46 @@
+{
+  "categories": [
+    {
+      "id": "movies",
+      "name": "Movies",
+      "description": "Latest movies and cinema experiences",
+      "icon": "LocalMovies",
+      "color": "#6a5acd"
+    },
+    {
+      "id": "music",
+      "name": "Music",
+      "description": "Concerts, festivals and live music events",
+      "icon": "MusicNote",
+      "color": "#ff6b6b"
+    },
+    {
+      "id": "theater",
+      "name": "Theater",
+      "description": "Plays, musicals and theatrical performances",
+      "icon": "TheaterComedy",
+      "color": "#4ecdc4"
+    },
+    {
+      "id": "sports",
+      "name": "Sports",
+      "description": "Live sports events and competitions",
+      "icon": "SportsBasketball",
+      "color": "#45b7d1"
+    },
+    {
+      "id": "comedy",
+      "name": "Comedy",
+      "description": "Stand-up comedy and humor shows",
+      "icon": "SentimentSatisfiedAlt",
+      "color": "#f9ca24"
+    },
+    {
+      "id": "family",
+      "name": "Family",
+      "description": "Family-friendly events and activities",
+      "icon": "FamilyRestroom",
+      "color": "#6c5ce7"
+    }
+  ]
+} 

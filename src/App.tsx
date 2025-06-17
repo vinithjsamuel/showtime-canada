@@ -18,6 +18,8 @@ import Profile from './components/profile/Profile';
 import HomePage from './pages/HomePage';
 import Movies from './pages/Movies';
 import MovieDetail from './pages/MovieDetail';
+import Events from './pages/Events';
+import EventCategories from './pages/EventCategories';
 
 // Auth Route Guard
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -86,6 +88,9 @@ const App: React.FC = () => {
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="movies" element={<Movies />} />
               <Route path="movies/:id" element={<MovieDetail />} />
+              <Route path="events" element={<Events />} />
+              <Route path="events/categories" element={<EventCategories />} />
+              <Route path="events/category/:categoryId" element={<Events />} />
 
               {/* Protected Routes */}
               <Route 

@@ -284,12 +284,30 @@ const HomePage: React.FC = () => {
                   bgcolor: '#f5f5f5'
                 },
                 px: 4,
-                py: 1.5
+                py: 1.5,
+                mr: 2
               }}
             >
               {settings.features.showMovies ? "Book Your First Movie" : "Get Started Today"}
             </Button>
           )}
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={() => navigate('/events/categories')}
+            sx={{
+              borderColor: 'white',
+              color: 'white',
+              '&:hover': {
+                borderColor: '#f5f5f5',
+                bgcolor: 'rgba(255, 255, 255, 0.1)'
+              },
+              px: 4,
+              py: 1.5
+            }}
+          >
+            Explore Events
+          </Button>
         </Container>
       </Box>
     </Box>
