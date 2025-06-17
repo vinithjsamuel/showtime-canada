@@ -20,6 +20,7 @@ import Movies from './pages/Movies';
 import MovieDetail from './pages/MovieDetail';
 import Events from './pages/Events';
 import EventCategories from './pages/EventCategories';
+import EventDetail from './pages/EventDetail';
 
 // Auth Route Guard
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -91,6 +92,7 @@ const App: React.FC = () => {
               <Route path="events" element={<Events />} />
               <Route path="events/categories" element={<EventCategories />} />
               <Route path="events/category/:categoryId" element={<Events />} />
+              <Route path="events/:id" element={<EventDetail />} />
 
               {/* Protected Routes */}
               <Route 

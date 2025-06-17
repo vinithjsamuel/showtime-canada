@@ -19,7 +19,7 @@ import {
   Stack
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import moviesData from '../data/movies.json';
+import eventsData from '../data/events.json';
 
 const Movies: React.FC = () => {
   const navigate = useNavigate();
@@ -28,16 +28,19 @@ const Movies: React.FC = () => {
   const [page, setPage] = useState(1);
   const moviesPerPage = 8;
 
+  // Get movies from events data
+  const moviesData = eventsData.events.filter(event => event.category === 'movies');
+
   // Extract unique genres from the movies data
   const uniqueGenres = Array.from(
-    new Set(moviesData.map(movie => movie.genre.split('/')[0]))
+    new Set(moviesData.map(movie => movie.genre?.split('/')[0]).filter(Boolean))
   );
 
   // Filter movies based on search term and genre
   const filteredMovies = moviesData.filter(movie => {
     const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           movie.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGenre = genreFilter === '' || movie.genre.includes(genreFilter);
+    const matchesGenre = genreFilter === '' || movie.genre?.includes(genreFilter);
     return matchesSearch && matchesGenre;
   });
 
@@ -131,7 +134,7 @@ const Movies: React.FC = () => {
                     <CardMedia
                       component="img"
                       height="300"
-                      image={movie.posterUrl}
+                      image={movie.posterUrl || movie.image}
                       alt={movie.title}
                     />
                     <CardContent sx={{ flexGrow: 1 }}>

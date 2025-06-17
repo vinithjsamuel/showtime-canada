@@ -17,11 +17,13 @@ import {
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import moviesData from '../data/movies.json';
+import eventsData from '../data/events.json';
+import eventCategoriesData from '../data/eventCategories.json';
 import settings from '../data/settings.json';
 import { useAuth } from '../contexts/AuthContext';
 
-const featuredMovies = moviesData.slice(0, 3);
+const featuredMovies = eventsData.events.filter(event => event.category === 'movies' && event.featured).slice(0, 3);
+const featuredEvents = eventsData.events.filter(event => event.featured && (event.category === 'music' || event.category === 'comedy')).slice(0, 3);
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -132,7 +134,7 @@ const HomePage: React.FC = () => {
                   <CardMedia
                     component="img"
                     height="300"
-                    image={movie.posterUrl}
+                    image={movie.posterUrl || movie.image}
                     alt={movie.title}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
@@ -169,6 +171,88 @@ const HomePage: React.FC = () => {
           </Box>
         </Container>
       )}
+
+      {/* Featured Events Section */}
+      <Container maxWidth="lg" sx={{ mb: 8 }}>
+        <Typography
+          variant="h4"
+          component="h2"
+          gutterBottom
+          sx={{ mb: 4, textAlign: 'center', color: '#6a5acd' }}
+        >
+          Featured Events
+        </Typography>
+
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={4}
+          justifyContent="center"
+          alignItems="stretch"
+        >
+          {featuredEvents.map(event => {
+            const categoryInfo = eventCategoriesData.categories.find(cat => cat.id === event.category);
+            return (
+              <Card
+                key={event.id}
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: '0.3s',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: 6
+                  },
+                  borderRadius: 2
+                }}
+              >
+                <CardActionArea onClick={() => navigate(`/events/${event.id}`)}>
+                  <CardMedia
+                    component="img"
+                    height="250"
+                    image={event.image}
+                    alt={event.title}
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography gutterBottom variant="h5" component="h3">
+                      {event.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      {categoryInfo?.name} • {event.location}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      {new Date(event.date).toLocaleDateString('en-CA', { 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })} • ${event.price}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {event.description.substring(0, 100)}...
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            );
+          })}
+        </Stack>
+
+        <Box sx={{ textAlign: 'center', mt: 4 }}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate('/events')}
+            sx={{
+              color: '#6a5acd',
+              borderColor: '#6a5acd',
+              '&:hover': {
+                borderColor: '#5b4cbb',
+                backgroundColor: 'rgba(106, 90, 205, 0.04)'
+              }
+            }}
+          >
+            View All Events
+          </Button>
+        </Box>
+      </Container>
 
       {/* Features Section */}
       <Box sx={{ bgcolor: '#f9f7ff', py: 8, mt: 8 }}>
