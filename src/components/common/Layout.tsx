@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   AppBar,
   Box,
@@ -31,6 +31,7 @@ const drawerWidth = 240;
 const Layout: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
@@ -62,6 +63,21 @@ const Layout: React.FC = () => {
     }
   };
 
+  const handleAllEventsClick = () => {
+    // Check if we're already on an events page
+    if (location.pathname.startsWith('/events')) {
+      // Clear filters by navigating to plain /events and clearing localStorage
+      localStorage.removeItem('selectedEventCategory');
+      navigate('/events');
+    } else {
+      // Navigate to events page normally
+      navigate('/events');
+    }
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -81,7 +97,7 @@ const Layout: React.FC = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleNavigate('/events')}>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={handleAllEventsClick}>
             <ListItemText primary="All Events" />
           </ListItemButton>
         </ListItem>
@@ -159,7 +175,7 @@ const Layout: React.FC = () => {
             <Button color="inherit" component={Link} to="/events/categories">
               Event Categories
             </Button>
-            <Button color="inherit" component={Link} to="/events">
+            <Button color="inherit" onClick={handleAllEventsClick}>
               All Events
             </Button>
             {settings.features.showMovies && (

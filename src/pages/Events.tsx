@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -54,6 +54,7 @@ const Events: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -76,6 +77,16 @@ const Events: React.FC = () => {
       }
     }
   }, [categoryId, searchParams]);
+
+  // Clear filters when navigating to plain /events
+  useEffect(() => {
+    if (location.pathname === '/events' && !searchParams.get('category') && !categoryId) {
+      setSelectedCategory('');
+      setSearchTerm('');
+      setSelectedGenre('');
+      localStorage.removeItem('selectedEventCategory');
+    }
+  }, [location.pathname, searchParams, categoryId]);
 
   // Save category selection to localStorage
   useEffect(() => {
