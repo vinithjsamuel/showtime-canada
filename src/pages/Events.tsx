@@ -127,6 +127,11 @@ const Events: React.FC = () => {
     const newCategory = event.target.value;
     setSelectedCategory(newCategory);
     
+    // Clear genre filter when switching away from movies category
+    if (newCategory !== 'movies') {
+      setSelectedGenre('');
+    }
+    
     if (newCategory) {
       navigate(`/events/category/${newCategory}`);
     } else {
