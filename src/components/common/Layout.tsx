@@ -29,7 +29,7 @@ import settings from '../../data/settings.json';
 const drawerWidth = 240;
 
 const Layout: React.FC = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
@@ -68,6 +68,7 @@ const Layout: React.FC = () => {
     if (location.pathname.startsWith('/events')) {
       // Clear filters by navigating to plain /events and clearing localStorage
       localStorage.removeItem('selectedEventCategory');
+      localStorage.removeItem('selectedEventLocation');
       navigate('/events');
     } else {
       // Navigate to events page normally
@@ -103,7 +104,7 @@ const Layout: React.FC = () => {
         </ListItem>
         {settings.features.showMovies && (
           <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleNavigate('/events/category/movies')}>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={() => handleNavigate('/events?category=movies')}>
               <ListItemText primary="Movies" />
             </ListItemButton>
           </ListItem>
@@ -179,7 +180,7 @@ const Layout: React.FC = () => {
               All Events
             </Button>
             {settings.features.showMovies && (
-              <Button color="inherit" component={Link} to="/events/category/movies">
+              <Button color="inherit" component={Link} to="/events?category=movies">
                 Movies
               </Button>
             )}

@@ -156,7 +156,7 @@ const HomePage: React.FC = () => {
           <Box sx={{ textAlign: 'center', mt: 4 }}>
             <Button
               variant="outlined"
-              onClick={() => navigate('/movies')}
+              onClick={() => navigate('/events?category=movies')}
               sx={{
                 color: '#6a5acd',
                 borderColor: '#6a5acd',

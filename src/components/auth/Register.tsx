@@ -78,11 +78,13 @@ const Register: React.FC = () => {
     validationSchema: registerSchema,
     onSubmit: (values) => {
       // Store user data for later registration after activation
+      // Toronto is set as default location
       setRegisteredUserData({
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
-        password: values.password
+        password: values.password,
+        location: 'Toronto'
       });
       
       // Show activation code dialog
@@ -203,6 +205,7 @@ const Register: React.FC = () => {
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
             />
+            
             <TextField
               margin="normal"
               fullWidth

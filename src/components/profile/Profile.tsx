@@ -11,7 +11,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  SelectChangeEvent,
   CircularProgress,
   Divider,
   Alert,
@@ -21,17 +20,13 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../contexts/AuthContext';
 import { UserPreferences } from '../../types/user';
-
-// Available movie genres
-const availableGenres = [
-  'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
-  'Horror', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller'
-];
+import { CANADIAN_CITIES, MOVIE_GENRES } from '../../utils/constants';
 
 const profileSchema = Yup.object({
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
   email: Yup.string().email('Enter a valid email').required('Email is required'),
+  location: Yup.string().optional()
 });
 
 const Profile: React.FC = () => {
@@ -44,6 +39,7 @@ const Profile: React.FC = () => {
       firstName: user?.firstName || '',
       lastName: user?.lastName || '',
       email: user?.email || '',
+      location: user?.location || '',
       preferences: {
         favoriteGenres: user?.preferences.favoriteGenres || []
       }
@@ -55,6 +51,7 @@ const Profile: React.FC = () => {
           ...user,
           firstName: values.firstName,
           lastName: values.lastName,
+          location: values.location || undefined,
           preferences: values.preferences as UserPreferences
         });
         setUpdateSuccess(true);
@@ -143,6 +140,31 @@ const Profile: React.FC = () => {
               disabled
               helperText="Email cannot be changed"
             />
+            
+            <FormControl fullWidth>
+              <InputLabel id="location-label">City</InputLabel>
+              <Select
+                labelId="location-label"
+                id="location"
+                name="location"
+                value={formik.values.location}
+                label="City"
+                onChange={formik.handleChange}
+              >
+                <MenuItem value="">Select your city</MenuItem>
+                {CANADIAN_CITIES.map((city) => (
+                  <MenuItem key={city} value={city}>
+                    {city}
+                  </MenuItem>
+                ))}
+              </Select>
+              <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
+                {formik.values.location 
+                  ? "Events in your city will be prioritized in your browsing experience"
+                  : "Select your city to see relevant events. Toronto is set as default for new users."
+                }
+              </Typography>
+            </FormControl>
           </Stack>
 
           <Divider sx={{ my: 4 }} />
@@ -181,7 +203,7 @@ const Profile: React.FC = () => {
                     label="Add Genre"
                     onChange={(e) => setSelectedGenre(e.target.value)}
                   >
-                    {availableGenres
+                    {MOVIE_GENRES
                       .filter((genre) => !formik.values.preferences.favoriteGenres.includes(genre))
                       .map((genre) => (
                         <MenuItem key={genre} value={genre}>
@@ -202,21 +224,19 @@ const Profile: React.FC = () => {
             </Box>
           </Stack>
 
-          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ mt: 4 }}>
             <Button
               type="submit"
               variant="contained"
-              size="large"
-              disabled={loading}
+              disabled={loading || !formik.isValid}
               sx={{
                 bgcolor: '#6a5acd',
                 '&:hover': {
                   bgcolor: '#5b4cbb'
-                },
-                px: 4
+                }
               }}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : 'Update Profile'}
+              {loading ? <CircularProgress size={24} /> : 'Update Profile'}
             </Button>
           </Box>
         </Box>

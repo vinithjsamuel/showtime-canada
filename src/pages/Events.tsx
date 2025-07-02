@@ -21,7 +21,6 @@ import {
 } from '@mui/material';
 import { 
   ArrowBack, 
-  Category, 
   Search, 
   LocationOn, 
   AccessTime,
@@ -29,6 +28,7 @@ import {
 } from '@mui/icons-material';
 import eventCategoriesData from '../data/eventCategories.json';
 import eventsData from '../data/events.json';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Event {
   id: number;
@@ -55,15 +55,19 @@ const Events: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const location = useLocation();
+  const { user } = useAuth();
   
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<string>('');
   const [events] = useState<Event[]>(eventsData.events);
 
-  // Load category from URL params or localStorage on mount
+  // Load filters from URL params or localStorage on mount
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
+    const locationFromUrl = searchParams.get('location');
+    
     if (categoryFromUrl) {
       setSelectedCategory(categoryFromUrl);
       localStorage.setItem('selectedEventCategory', categoryFromUrl);
@@ -76,29 +80,75 @@ const Events: React.FC = () => {
         setSelectedCategory(savedCategory);
       }
     }
-  }, [categoryId, searchParams]);
 
-  // Clear filters when navigating to plain /events
+    if (locationFromUrl) {
+      setSelectedLocation(locationFromUrl);
+      localStorage.setItem('selectedEventLocation', locationFromUrl);
+    } else {
+      // Check for saved location first, but always prefer user's current location
+      const savedLocation = localStorage.getItem('selectedEventLocation');
+      
+      // If user has a location and it's different from saved, update to user's location
+      if (user?.location) {
+        const userLocation = user.location;
+        if (savedLocation !== userLocation) {
+          setSelectedLocation(userLocation);
+          localStorage.setItem('selectedEventLocation', userLocation);
+        } else if (savedLocation) {
+          setSelectedLocation(savedLocation);
+        } else {
+          setSelectedLocation(userLocation);
+          localStorage.setItem('selectedEventLocation', userLocation);
+        }
+      } else if (savedLocation) {
+        setSelectedLocation(savedLocation);
+      }
+    }
+  }, [categoryId, searchParams, user?.location]);
+
+  // Clear filters when navigating to plain /events, then set user location
   useEffect(() => {
-    if (location.pathname === '/events' && !searchParams.get('category') && !categoryId) {
+    if (location.pathname === '/events' && !searchParams.get('category') && !searchParams.get('location') && !categoryId) {
       setSelectedCategory('');
+      setSelectedLocation('');
       setSearchTerm('');
       setSelectedGenre('');
       localStorage.removeItem('selectedEventCategory');
+      localStorage.removeItem('selectedEventLocation');
+      
+      // After clearing, set user's location if available
+      if (user?.location) {
+        const userLocation = user.location;
+        setTimeout(() => {
+          setSelectedLocation(userLocation);
+          localStorage.setItem('selectedEventLocation', userLocation);
+        }, 0);
+      }
     }
-  }, [location.pathname, searchParams, categoryId]);
+  }, [location.pathname, searchParams, categoryId, user?.location]);
 
-  // Save category selection to localStorage
+  // Save filters to localStorage
   useEffect(() => {
     if (selectedCategory) {
       localStorage.setItem('selectedEventCategory', selectedCategory);
     }
   }, [selectedCategory]);
 
+  useEffect(() => {
+    if (selectedLocation) {
+      localStorage.setItem('selectedEventLocation', selectedLocation);
+    }
+  }, [selectedLocation]);
+
   // Find the selected category details
   const categoryDetails = selectedCategory 
     ? eventCategoriesData.categories.find(cat => cat.id === selectedCategory)
     : null;
+
+  // Get unique locations from events data
+  const uniqueLocations = Array.from(
+    new Set(events.map(event => event.location))
+  ).sort();
 
   // Get movie events for genre filtering
   const movieEvents = events.filter(event => event.category === 'movies');
@@ -106,9 +156,10 @@ const Events: React.FC = () => {
     new Set(movieEvents.map(movie => movie.genre?.split('/')[0]).filter(Boolean))
   );
 
-  // Filter events based on category, genre, and search
+  // Filter events based on category, location, genre, and search
   const filteredEvents = events.filter(event => {
     const matchesCategory = !selectedCategory || event.category === selectedCategory;
+    const matchesLocation = !selectedLocation || event.location === selectedLocation;
     const matchesGenre = !selectedGenre || (event.category === 'movies' && event.genre?.includes(selectedGenre));
     const matchesSearch = !searchTerm || 
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -116,7 +167,7 @@ const Events: React.FC = () => {
       event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.venue.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesCategory && matchesGenre && matchesSearch;
+    return matchesCategory && matchesLocation && matchesGenre && matchesSearch;
   });
 
   const handleBackToCategories = () => {
@@ -133,10 +184,40 @@ const Events: React.FC = () => {
     }
     
     if (newCategory) {
-      navigate(`/events/category/${newCategory}`);
+      const searchParams = new URLSearchParams();
+      searchParams.set('category', newCategory);
+      if (selectedLocation) {
+        searchParams.set('location', selectedLocation);
+      }
+      navigate(`/events?${searchParams.toString()}`);
     } else {
       localStorage.removeItem('selectedEventCategory');
-      navigate('/events');
+      if (selectedLocation) {
+        navigate(`/events?location=${selectedLocation}`);
+      } else {
+        navigate('/events');
+      }
+    }
+  };
+
+  const handleLocationChange = (event: SelectChangeEvent<string>) => {
+    const newLocation = event.target.value;
+    setSelectedLocation(newLocation);
+    
+    if (newLocation) {
+      const searchParams = new URLSearchParams();
+      if (selectedCategory) {
+        searchParams.set('category', selectedCategory);
+      }
+      searchParams.set('location', newLocation);
+      navigate(`/events?${searchParams.toString()}`);
+    } else {
+      localStorage.removeItem('selectedEventLocation');
+      if (selectedCategory) {
+        navigate(`/events?category=${selectedCategory}`);
+      } else {
+        navigate('/events');
+      }
     }
   };
 
@@ -146,9 +227,11 @@ const Events: React.FC = () => {
 
   const handleClearFilter = () => {
     setSelectedCategory('');
+    setSelectedLocation('');
     setSearchTerm('');
     setSelectedGenre('');
     localStorage.removeItem('selectedEventCategory');
+    localStorage.removeItem('selectedEventLocation');
     navigate('/events');
   };
 
@@ -161,6 +244,21 @@ const Events: React.FC = () => {
       day: 'numeric' 
     });
   };
+
+  // Determine the appropriate header text
+  const getHeaderText = () => {
+    if (selectedCategory && selectedLocation) {
+      return `${categoryDetails?.name} Events in ${selectedLocation}`;
+    } else if (selectedCategory) {
+      return `${categoryDetails?.name} Events`;
+    } else if (selectedLocation) {
+      return `Events in ${selectedLocation}`;
+    }
+    return 'All Events';
+  };
+
+  // Check if user location is being used as default
+  const isUsingUserLocation = user?.location && selectedLocation === user.location && !searchParams.get('location');
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -175,8 +273,14 @@ const Events: React.FC = () => {
         </Button>
         
         <Typography variant="h3" component="h1" gutterBottom sx={{ color: '#6a5acd', fontWeight: 'bold' }}>
-          {categoryDetails ? `${categoryDetails.name} Events` : 'All Events'}
+          {getHeaderText()}
         </Typography>
+        
+        {isUsingUserLocation && (
+          <Typography variant="body2" sx={{ color: '#6a5acd', mb: 2 }}>
+            📍 Showing events in your city ({user.location}). You can change this in the filters below.
+          </Typography>
+        )}
         
         {categoryDetails && (
           <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
@@ -202,7 +306,23 @@ const Events: React.FC = () => {
             }}
           />
           
-          <FormControl sx={{ minWidth: 200 }}>
+          <FormControl sx={{ minWidth: 180 }}>
+            <InputLabel>Location</InputLabel>
+            <Select
+              value={selectedLocation}
+              label="Location"
+              onChange={handleLocationChange}
+            >
+              <MenuItem value="">All Locations</MenuItem>
+              {uniqueLocations.map(location => (
+                <MenuItem key={location} value={location}>
+                  {location} {user?.location === location && '(Your City)'}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          
+          <FormControl sx={{ minWidth: 180 }}>
             <InputLabel>Category</InputLabel>
             <Select
               value={selectedCategory}
@@ -236,7 +356,7 @@ const Events: React.FC = () => {
             </FormControl>
           )}
           
-          {(selectedCategory || searchTerm || selectedGenre) && (
+          {(selectedCategory || selectedLocation || searchTerm || selectedGenre) && (
             <Button
               variant="outlined"
               onClick={handleClearFilter}
@@ -251,25 +371,29 @@ const Events: React.FC = () => {
       {/* Events List */}
       {filteredEvents.length === 0 ? (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Category sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
+          <LocationOn sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
           <Typography variant="h5" gutterBottom color="text.secondary">
-            {selectedCategory 
-              ? `No events available in ${categoryDetails?.name || 'this'} category` 
-              : searchTerm 
-                ? 'No events found matching your search'
-                : 'No events available'
+            {selectedLocation 
+              ? `No events available in ${selectedLocation}` 
+              : selectedCategory 
+                ? `No events available in ${categoryDetails?.name || 'this'} category` 
+                : searchTerm 
+                  ? 'No events found matching your search'
+                  : 'No events available'
             }
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            {selectedCategory 
-              ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
-              : 'Try adjusting your search criteria or explore different categories.'
+            {selectedLocation 
+              ? `Check back later for exciting events in ${selectedLocation}, or explore events in other cities.`
+              : selectedCategory 
+                ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
+                : 'Try adjusting your search criteria or explore different categories.'
             }
           </Typography>
           
           <Button
             variant="contained"
-            onClick={selectedCategory ? handleClearFilter : handleBackToCategories}
+            onClick={selectedLocation || selectedCategory ? handleClearFilter : handleBackToCategories}
             sx={{
               bgcolor: '#6a5acd',
               '&:hover': {
@@ -277,7 +401,7 @@ const Events: React.FC = () => {
               }
             }}
           >
-            {selectedCategory ? 'Show All Events' : 'Explore Categories'}
+            {selectedLocation || selectedCategory ? 'Show All Events' : 'Explore Categories'}
           </Button>
         </Box>
       ) : (

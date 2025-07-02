@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { AuthState, LoginCredentials, RegisterData, User, UserPreferences } from '../types/user';
+import { AuthState, LoginCredentials, RegisterData, User } from '../types/user';
 import { toast } from 'react-toastify';
 import { openDB } from 'idb';
 
@@ -26,6 +26,7 @@ const initDB = async () => {
       password: 'password123',
       firstName: 'John',
       lastName: 'Doe',
+      location: 'Toronto',
       preferences: {
         favoriteGenres: ['Action', 'Comedy']
       }
@@ -157,6 +158,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        location: user.location,
         preferences: user.preferences
       };
 
@@ -195,6 +197,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
+        location: data.location,
         preferences: {
           favoriteGenres: []
         }
@@ -209,6 +212,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         email: data.email,
         firstName: data.firstName,
         lastName: data.lastName,
+        location: data.location,
         preferences: newUserData.preferences
       };
 
@@ -278,6 +282,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...user,
         firstName: userData.firstName,
         lastName: userData.lastName,
+        location: userData.location,
         preferences: userData.preferences
       };
       

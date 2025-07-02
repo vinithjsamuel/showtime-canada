@@ -6,8 +6,7 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  Typography,
-  useTheme
+  Typography
 } from '@mui/material';
 import {
   LocalMovies,
@@ -31,10 +30,9 @@ const iconMap: { [key: string]: React.ComponentType<any> } = {
 
 const EventCategories: React.FC = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
 
   const handleCategoryClick = (categoryId: string) => {
-    navigate(`/events/category/${categoryId}`);
+    navigate(`/events?category=${categoryId}`);
   };
 
   return (

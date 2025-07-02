@@ -3,6 +3,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  location?: string;
   preferences: UserPreferences;
 }
 
@@ -25,4 +26,5 @@ export interface LoginCredentials {
 export interface RegisterData extends LoginCredentials {
   firstName: string;
   lastName: string;
+  location?: string;
 } 
