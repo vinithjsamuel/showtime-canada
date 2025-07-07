@@ -87,6 +87,7 @@ const MovieDetail: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
+
       <Paper
         elevation={3}
         sx={{

@@ -177,7 +177,7 @@ const Layout: React.FC = () => {
               Event Categories
             </Button>
             <Button color="inherit" onClick={handleAllEventsClick}>
-              All Events
+              Events
             </Button>
             {settings.features.showMovies && (
               <Button color="inherit" component={Link} to="/events?category=movies">

@@ -136,6 +136,7 @@ const HomePage: React.FC = () => {
                     height="300"
                     image={movie.posterUrl || movie.image}
                     alt={movie.title}
+                    sx={{ objectFit: 'cover',objectPosition: 'top' }}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h3">
@@ -178,7 +179,7 @@ const HomePage: React.FC = () => {
           variant="h4"
           component="h2"
           gutterBottom
-          sx={{ mb: 4, textAlign: 'center', color: '#6a5acd' }}
+          sx={{ mb: 4, mt: 4, textAlign: 'center', color: '#6a5acd' }}
         >
           Featured Events
         </Typography>
@@ -209,9 +210,10 @@ const HomePage: React.FC = () => {
                 <CardActionArea onClick={() => navigate(`/events/${event.id}`)}>
                   <CardMedia
                     component="img"
-                    height="250"
+                    height="300"
                     image={event.image}
                     alt={event.title}
+                    sx={{ objectFit: 'cover',objectPosition: 'top' }}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h3">
@@ -255,7 +257,7 @@ const HomePage: React.FC = () => {
       </Container>
 
       {/* Features Section */}
-      <Box sx={{ bgcolor: '#f9f7ff', py: 8, mt: 8 }}>
+      <Box sx={{ bgcolor: '#f9f7ff', py: 8, mt: 8, borderRadius: 2, boxShadow: 3,mb: 8 }}>
         <Container maxWidth="lg">
           <Typography
             variant="h4"
@@ -345,7 +347,7 @@ const HomePage: React.FC = () => {
       </Box>
 
       {/* CTA Section */}
-      <Box sx={{ bgcolor: '#6a5acd', color: 'white', py: 6, textAlign: 'center' }}>
+      <Box sx={{ bgcolor: '#6a5acd', color: 'white', py: 6, textAlign: 'center', borderRadius: 2, boxShadow: 3,mb: 8 }}>
         <Container maxWidth="md">
           <Typography variant="h4" component="h2" gutterBottom>
             {settings.features.showMovies ? "Ready to Watch?" : "Ready to Get Started?"}

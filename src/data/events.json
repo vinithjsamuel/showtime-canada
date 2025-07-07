@@ -10,14 +10,14 @@
       "date": "2024-02-15",
       "time": "19:30",
       "price": 18.99,
-      "image": "https://images.unsplash.com/photo-1509347528160-9329d33b2588?w=400&h=600&fit=crop",
+      "image": "https://images.unsplash.com/photo-1653395108060-e0236d7a9e58?w=400&h=600&fit=crop",
       "featured": true,
       "genre": "Action/Crime",
       "duration": 176,
       "rating": "PG-13",
       "director": "Matt Reeves",
       "releaseDate": "2022-03-04",
-      "posterUrl": "https://images.unsplash.com/photo-1509347528160-9329d33b2588?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1653395108060-e0236d7a9e58?w=400&h=600&fit=crop"
     },
     {
       "id": 7,
@@ -124,7 +124,7 @@
       "date": "2024-02-24",
       "time": "21:00",
       "price": 14.50,
-      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop",
+      "image": "https://images.unsplash.com/photo-1642390368996-b11e3fece279?w=400&h=600&fit=crop",
       "featured": false,
       "genre": "Action/Drama",
       "duration": 137,
@@ -143,14 +143,14 @@
       "date": "2024-02-26",
       "time": "19:45",
       "price": 15.25,
-      "image": "https://images.unsplash.com/photo-1489599363535-b7bd1df29b36?w=400&h=600&fit=crop",
+      "image": "https://images.unsplash.com/photo-1566846724210-39d2b2c7ca0b?w=400&h=600&fit=crop",
       "featured": false,
       "genre": "Comedy/Sci-Fi",
       "duration": 139,
       "rating": "R",
       "director": "Daniels",
       "releaseDate": "2022-03-25",
-      "posterUrl": "https://images.unsplash.com/photo-1489599363535-b7bd1df29b36?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1566846724210-39d2b2c7ca0b?w=400&h=600&fit=crop"
     },
     {
       "id": 19,
@@ -226,7 +226,7 @@
       "date": "2024-03-04",
       "time": "16:00",
       "price": 13.50,
-      "image": "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=400&h=600&fit=crop",
+      "image": "https://plus.unsplash.com/premium_photo-1661430851987-aeb9755ee29e?w=400&h=600&fit=crop",
       "featured": true
     },
     {
@@ -239,7 +239,7 @@
       "date": "2024-03-05",
       "time": "19:00",
       "price": 25.75,
-      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop",
+      "image": "https://images.unsplash.com/photo-1641478859026-c2728062c1e1?w=400&h=600&fit=crop",
       "featured": false
     },
     {
@@ -265,7 +265,7 @@
       "date": "2024-02-20",
       "time": "20:00",
       "price": 89.50,
-      "image": "https://source.unsplash.com/400x300/?concert,drake",
+      "image": "https://plus.unsplash.com/premium_photo-1682600100798-a58f2ac9ac6b?w=400&h=600&fit=crop",
       "featured": true
     },
     {
@@ -278,7 +278,7 @@
       "date": "2024-02-18",
       "time": "19:30",
       "price": 75.00,
-      "image": "https://source.unsplash.com/400x300/?theater,musical",
+      "image": "https://images.unsplash.com/photo-1727804606909-108661bf0736?w=400&h=600&fit=crop",
       "featured": false
     },
     {
@@ -291,7 +291,7 @@
       "date": "2024-02-22",
       "time": "19:00",
       "price": 125.00,
-      "image": "https://source.unsplash.com/400x300/?basketball,nba",
+      "image": "https://images.unsplash.com/photo-1568691452405-99cbf704e978?w=400&h=600&fit=crop",
       "featured": true
     },
     {
@@ -304,7 +304,7 @@
       "date": "2024-02-25",
       "time": "20:00",
       "price": 55.00,
-      "image": "https://source.unsplash.com/400x300/?comedy,standup",
+      "image": "https://plus.unsplash.com/premium_photo-1738067044507-07f7558efe30?w=400&h=600&fit=crop",
       "featured": true
     },
     {
@@ -317,7 +317,7 @@
       "date": "2024-02-17",
       "time": "10:00",
       "price": 25.00,
-      "image": "https://source.unsplash.com/400x300/?zoo,family",
+      "image": "https://plus.unsplash.com/premium_photo-1737373915093-2c4128162243?w=400&h=600&fit=crop",
       "featured": false
     },
     {
@@ -330,7 +330,7 @@
       "date": "2024-02-28",
       "time": "20:30",
       "price": 95.00,
-      "image": "https://source.unsplash.com/400x300/?weeknd,concert",
+      "image": "https://images.unsplash.com/photo-1580244659964-dba76bd98929?w=400&h=600&fit=crop",
       "featured": true
     },
     {
@@ -343,7 +343,7 @@
       "date": "2024-03-05",
       "time": "19:30",
       "price": 85.00,
-      "image": "https://source.unsplash.com/400x300/?hamilton,broadway",
+      "image": "https://images.unsplash.com/photo-1692288783512-1db833cbc178?w=400&h=600&fit=crop",
       "featured": true
     },
     {
@@ -356,7 +356,7 @@
       "date": "2024-03-01",
       "time": "19:00",
       "price": 89.00,
-      "image": "https://source.unsplash.com/400x300/?hockey,nhl",
+      "image": "https://images.unsplash.com/photo-1496427473315-1408fac9d594?w=400&h=600&fit=crop",
       "featured": false
     },
     {
@@ -369,7 +369,7 @@
       "date": "2024-02-24",
       "time": "14:00",
       "price": 15.00,
-      "image": "https://source.unsplash.com/400x300/?science,kids",
+      "image": "https://images.unsplash.com/photo-1557734864-c78b6dfef1b1?w=400&h=600&fit=crop",
       "featured": false
     },
     {
@@ -382,7 +382,7 @@
       "date": "2024-03-08",
       "time": "21:00",
       "price": 65.00,
-      "image": "https://source.unsplash.com/400x300/?comedy,johnkrasinski",
+      "image": "https://images.unsplash.com/photo-1641903806973-17eaf2d2634f?w=400&h=600&fit=crop",
       "featured": false
     },
     {
@@ -395,7 +395,7 @@
       "date": "2024-03-10",
       "time": "20:00",
       "price": 75.00,
-      "image": "https://source.unsplash.com/400x300/?music,concert",
+      "image": "https://plus.unsplash.com/premium_photo-1737373915093-2c4128162243?w=400&h=600&fit=crop",
       "featured": false
     },
     {
@@ -408,7 +408,7 @@
       "date": "2024-03-12",
       "time": "21:30",
       "price": 45.00,
-      "image": "https://source.unsplash.com/400x300/?comedy,stage",
+      "image": "https://images.unsplash.com/photo-1607873893945-b5920ac228f6?w=400&h=600&fit=crop",
       "featured": true
     },
     {
@@ -421,7 +421,7 @@
       "date": "2024-03-15",
       "time": "19:00",
       "price": 95.00,
-      "image": "https://source.unsplash.com/400x300/?hockey,montreal",
+      "image": "https://plus.unsplash.com/premium_photo-1712284619389-60ec1957e348?w=400&h=600&fit=crop",
       "featured": false
     }
   ]

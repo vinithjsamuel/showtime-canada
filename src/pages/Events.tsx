@@ -431,10 +431,10 @@ const Events: React.FC = () => {
               >
                 <CardMedia
                   component="img"
-                  height="200"
+                  height="300"
                   image={event.image}
                   alt={event.title}
-                  sx={{ objectFit: 'cover' }}
+                  sx={{ objectFit: 'cover',objectPosition: 'top' }}
                 />
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
