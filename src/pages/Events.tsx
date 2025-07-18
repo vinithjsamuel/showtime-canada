@@ -65,6 +65,8 @@ const Events: React.FC = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>('');
   const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const [fromTime, setFromTime] = useState<string>('');
+  const [toTime, setToTime] = useState<string>('');
   const [events] = useState<Event[]>(eventsData.events);
 
   // Load filters from URL params or localStorage on mount
@@ -119,6 +121,8 @@ const Events: React.FC = () => {
       setSelectedGenre('');
       setSelectedVenues([]);
       setSelectedDate('');
+      setFromTime('');
+      setToTime('');
       localStorage.removeItem('selectedEventCategory');
       localStorage.removeItem('selectedEventLocation');
       
@@ -167,20 +171,46 @@ const Events: React.FC = () => {
     new Set(movieEvents.map(movie => movie.genre?.split('/')[0]).filter(Boolean))
   );
 
-  // Filter events based on category, location, genre, venue, date, and search
+  // Helper function to convert time string to minutes for comparison
+  const timeToMinutes = (timeString: string): number => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  // Helper function to format time for display
+  const formatTimeForDisplay = (timeString: string): string => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+  };
+
+  // Filter events based on category, location, genre, venue, date, time range, and search
   const filteredEvents = events.filter(event => {
     const matchesCategory = !selectedCategory || event.category === selectedCategory;
     const matchesLocation = !selectedLocation || event.location === selectedLocation;
     const matchesGenre = !selectedGenre || (event.category === 'movies' && event.genre?.includes(selectedGenre));
     const matchesVenues = selectedVenues.length === 0 || selectedVenues.includes(event.venue);
     const matchesDate = !selectedDate || event.date === selectedDate;
+    
+    // Time range filtering
+    const matchesTimeRange = () => {
+      if (!fromTime && !toTime) return true;
+      
+      const eventTimeMinutes = timeToMinutes(event.time);
+      const fromTimeMinutes = fromTime ? timeToMinutes(fromTime) : 0;
+      const toTimeMinutes = toTime ? timeToMinutes(toTime) : 24 * 60;
+      
+      return eventTimeMinutes >= fromTimeMinutes && eventTimeMinutes <= toTimeMinutes;
+    };
+    
     const matchesSearch = !searchTerm || 
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.venue.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesDate && matchesSearch;
+    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesDate && matchesTimeRange() && matchesSearch;
   });
 
   const handleBackToCategories = () => {
@@ -247,6 +277,14 @@ const Events: React.FC = () => {
     setSelectedDate(event.target.value);
   };
 
+  const handleFromTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFromTime(event.target.value);
+  };
+
+  const handleToTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setToTime(event.target.value);
+  };
+
   const handleClearFilter = () => {
     setSelectedCategory('');
     setSelectedLocation('');
@@ -254,6 +292,8 @@ const Events: React.FC = () => {
     setSelectedGenre('');
     setSelectedVenues([]);
     setSelectedDate('');
+    setFromTime('');
+    setToTime('');
     localStorage.removeItem('selectedEventCategory');
     localStorage.removeItem('selectedEventLocation');
     navigate('/events');
@@ -340,6 +380,28 @@ const Events: React.FC = () => {
               shrink: true,
             }}
           />
+
+          <TextField
+            type="time"
+            label="From Time"
+            value={fromTime}
+            onChange={handleFromTimeChange}
+            sx={{ minWidth: 140 }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+
+          <TextField
+            type="time"
+            label="To Time"
+            value={toTime}
+            onChange={handleToTimeChange}
+            sx={{ minWidth: 140 }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
           
           <FormControl sx={{ minWidth: 180 }}>
             <InputLabel>Location</InputLabel>
@@ -415,7 +477,7 @@ const Events: React.FC = () => {
             </Select>
           </FormControl>
           
-          {(selectedCategory || selectedLocation || searchTerm || selectedGenre || selectedVenues.length > 0 || selectedDate) && (
+          {(selectedCategory || selectedLocation || searchTerm || selectedGenre || selectedVenues.length > 0 || selectedDate || fromTime || toTime) && (
             <Button
               variant="outlined"
               onClick={handleClearFilter}
@@ -432,35 +494,47 @@ const Events: React.FC = () => {
         <Box sx={{ textAlign: 'center', py: 8 }}>
           <LocationOn sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
           <Typography variant="h5" gutterBottom color="text.secondary">
-            {selectedDate
-              ? `No events available on ${new Date(selectedDate).toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`
-              : selectedVenues.length > 0
-                ? `No events available at ${selectedVenues.length === 1 ? selectedVenues[0] : 'selected venues'}`
-                : selectedLocation 
-                  ? `No events available in ${selectedLocation}` 
-                  : selectedCategory 
-                    ? `No events available in ${categoryDetails?.name || 'this'} category` 
-                    : searchTerm 
-                      ? 'No events found matching your search'
-                      : 'No events available'
+            {(fromTime || toTime)
+              ? `No events available ${fromTime && toTime 
+                  ? `between ${formatTimeForDisplay(fromTime)} and ${formatTimeForDisplay(toTime)}` 
+                  : fromTime 
+                    ? `after ${formatTimeForDisplay(fromTime)}` 
+                    : `before ${formatTimeForDisplay(toTime)}`}`
+              : selectedDate
+                ? `No events available on ${new Date(selectedDate).toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`
+                : selectedVenues.length > 0
+                  ? `No events available at ${selectedVenues.length === 1 ? selectedVenues[0] : 'selected venues'}`
+                  : selectedLocation 
+                    ? `No events available in ${selectedLocation}` 
+                    : selectedCategory 
+                      ? `No events available in ${categoryDetails?.name || 'this'} category` 
+                      : searchTerm 
+                        ? 'No events found matching your search'
+                        : 'No events available'
             }
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            {selectedDate
-              ? `Try selecting a different date or check back later for events on ${new Date(selectedDate).toLocaleDateString('en-CA', { month: 'long', day: 'numeric' })}.`
-              : selectedVenues.length > 0
-                ? `Try selecting different venues or check back later for new events at ${selectedVenues.length === 1 ? selectedVenues[0] : 'your selected venues'}.`
-                : selectedLocation 
-                  ? `Check back later for exciting events in ${selectedLocation}, or explore events in other cities.`
-                  : selectedCategory 
-                    ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
-                    : 'Try adjusting your search criteria or explore different categories.'
+            {(fromTime || toTime)
+              ? `Try adjusting your time range or check back later for events ${fromTime && toTime 
+                  ? `between ${formatTimeForDisplay(fromTime)} and ${formatTimeForDisplay(toTime)}` 
+                  : fromTime 
+                    ? `after ${formatTimeForDisplay(fromTime)}` 
+                    : `before ${formatTimeForDisplay(toTime)}`}.`
+              : selectedDate
+                ? `Try selecting a different date or check back later for events on ${new Date(selectedDate).toLocaleDateString('en-CA', { month: 'long', day: 'numeric' })}.`
+                : selectedVenues.length > 0
+                  ? `Try selecting different venues or check back later for new events at ${selectedVenues.length === 1 ? selectedVenues[0] : 'your selected venues'}.`
+                  : selectedLocation 
+                    ? `Check back later for exciting events in ${selectedLocation}, or explore events in other cities.`
+                    : selectedCategory 
+                      ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
+                      : 'Try adjusting your search criteria or explore different categories.'
             }
           </Typography>
           
           <Button
             variant="contained"
-            onClick={selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate ? handleClearFilter : handleBackToCategories}
+            onClick={selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime ? handleClearFilter : handleBackToCategories}
             sx={{
               bgcolor: '#6a5acd',
               '&:hover': {
@@ -468,7 +542,7 @@ const Events: React.FC = () => {
               }
             }}
           >
-            {selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate ? 'Show All Events' : 'Explore Categories'}
+            {selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime ? 'Show All Events' : 'Explore Categories'}
           </Button>
         </Box>
       ) : (
