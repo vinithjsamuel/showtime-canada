@@ -130,7 +130,7 @@ const HomePage: React.FC = () => {
                   borderRadius: 2
                 }}
               >
-                <CardActionArea onClick={() => navigate(`/movies/${movie.id}`)}>
+                <CardActionArea onClick={() => navigate(`/events/${movie.id}`)}>
                   <CardMedia
                     component="img"
                     height="300"
