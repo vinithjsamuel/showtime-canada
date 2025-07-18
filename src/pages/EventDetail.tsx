@@ -22,6 +22,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import eventsData from '../data/events.json';
 import eventCategoriesData from '../data/eventCategories.json';
+import SeatingLayout from '../components/common/SeatingLayout';
 
 const EventDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -200,6 +201,22 @@ const EventDetail: React.FC = () => {
               </Stack>
 
               <Divider sx={{ my: 3 }} />
+
+              {/* Seating Layout Section */}
+              {event.seating && (
+                <Box sx={{ mb: 4 }}>
+                  <SeatingLayout 
+                    seating={event.seating}
+                    venueType={
+                      event.category === 'movies' ? 'cinema' :
+                      event.category === 'theater' ? 'theater' :
+                      event.category === 'music' || event.category === 'sports' ? 'arena' :
+                      'cinema'
+                    }
+                  />
+                  <Divider sx={{ my: 3 }} />
+                </Box>
+              )}
 
               {/* Reviews Section */}
               {event.userRating && event.reviews && event.reviews.length > 0 && (

@@ -10,7 +10,7 @@
 5. SCRUM-55 (Reviews & Ratings Display) #DONE
 
 ## Phase 3: Seating System
-6. SCRUM-56 (Venue Seating Layout)
+6. SCRUM-56 (Venue Seating Layout) #DONE
 7. SCRUM-58 (Mark Unavailable Seats)
 8. SCRUM-57 (Seat Selection)
 
