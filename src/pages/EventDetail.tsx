@@ -11,7 +11,9 @@ import {
   Chip,
   CircularProgress,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Rating,
+  Avatar
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -28,6 +30,7 @@ const EventDetail: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [loading, setLoading] = useState(true);
   const [event, setEvent] = useState<any>(null);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
     // Simulate API call to fetch event
@@ -197,6 +200,86 @@ const EventDetail: React.FC = () => {
               </Stack>
 
               <Divider sx={{ my: 3 }} />
+
+              {/* Reviews Section */}
+              {event.userRating && event.reviews && event.reviews.length > 0 && (
+                <Box sx={{ mb: 4 }}>
+                  <Typography variant="h5" component="h2" gutterBottom sx={{ color: '#6a5acd', fontWeight: 'bold', mb: 3 }}>
+                    Reviews & Ratings
+                  </Typography>
+                  
+                  {/* Overall Rating */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                    <Rating
+                      value={event.userRating}
+                      precision={0.1}
+                      readOnly
+                      size="large"
+                      sx={{ mr: 2 }}
+                    />
+                    <Typography variant="h6" sx={{ color: '#6a5acd', fontWeight: 'bold' }}>
+                      {event.userRating.toFixed(1)}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                      ({event.reviews.length} review{event.reviews.length !== 1 ? 's' : ''})
+                    </Typography>
+                  </Box>
+
+                  {/* Reviews List */}
+                  <Stack spacing={2}>
+                    {(showAllReviews ? event.reviews : event.reviews.slice(0, 3)).map((review: any) => (
+                      <Paper key={review.id} elevation={1} sx={{ p: 3, borderRadius: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+                          <Avatar sx={{ bgcolor: '#6a5acd', width: 40, height: 40 }}>
+                            {review.username.charAt(0).toUpperCase()}
+                          </Avatar>
+                          <Box sx={{ flex: 1 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                                {review.username}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                {new Date(review.date).toLocaleDateString('en-CA')}
+                              </Typography>
+                            </Box>
+                            <Rating
+                              value={review.rating}
+                              readOnly
+                              size="small"
+                              sx={{ mb: 1 }}
+                            />
+                            <Typography variant="body2" color="text.secondary">
+                              {review.comment}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Paper>
+                    ))}
+                  </Stack>
+
+                  {/* Load More Button */}
+                  {event.reviews.length > 3 && (
+                    <Box sx={{ textAlign: 'center', mt: 3 }}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => setShowAllReviews(!showAllReviews)}
+                        sx={{
+                          color: '#6a5acd',
+                          borderColor: '#6a5acd',
+                          '&:hover': {
+                            borderColor: '#5b4cbb',
+                            bgcolor: 'rgba(106, 90, 205, 0.04)'
+                          }
+                        }}
+                      >
+                        {showAllReviews ? 'Show Less' : `Load More (${event.reviews.length - 3} more)`}
+                      </Button>
+                    </Box>
+                  )}
+
+                  <Divider sx={{ my: 3 }} />
+                </Box>
+              )}
 
               <Box>
                 <Button

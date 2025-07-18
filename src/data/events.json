@@ -17,7 +17,38 @@
       "rating": "PG-13",
       "director": "Matt Reeves",
       "releaseDate": "2022-03-04",
-      "posterUrl": "https://images.unsplash.com/photo-1653395108060-e0236d7a9e58?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1653395108060-e0236d7a9e58?w=400&h=600&fit=crop",
+      "userRating": 4.3,
+      "reviews": [
+        {
+          "id": 1,
+          "username": "MovieFan123",
+          "rating": 5,
+          "comment": "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt labore dolore magna aliqua ut.",
+          "date": "2024-02-10"
+        },
+        {
+          "id": 2,
+          "username": "CinemaLover",
+          "rating": 4,
+          "comment": "Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam.",
+          "date": "2024-02-08"
+        },
+        {
+          "id": 3,
+          "username": "BatmanFan",
+          "rating": 4,
+          "comment": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud.",
+          "date": "2024-02-06"
+        },
+        {
+          "id": 4,
+          "username": "TorontoReviewer",
+          "rating": 4,
+          "comment": "Tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris.",
+          "date": "2024-02-05"
+        }
+      ]
     },
     {
       "id": 7,
@@ -28,7 +59,7 @@
       "venue": "Cinéma Banque Scotia Montreal",
       "date": "2024-02-16",
       "time": "20:15",
-      "price": 16.50,
+      "price": 16.5,
       "image": "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&h=600&fit=crop",
       "featured": true,
       "genre": "Sci-Fi/Adventure",
@@ -36,7 +67,38 @@
       "rating": "PG-13",
       "director": "Denis Villeneuve",
       "releaseDate": "2024-03-01",
-      "posterUrl": "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&h=600&fit=crop",
+      "userRating": 3.6,
+      "reviews": [
+        {
+          "id": 100,
+          "username": "EntertainmentBuff",
+          "rating": 4,
+          "comment": "do eiusmod quis consectetur exercitation non proident magna officia incididunt sint amet voluptate elit est.",
+          "date": "2024-02-24"
+        },
+        {
+          "id": 101,
+          "username": "EventLover",
+          "rating": 3,
+          "comment": "nostrud nulla laboris et veniam Lorem cillum in anim labore do minim enim ut mollit.",
+          "date": "2024-02-13"
+        },
+        {
+          "id": 102,
+          "username": "MovieFan123",
+          "rating": 5,
+          "comment": "duis excepteur proident amet minim eiusmod consectetur anim occaecat sunt aliqua consequat esse ullamco ea.",
+          "date": "2024-02-21"
+        },
+        {
+          "id": 103,
+          "username": "EventLover",
+          "rating": 5,
+          "comment": "irure officia magna minim sit ea amet ut cupidatat elit consectetur proident ex voluptate mollit.",
+          "date": "2024-02-19"
+        }
+      ]
     },
     {
       "id": 13,
@@ -47,7 +109,7 @@
       "venue": "International Village 20",
       "date": "2024-02-17",
       "time": "18:45",
-      "price": 17.50,
+      "price": 17.5,
       "image": "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&h=600&fit=crop",
       "featured": true,
       "genre": "Action/Adventure",
@@ -55,7 +117,45 @@
       "rating": "PG-13",
       "director": "Jon Watts",
       "releaseDate": "2021-12-17",
-      "posterUrl": "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400&h=600&fit=crop",
+      "userRating": 4.1,
+      "reviews": [
+        {
+          "id": 104,
+          "username": "LiveEventLover",
+          "rating": 4,
+          "comment": "nisi occaecat nulla velit esse in eiusmod sed laboris magna duis aute ad mollit sunt.",
+          "date": "2024-02-24"
+        },
+        {
+          "id": 105,
+          "username": "ConcertGoer",
+          "rating": 3,
+          "comment": "in nisi aute non velit tempor nulla ullamco cupidatat deserunt nostrud irure et aliqua do.",
+          "date": "2024-02-15"
+        },
+        {
+          "id": 106,
+          "username": "CityExplorer",
+          "rating": 5,
+          "comment": "exercitation quis ex ut veniam dolore esse reprehenderit cillum id nisi cupidatat voluptate do velit.",
+          "date": "2024-02-08"
+        },
+        {
+          "id": 107,
+          "username": "NightOutFan",
+          "rating": 5,
+          "comment": "ex quis voluptate laborum aliqua culpa excepteur nulla adipiscing aliquip fugiat ad dolor cupidatat laboris.",
+          "date": "2024-02-07"
+        },
+        {
+          "id": 108,
+          "username": "CityExplorer",
+          "rating": 3,
+          "comment": "ut ipsum occaecat irure exercitation laboris nulla ullamco incididunt veniam aliquip reprehenderit fugiat nostrud duis.",
+          "date": "2024-02-21"
+        }
+      ]
     },
     {
       "id": 14,
@@ -74,7 +174,45 @@
       "rating": "PG-13",
       "director": "Joseph Kosinski",
       "releaseDate": "2022-05-27",
-      "posterUrl": "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=600&fit=crop",
+      "userRating": 3.7,
+      "reviews": [
+        {
+          "id": 109,
+          "username": "EntertainmentBuff",
+          "rating": 4,
+          "comment": "officia fugiat esse eiusmod tempor anim magna Lorem elit enim exercitation ad ipsum cupidatat mollit.",
+          "date": "2024-02-17"
+        },
+        {
+          "id": 110,
+          "username": "TheaterAddict",
+          "rating": 5,
+          "comment": "sint do ut aliqua ad elit adipiscing et qui aliquip sed esse veniam consectetur labore.",
+          "date": "2024-02-16"
+        },
+        {
+          "id": 111,
+          "username": "FunSeeker",
+          "rating": 5,
+          "comment": "pariatur labore exercitation eiusmod Lorem id consectetur fugiat occaecat ipsum tempor amet sed nostrud minim.",
+          "date": "2024-02-11"
+        },
+        {
+          "id": 112,
+          "username": "CultureSeeker",
+          "rating": 5,
+          "comment": "consequat nostrud minim quis duis adipiscing aute veniam est culpa Lorem incididunt cillum qui cupidatat.",
+          "date": "2024-02-21"
+        },
+        {
+          "id": 113,
+          "username": "ShowFan",
+          "rating": 4,
+          "comment": "ipsum eiusmod quis velit aliqua nulla duis enim amet aliquip ea nisi et anim laborum.",
+          "date": "2024-02-18"
+        }
+      ]
     },
     {
       "id": 15,
@@ -93,7 +231,45 @@
       "rating": "PG-13",
       "director": "James Cameron",
       "releaseDate": "2022-12-16",
-      "posterUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop",
+      "userRating": 3.6,
+      "reviews": [
+        {
+          "id": 114,
+          "username": "MovieFan123",
+          "rating": 5,
+          "comment": "laborum ipsum voluptate enim dolor magna culpa Lorem ex aute amet tempor ea nisi mollit.",
+          "date": "2024-02-19"
+        },
+        {
+          "id": 115,
+          "username": "ConcertGoer",
+          "rating": 5,
+          "comment": "est cillum tempor veniam laboris sunt fugiat consequat mollit ipsum culpa voluptate ut minim in.",
+          "date": "2024-02-10"
+        },
+        {
+          "id": 116,
+          "username": "EntertainmentBuff",
+          "rating": 5,
+          "comment": "veniam ea fugiat duis dolore excepteur aliquip reprehenderit commodo dolor in pariatur nisi eiusmod do.",
+          "date": "2024-02-05"
+        },
+        {
+          "id": 117,
+          "username": "LocalReviewer",
+          "rating": 4,
+          "comment": "exercitation laboris laborum sed et occaecat sit in culpa ullamco enim velit anim sint aute.",
+          "date": "2024-02-14"
+        },
+        {
+          "id": 118,
+          "username": "NightOutFan",
+          "rating": 4,
+          "comment": "nisi et exercitation culpa pariatur magna nulla officia dolor cillum id sit Lorem amet tempor.",
+          "date": "2024-02-15"
+        }
+      ]
     },
     {
       "id": 16,
@@ -112,7 +288,45 @@
       "rating": "PG-13",
       "director": "Ryan Coogler",
       "releaseDate": "2022-11-11",
-      "posterUrl": "https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=400&h=600&fit=crop",
+      "userRating": 4.8,
+      "reviews": [
+        {
+          "id": 119,
+          "username": "ArtLover",
+          "rating": 4,
+          "comment": "laboris tempor deserunt enim cupidatat proident aute ut ad Lorem elit mollit sit ipsum aliquip.",
+          "date": "2024-02-13"
+        },
+        {
+          "id": 120,
+          "username": "SportsFan88",
+          "rating": 3,
+          "comment": "anim cupidatat proident sint ullamco fugiat amet aute ea laborum nulla culpa aliquip ad eiusmod.",
+          "date": "2024-02-22"
+        },
+        {
+          "id": 121,
+          "username": "TheaterAddict",
+          "rating": 4,
+          "comment": "adipiscing deserunt amet ullamco exercitation esse et proident non nostrud veniam officia Lorem ex nisi.",
+          "date": "2024-02-19"
+        },
+        {
+          "id": 122,
+          "username": "EventLover",
+          "rating": 3,
+          "comment": "ad proident laborum cupidatat est sint et occaecat ipsum voluptate magna consequat elit tempor deserunt.",
+          "date": "2024-02-21"
+        },
+        {
+          "id": 123,
+          "username": "ExperienceHunter",
+          "rating": 5,
+          "comment": "duis labore laborum excepteur aliqua esse fugiat veniam reprehenderit Lorem cupidatat aute dolore consequat voluptate.",
+          "date": "2024-02-17"
+        }
+      ]
     },
     {
       "id": 17,
@@ -123,7 +337,7 @@
       "venue": "Landmark Cinemas Grant Park",
       "date": "2024-02-24",
       "time": "21:00",
-      "price": 14.50,
+      "price": 14.5,
       "image": "https://images.unsplash.com/photo-1642390368996-b11e3fece279?w=400&h=600&fit=crop",
       "featured": false,
       "genre": "Action/Drama",
@@ -131,7 +345,38 @@
       "rating": "R",
       "director": "Robert Eggers",
       "releaseDate": "2022-04-22",
-      "posterUrl": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=600&fit=crop",
+      "userRating": 4.0,
+      "reviews": [
+        {
+          "id": 124,
+          "username": "TorontoUser",
+          "rating": 4,
+          "comment": "nulla aliqua id labore in excepteur irure occaecat deserunt commodo Lorem cillum ipsum cupidatat et.",
+          "date": "2024-02-24"
+        },
+        {
+          "id": 125,
+          "username": "LocalReviewer",
+          "rating": 3,
+          "comment": "nisi adipiscing aute Lorem esse cupidatat officia do ea ad labore incididunt qui veniam mollit.",
+          "date": "2024-02-25"
+        },
+        {
+          "id": 126,
+          "username": "VenueVisitor",
+          "rating": 5,
+          "comment": "irure sit sunt qui reprehenderit consectetur voluptate aliquip occaecat Lorem proident et id consequat sint.",
+          "date": "2024-02-13"
+        },
+        {
+          "id": 127,
+          "username": "PerformanceFan",
+          "rating": 4,
+          "comment": "ex voluptate laboris ea sint ipsum id occaecat commodo excepteur proident sed qui cupidatat nulla.",
+          "date": "2024-02-17"
+        }
+      ]
     },
     {
       "id": 18,
@@ -150,7 +395,38 @@
       "rating": "R",
       "director": "Daniels",
       "releaseDate": "2022-03-25",
-      "posterUrl": "https://images.unsplash.com/photo-1566846724210-39d2b2c7ca0b?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1566846724210-39d2b2c7ca0b?w=400&h=600&fit=crop",
+      "userRating": 3.7,
+      "reviews": [
+        {
+          "id": 128,
+          "username": "CultureSeeker",
+          "rating": 3,
+          "comment": "amet ut enim velit tempor deserunt laborum reprehenderit veniam in consectetur consequat exercitation sit irure.",
+          "date": "2024-02-07"
+        },
+        {
+          "id": 129,
+          "username": "EventLover",
+          "rating": 5,
+          "comment": "mollit nulla pariatur reprehenderit minim commodo amet duis sed deserunt exercitation quis consectetur non culpa.",
+          "date": "2024-02-23"
+        },
+        {
+          "id": 130,
+          "username": "TheaterAddict",
+          "rating": 3,
+          "comment": "velit ea mollit aute occaecat enim ad consectetur nisi tempor ipsum magna Lorem ullamco irure.",
+          "date": "2024-02-08"
+        },
+        {
+          "id": 500,
+          "username": "ShowAnalyst",
+          "rating": 5,
+          "comment": "sed velit veniam aliqua ea duis cillum ad quis ullamco occaecat officia non incididunt in.",
+          "date": "2024-02-05"
+        }
+      ]
     },
     {
       "id": 19,
@@ -161,7 +437,7 @@
       "venue": "Cineplex Odeon Ste-Foy",
       "date": "2024-02-27",
       "time": "20:00",
-      "price": 16.00,
+      "price": 16.0,
       "image": "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=600&fit=crop",
       "featured": false,
       "genre": "Horror/Thriller",
@@ -169,7 +445,38 @@
       "rating": "R",
       "director": "Jordan Peele",
       "releaseDate": "2022-07-22",
-      "posterUrl": "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=600&fit=crop",
+      "userRating": 3.6,
+      "reviews": [
+        {
+          "id": 131,
+          "username": "MovieFan123",
+          "rating": 5,
+          "comment": "aute cupidatat consequat ut in ea officia laborum non dolore Lorem dolor qui esse ad.",
+          "date": "2024-02-06"
+        },
+        {
+          "id": 132,
+          "username": "EntertainmentBuff",
+          "rating": 3,
+          "comment": "aliqua adipiscing aliquip est aute duis qui nisi esse amet consequat consectetur pariatur quis dolore.",
+          "date": "2024-02-21"
+        },
+        {
+          "id": 133,
+          "username": "EventExpert",
+          "rating": 3,
+          "comment": "laboris cupidatat nisi culpa consequat non sint ut reprehenderit est aliquip enim adipiscing in ullamco.",
+          "date": "2024-02-15"
+        },
+        {
+          "id": 134,
+          "username": "MusicLover",
+          "rating": 4,
+          "comment": "consequat aliquip culpa commodo ad nostrud quis ullamco in do aute ut adipiscing est enim.",
+          "date": "2024-02-16"
+        }
+      ]
     },
     {
       "id": 20,
@@ -180,7 +487,7 @@
       "venue": "Cineplex Odeon Tillicum",
       "date": "2024-02-29",
       "time": "19:30",
-      "price": 17.00,
+      "price": 17.0,
       "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=600&fit=crop",
       "featured": false,
       "genre": "Horror/Comedy",
@@ -188,7 +495,45 @@
       "rating": "R",
       "director": "Mark Mylod",
       "releaseDate": "2022-11-18",
-      "posterUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=600&fit=crop"
+      "posterUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=600&fit=crop",
+      "userRating": 4.9,
+      "reviews": [
+        {
+          "id": 135,
+          "username": "ExperienceHunter",
+          "rating": 5,
+          "comment": "cillum sit minim non laborum ipsum sint pariatur elit Lorem mollit adipiscing ad et ut.",
+          "date": "2024-02-24"
+        },
+        {
+          "id": 136,
+          "username": "SportsFan88",
+          "rating": 3,
+          "comment": "ullamco cillum laboris labore amet non proident mollit eiusmod quis ad fugiat reprehenderit laborum consectetur.",
+          "date": "2024-02-10"
+        },
+        {
+          "id": 137,
+          "username": "LocalReviewer",
+          "rating": 4,
+          "comment": "magna velit officia pariatur laboris nisi et nulla exercitation sit ex eiusmod est laborum Lorem.",
+          "date": "2024-02-07"
+        },
+        {
+          "id": 138,
+          "username": "TorontoUser",
+          "rating": 5,
+          "comment": "sit cupidatat labore laboris exercitation minim esse reprehenderit fugiat sunt velit amet ipsum est aliqua.",
+          "date": "2024-02-18"
+        },
+        {
+          "id": 139,
+          "username": "EventLover",
+          "rating": 5,
+          "comment": "reprehenderit officia nisi eiusmod adipiscing mollit proident quis irure commodo cillum ullamco non aliqua nostrud.",
+          "date": "2024-02-08"
+        }
+      ]
     },
     {
       "id": 21,
@@ -201,7 +546,38 @@
       "time": "18:30",
       "price": 14.99,
       "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 3.7,
+      "reviews": [
+        {
+          "id": 140,
+          "username": "TheaterAddict",
+          "rating": 5,
+          "comment": "officia dolor minim sint consectetur irure laborum amet excepteur est duis aliquip qui tempor ullamco.",
+          "date": "2024-02-23"
+        },
+        {
+          "id": 141,
+          "username": "EntertainmentBuff",
+          "rating": 5,
+          "comment": "dolor commodo reprehenderit sit consequat consectetur fugiat anim sint eiusmod ipsum magna pariatur Lorem aute.",
+          "date": "2024-02-13"
+        },
+        {
+          "id": 142,
+          "username": "TorontoUser",
+          "rating": 5,
+          "comment": "laborum voluptate est reprehenderit elit Lorem quis dolor aute occaecat consequat sit nostrud anim minim.",
+          "date": "2024-02-25"
+        },
+        {
+          "id": 501,
+          "username": "EventCritic",
+          "rating": 5,
+          "comment": "reprehenderit aliquip est Lorem anim ut mollit occaecat minim sit in veniam commodo ullamco duis.",
+          "date": "2024-02-18"
+        }
+      ]
     },
     {
       "id": 22,
@@ -214,7 +590,45 @@
       "time": "20:15",
       "price": 65.25,
       "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 3.8,
+      "reviews": [
+        {
+          "id": 143,
+          "username": "PerformanceFan",
+          "rating": 3,
+          "comment": "sunt velit et esse aute nostrud reprehenderit aliquip sint id ut consequat cupidatat dolor Lorem.",
+          "date": "2024-02-08"
+        },
+        {
+          "id": 144,
+          "username": "EventExpert",
+          "rating": 5,
+          "comment": "sunt consequat ex duis veniam qui nisi ut velit non sint tempor ullamco irure cillum.",
+          "date": "2024-02-13"
+        },
+        {
+          "id": 145,
+          "username": "MovieFan123",
+          "rating": 5,
+          "comment": "sed ut mollit pariatur aliqua cupidatat duis esse id labore consectetur irure voluptate sint ipsum.",
+          "date": "2024-02-08"
+        },
+        {
+          "id": 146,
+          "username": "FunSeeker",
+          "rating": 3,
+          "comment": "et ipsum commodo cillum ex esse laboris culpa deserunt nisi laborum Lorem ea aliqua id.",
+          "date": "2024-02-15"
+        },
+        {
+          "id": 147,
+          "username": "MusicLover",
+          "rating": 3,
+          "comment": "cupidatat ex pariatur veniam eiusmod amet est ullamco sed anim tempor officia nostrud velit aute.",
+          "date": "2024-02-12"
+        }
+      ]
     },
     {
       "id": 23,
@@ -225,9 +639,40 @@
       "venue": "Kingston Family Centre",
       "date": "2024-03-04",
       "time": "16:00",
-      "price": 13.50,
+      "price": 13.5,
       "image": "https://plus.unsplash.com/premium_photo-1661430851987-aeb9755ee29e?w=400&h=600&fit=crop",
-      "featured": true
+      "featured": true,
+      "userRating": 4.5,
+      "reviews": [
+        {
+          "id": 148,
+          "username": "PerformanceFan",
+          "rating": 5,
+          "comment": "ad duis elit mollit occaecat nisi ea sed ut Lorem reprehenderit minim pariatur officia anim.",
+          "date": "2024-02-19"
+        },
+        {
+          "id": 149,
+          "username": "LiveEventLover",
+          "rating": 4,
+          "comment": "laborum et amet occaecat labore pariatur magna consequat elit ut exercitation ea dolor aute deserunt.",
+          "date": "2024-02-05"
+        },
+        {
+          "id": 150,
+          "username": "CityExplorer",
+          "rating": 5,
+          "comment": "excepteur laboris deserunt ex in esse Lorem aliquip sint laborum aliqua id enim labore et.",
+          "date": "2024-02-18"
+        },
+        {
+          "id": 502,
+          "username": "ShowAnalyst",
+          "rating": 5,
+          "comment": "excepteur aliquip incididunt laborum proident adipiscing est sint elit Lorem reprehenderit cupidatat consectetur ex esse.",
+          "date": "2024-02-18"
+        }
+      ]
     },
     {
       "id": 24,
@@ -240,7 +685,38 @@
       "time": "19:00",
       "price": 25.75,
       "image": "https://images.unsplash.com/photo-1641478859026-c2728062c1e1?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.4,
+      "reviews": [
+        {
+          "id": 151,
+          "username": "EventExpert",
+          "rating": 3,
+          "comment": "enim laboris excepteur consectetur ad ea incididunt Lorem commodo fugiat elit consequat proident amet sint.",
+          "date": "2024-02-06"
+        },
+        {
+          "id": 152,
+          "username": "VenueVisitor",
+          "rating": 5,
+          "comment": "qui duis nostrud cillum sunt excepteur est aliquip elit non labore laborum sint magna ullamco.",
+          "date": "2024-02-23"
+        },
+        {
+          "id": 153,
+          "username": "ArtLover",
+          "rating": 4,
+          "comment": "do aute dolor ut labore in eiusmod dolore consequat ea quis officia et sunt incididunt.",
+          "date": "2024-02-19"
+        },
+        {
+          "id": 154,
+          "username": "EventLover",
+          "rating": 4,
+          "comment": "nisi sed duis ullamco elit sint ad nostrud veniam aliqua deserunt id occaecat enim aute.",
+          "date": "2024-02-14"
+        }
+      ]
     },
     {
       "id": 25,
@@ -253,7 +729,38 @@
       "time": "17:30",
       "price": 18.25,
       "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.1,
+      "reviews": [
+        {
+          "id": 155,
+          "username": "PerformanceFan",
+          "rating": 4,
+          "comment": "consectetur consequat aliquip elit labore quis cupidatat nostrud id officia commodo non duis incididunt laboris.",
+          "date": "2024-02-16"
+        },
+        {
+          "id": 156,
+          "username": "VenueVisitor",
+          "rating": 3,
+          "comment": "laborum commodo aute ex ad ipsum voluptate irure excepteur in elit Lorem magna laboris occaecat.",
+          "date": "2024-02-23"
+        },
+        {
+          "id": 157,
+          "username": "NightOutFan",
+          "rating": 3,
+          "comment": "esse nostrud aute sit commodo minim aliquip enim elit velit qui tempor do in dolor.",
+          "date": "2024-02-16"
+        },
+        {
+          "id": 503,
+          "username": "EventJudge",
+          "rating": 5,
+          "comment": "sed deserunt sit dolore cillum officia ullamco aute nostrud reprehenderit sunt sint occaecat nisi labore.",
+          "date": "2024-02-06"
+        }
+      ]
     },
     {
       "id": 2,
@@ -264,9 +771,40 @@
       "venue": "Scotiabank Arena",
       "date": "2024-02-20",
       "time": "20:00",
-      "price": 89.50,
+      "price": 89.5,
       "image": "https://plus.unsplash.com/premium_photo-1682600100798-a58f2ac9ac6b?w=400&h=600&fit=crop",
-      "featured": true
+      "featured": true,
+      "userRating": 4.7,
+      "reviews": [
+        {
+          "id": 5,
+          "username": "MusicLover88",
+          "rating": 5,
+          "comment": "Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis.",
+          "date": "2024-02-18"
+        },
+        {
+          "id": 6,
+          "username": "ConcertGoer",
+          "rating": 5,
+          "comment": "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit.",
+          "date": "2024-02-17"
+        },
+        {
+          "id": 7,
+          "username": "DrakeSuperfan",
+          "rating": 4,
+          "comment": "Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit voluptate velit.",
+          "date": "2024-02-16"
+        },
+        {
+          "id": 8,
+          "username": "TorontoMusic",
+          "rating": 5,
+          "comment": "Laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit voluptate velit esse cillum.",
+          "date": "2024-02-15"
+        }
+      ]
     },
     {
       "id": 3,
@@ -277,9 +815,40 @@
       "venue": "Princess of Wales Theatre",
       "date": "2024-02-18",
       "time": "19:30",
-      "price": 75.00,
+      "price": 75.0,
       "image": "https://images.unsplash.com/photo-1727804606909-108661bf0736?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.6,
+      "reviews": [
+        {
+          "id": 9,
+          "username": "TheaterFan",
+          "rating": 5,
+          "comment": "Duis aute irure dolor in reprehenderit voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat.",
+          "date": "2024-02-16"
+        },
+        {
+          "id": 10,
+          "username": "MusicalLover",
+          "rating": 4,
+          "comment": "Irure dolor in reprehenderit voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat.",
+          "date": "2024-02-14"
+        },
+        {
+          "id": 11,
+          "username": "DisneyAdult",
+          "rating": 5,
+          "comment": "Dolor in reprehenderit voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non.",
+          "date": "2024-02-12"
+        },
+        {
+          "id": 504,
+          "username": "CriticalViewer",
+          "rating": 4,
+          "comment": "irure tempor do ea exercitation incididunt eiusmod occaecat qui nulla laboris ipsum non magna anim.",
+          "date": "2024-02-13"
+        }
+      ]
     },
     {
       "id": 4,
@@ -290,9 +859,40 @@
       "venue": "Scotiabank Arena",
       "date": "2024-02-22",
       "time": "19:00",
-      "price": 125.00,
+      "price": 125.0,
       "image": "https://images.unsplash.com/photo-1568691452405-99cbf704e978?w=400&h=600&fit=crop",
-      "featured": true
+      "featured": true,
+      "userRating": 4.8,
+      "reviews": [
+        {
+          "id": 158,
+          "username": "EventLover",
+          "rating": 3,
+          "comment": "et aute adipiscing qui enim mollit quis laboris incididunt cupidatat ipsum minim id reprehenderit laborum.",
+          "date": "2024-02-18"
+        },
+        {
+          "id": 159,
+          "username": "MusicLover",
+          "rating": 4,
+          "comment": "proident aliqua labore occaecat velit Lorem culpa nulla aute irure nostrud veniam in fugiat ad.",
+          "date": "2024-02-07"
+        },
+        {
+          "id": 160,
+          "username": "ArtLover",
+          "rating": 5,
+          "comment": "esse ipsum ea pariatur eiusmod officia proident sed aliquip deserunt nisi incididunt cillum cupidatat ullamco.",
+          "date": "2024-02-07"
+        },
+        {
+          "id": 161,
+          "username": "EntertainmentBuff",
+          "rating": 3,
+          "comment": "et aliquip officia labore anim tempor enim fugiat occaecat consectetur sit nostrud minim nisi magna.",
+          "date": "2024-02-20"
+        }
+      ]
     },
     {
       "id": 5,
@@ -303,9 +903,47 @@
       "venue": "Queen Elizabeth Theatre",
       "date": "2024-02-25",
       "time": "20:00",
-      "price": 55.00,
+      "price": 55.0,
       "image": "https://plus.unsplash.com/premium_photo-1738067044507-07f7558efe30?w=400&h=600&fit=crop",
-      "featured": true
+      "featured": true,
+      "userRating": 4.6,
+      "reviews": [
+        {
+          "id": 162,
+          "username": "TheaterAddict",
+          "rating": 5,
+          "comment": "ut sunt sed deserunt ad aute commodo mollit ea adipiscing amet qui minim tempor exercitation.",
+          "date": "2024-02-22"
+        },
+        {
+          "id": 163,
+          "username": "SportsFan88",
+          "rating": 4,
+          "comment": "eiusmod nisi exercitation cillum laborum ullamco consequat amet consectetur aliqua in do esse dolore culpa.",
+          "date": "2024-02-07"
+        },
+        {
+          "id": 164,
+          "username": "EntertainmentBuff",
+          "rating": 3,
+          "comment": "tempor pariatur qui duis irure laboris consectetur velit occaecat sint ea veniam quis et sed.",
+          "date": "2024-02-08"
+        },
+        {
+          "id": 165,
+          "username": "ShowFan",
+          "rating": 4,
+          "comment": "in amet consequat excepteur cupidatat irure duis labore laborum officia quis esse deserunt mollit ut.",
+          "date": "2024-02-20"
+        },
+        {
+          "id": 166,
+          "username": "VenueVisitor",
+          "rating": 5,
+          "comment": "commodo magna dolor tempor enim nostrud minim velit labore cupidatat pariatur dolore occaecat ea sit.",
+          "date": "2024-02-22"
+        }
+      ]
     },
     {
       "id": 6,
@@ -316,9 +954,40 @@
       "venue": "Calgary Zoo",
       "date": "2024-02-17",
       "time": "10:00",
-      "price": 25.00,
+      "price": 25.0,
       "image": "https://plus.unsplash.com/premium_photo-1737373915093-2c4128162243?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.2,
+      "reviews": [
+        {
+          "id": 167,
+          "username": "EventExpert",
+          "rating": 5,
+          "comment": "laborum minim qui ex incididunt sint est officia nisi nostrud et pariatur ipsum tempor voluptate.",
+          "date": "2024-02-25"
+        },
+        {
+          "id": 168,
+          "username": "LocalReviewer",
+          "rating": 4,
+          "comment": "officia dolore amet excepteur aliquip deserunt enim id adipiscing pariatur minim proident cillum commodo laboris.",
+          "date": "2024-02-09"
+        },
+        {
+          "id": 169,
+          "username": "ExperienceHunter",
+          "rating": 3,
+          "comment": "cillum commodo excepteur ex irure non ea occaecat qui Lorem culpa labore consectetur enim ullamco.",
+          "date": "2024-02-19"
+        },
+        {
+          "id": 170,
+          "username": "VenueVisitor",
+          "rating": 3,
+          "comment": "aute adipiscing labore magna fugiat ipsum id velit officia duis est in eiusmod minim sed.",
+          "date": "2024-02-15"
+        }
+      ]
     },
     {
       "id": 8,
@@ -329,9 +998,40 @@
       "venue": "Bell Centre",
       "date": "2024-02-28",
       "time": "20:30",
-      "price": 95.00,
+      "price": 95.0,
       "image": "https://images.unsplash.com/photo-1580244659964-dba76bd98929?w=400&h=600&fit=crop",
-      "featured": true
+      "featured": true,
+      "userRating": 4.2,
+      "reviews": [
+        {
+          "id": 171,
+          "username": "PerformanceFan",
+          "rating": 4,
+          "comment": "tempor cillum sed sit voluptate anim id mollit dolor enim nisi deserunt cupidatat nulla velit.",
+          "date": "2024-02-15"
+        },
+        {
+          "id": 172,
+          "username": "TorontoUser",
+          "rating": 5,
+          "comment": "do non Lorem laboris est quis dolore sint commodo et ullamco enim irure veniam mollit.",
+          "date": "2024-02-19"
+        },
+        {
+          "id": 173,
+          "username": "TorontoUser",
+          "rating": 3,
+          "comment": "minim est tempor irure dolor commodo consectetur et adipiscing Lorem deserunt laborum officia ea sint.",
+          "date": "2024-02-22"
+        },
+        {
+          "id": 505,
+          "username": "VenueExpert",
+          "rating": 3,
+          "comment": "fugiat proident tempor officia consequat aute est commodo id cupidatat pariatur quis aliqua non cillum.",
+          "date": "2024-02-15"
+        }
+      ]
     },
     {
       "id": 9,
@@ -342,9 +1042,40 @@
       "venue": "Queen Elizabeth Theatre",
       "date": "2024-03-05",
       "time": "19:30",
-      "price": 85.00,
+      "price": 85.0,
       "image": "https://images.unsplash.com/photo-1692288783512-1db833cbc178?w=400&h=600&fit=crop",
-      "featured": true
+      "featured": true,
+      "userRating": 4.7,
+      "reviews": [
+        {
+          "id": 174,
+          "username": "ShowFan",
+          "rating": 4,
+          "comment": "reprehenderit do sint velit est irure amet esse elit ea duis id laborum adipiscing dolor.",
+          "date": "2024-02-18"
+        },
+        {
+          "id": 175,
+          "username": "MusicLover",
+          "rating": 5,
+          "comment": "ex sunt incididunt minim reprehenderit sint duis ad consequat adipiscing esse cupidatat anim Lorem id.",
+          "date": "2024-02-11"
+        },
+        {
+          "id": 176,
+          "username": "LiveEventLover",
+          "rating": 3,
+          "comment": "eiusmod sed laborum irure aliqua dolor quis Lorem enim velit amet ipsum dolore deserunt id.",
+          "date": "2024-02-20"
+        },
+        {
+          "id": 506,
+          "username": "ShowCritic",
+          "rating": 5,
+          "comment": "nulla fugiat consequat Lorem tempor sint voluptate anim magna veniam cillum ea in dolore ad.",
+          "date": "2024-02-06"
+        }
+      ]
     },
     {
       "id": 10,
@@ -355,9 +1086,40 @@
       "venue": "Rogers Arena",
       "date": "2024-03-01",
       "time": "19:00",
-      "price": 89.00,
+      "price": 89.0,
       "image": "https://images.unsplash.com/photo-1496427473315-1408fac9d594?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.4,
+      "reviews": [
+        {
+          "id": 177,
+          "username": "ShowFan",
+          "rating": 4,
+          "comment": "nostrud fugiat irure tempor ipsum ad mollit esse aliquip aliqua ea eiusmod et officia sint.",
+          "date": "2024-02-23"
+        },
+        {
+          "id": 178,
+          "username": "MovieFan123",
+          "rating": 3,
+          "comment": "eiusmod ea consectetur in tempor et id cupidatat do ipsum amet aliquip officia ad ullamco.",
+          "date": "2024-02-21"
+        },
+        {
+          "id": 179,
+          "username": "FunSeeker",
+          "rating": 3,
+          "comment": "officia sit do culpa velit consequat cupidatat sunt nulla proident et id eiusmod veniam mollit.",
+          "date": "2024-02-19"
+        },
+        {
+          "id": 507,
+          "username": "ArtCritic",
+          "rating": 4,
+          "comment": "sed est aliqua sit ipsum qui consequat magna ex in ullamco dolor sint anim aute.",
+          "date": "2024-02-06"
+        }
+      ]
     },
     {
       "id": 11,
@@ -368,9 +1130,40 @@
       "venue": "Canada Science and Technology Museum",
       "date": "2024-02-24",
       "time": "14:00",
-      "price": 15.00,
+      "price": 15.0,
       "image": "https://images.unsplash.com/photo-1557734864-c78b6dfef1b1?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.2,
+      "reviews": [
+        {
+          "id": 180,
+          "username": "PerformanceFan",
+          "rating": 3,
+          "comment": "laboris esse anim nulla minim nostrud id aliqua elit in do ex excepteur veniam ut.",
+          "date": "2024-02-17"
+        },
+        {
+          "id": 181,
+          "username": "EntertainmentBuff",
+          "rating": 3,
+          "comment": "ex laboris tempor nostrud velit consectetur amet laborum pariatur est mollit dolore aliqua nisi magna.",
+          "date": "2024-02-15"
+        },
+        {
+          "id": 182,
+          "username": "SportsFan88",
+          "rating": 5,
+          "comment": "sed labore enim tempor consequat ullamco ex in ut nostrud sit sint dolor aliqua duis.",
+          "date": "2024-02-10"
+        },
+        {
+          "id": 508,
+          "username": "EntertainmentFan",
+          "rating": 3,
+          "comment": "do nostrud cillum enim reprehenderit dolor ex mollit consequat ea culpa adipiscing ad dolore incididunt.",
+          "date": "2024-02-13"
+        }
+      ]
     },
     {
       "id": 12,
@@ -381,9 +1174,47 @@
       "venue": "Danforth Music Hall",
       "date": "2024-03-08",
       "time": "21:00",
-      "price": 65.00,
+      "price": 65.0,
       "image": "https://images.unsplash.com/photo-1641903806973-17eaf2d2634f?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.1,
+      "reviews": [
+        {
+          "id": 183,
+          "username": "FunSeeker",
+          "rating": 4,
+          "comment": "veniam laboris amet eiusmod in ea aute do proident non consequat voluptate esse adipiscing id.",
+          "date": "2024-02-21"
+        },
+        {
+          "id": 184,
+          "username": "ConcertGoer",
+          "rating": 3,
+          "comment": "proident voluptate enim excepteur nisi sed laboris consequat non reprehenderit ad exercitation mollit aliquip cillum.",
+          "date": "2024-02-25"
+        },
+        {
+          "id": 185,
+          "username": "TorontoUser",
+          "rating": 3,
+          "comment": "sed qui nisi laboris in incididunt eiusmod esse magna enim veniam aliqua culpa dolore non.",
+          "date": "2024-02-19"
+        },
+        {
+          "id": 186,
+          "username": "LocalReviewer",
+          "rating": 5,
+          "comment": "minim cupidatat commodo ut qui sed elit mollit velit consequat cillum Lorem esse ex enim.",
+          "date": "2024-02-16"
+        },
+        {
+          "id": 187,
+          "username": "FunSeeker",
+          "rating": 4,
+          "comment": "veniam consectetur ipsum tempor cillum excepteur culpa sed ullamco irure enim id et nulla pariatur.",
+          "date": "2024-02-23"
+        }
+      ]
     },
     {
       "id": 26,
@@ -394,9 +1225,40 @@
       "venue": "Place Bell",
       "date": "2024-03-10",
       "time": "20:00",
-      "price": 75.00,
+      "price": 75.0,
       "image": "https://plus.unsplash.com/premium_photo-1737373915093-2c4128162243?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.1,
+      "reviews": [
+        {
+          "id": 188,
+          "username": "ShowFan",
+          "rating": 5,
+          "comment": "esse id ut ullamco mollit sit dolore duis consequat veniam est in officia elit reprehenderit.",
+          "date": "2024-02-08"
+        },
+        {
+          "id": 189,
+          "username": "ExperienceHunter",
+          "rating": 3,
+          "comment": "mollit laborum sint commodo fugiat pariatur consectetur exercitation nostrud amet voluptate est nulla nisi et.",
+          "date": "2024-02-17"
+        },
+        {
+          "id": 190,
+          "username": "LiveEventLover",
+          "rating": 4,
+          "comment": "deserunt nulla est enim minim qui ullamco nisi dolor consequat do veniam in eiusmod officia.",
+          "date": "2024-02-14"
+        },
+        {
+          "id": 509,
+          "username": "EventCritic",
+          "rating": 3,
+          "comment": "ea in dolor amet nulla adipiscing ullamco dolore sunt sed velit voluptate ipsum minim esse.",
+          "date": "2024-02-07"
+        }
+      ]
     },
     {
       "id": 27,
@@ -407,9 +1269,40 @@
       "venue": "Second City Toronto",
       "date": "2024-03-12",
       "time": "21:30",
-      "price": 45.00,
+      "price": 45.0,
       "image": "https://images.unsplash.com/photo-1607873893945-b5920ac228f6?w=400&h=600&fit=crop",
-      "featured": true
+      "featured": true,
+      "userRating": 4.6,
+      "reviews": [
+        {
+          "id": 191,
+          "username": "LiveEventLover",
+          "rating": 5,
+          "comment": "aliqua sint qui amet laboris fugiat ea pariatur cupidatat aute sunt in mollit voluptate officia.",
+          "date": "2024-02-05"
+        },
+        {
+          "id": 192,
+          "username": "CityExplorer",
+          "rating": 3,
+          "comment": "labore proident do ullamco sint in quis id velit ut officia deserunt incididunt ipsum duis.",
+          "date": "2024-02-06"
+        },
+        {
+          "id": 193,
+          "username": "VenueVisitor",
+          "rating": 4,
+          "comment": "consequat esse magna culpa velit amet pariatur qui elit non enim voluptate ipsum ea minim.",
+          "date": "2024-02-15"
+        },
+        {
+          "id": 194,
+          "username": "LocalReviewer",
+          "rating": 4,
+          "comment": "duis minim id fugiat tempor do sint consectetur commodo non sed esse laborum reprehenderit amet.",
+          "date": "2024-02-14"
+        }
+      ]
     },
     {
       "id": 28,
@@ -420,9 +1313,47 @@
       "venue": "Bell Centre",
       "date": "2024-03-15",
       "time": "19:00",
-      "price": 95.00,
+      "price": 95.0,
       "image": "https://plus.unsplash.com/premium_photo-1712284619389-60ec1957e348?w=400&h=600&fit=crop",
-      "featured": false
+      "featured": false,
+      "userRating": 4.9,
+      "reviews": [
+        {
+          "id": 195,
+          "username": "SportsFan88",
+          "rating": 5,
+          "comment": "culpa aute ipsum mollit aliquip enim esse pariatur in occaecat tempor ad deserunt aliqua velit.",
+          "date": "2024-02-25"
+        },
+        {
+          "id": 196,
+          "username": "LiveEventLover",
+          "rating": 5,
+          "comment": "dolore incididunt quis sed anim nostrud labore reprehenderit cillum veniam esse cupidatat consequat consectetur duis.",
+          "date": "2024-02-06"
+        },
+        {
+          "id": 197,
+          "username": "VenueVisitor",
+          "rating": 3,
+          "comment": "duis sunt irure fugiat labore do eiusmod aliqua mollit deserunt velit minim occaecat enim pariatur.",
+          "date": "2024-02-06"
+        },
+        {
+          "id": 198,
+          "username": "FunSeeker",
+          "rating": 3,
+          "comment": "ullamco cillum nostrud cupidatat quis velit deserunt ad qui ipsum reprehenderit amet culpa laboris magna.",
+          "date": "2024-02-14"
+        },
+        {
+          "id": 199,
+          "username": "TorontoUser",
+          "rating": 3,
+          "comment": "laboris ut labore aliqua anim amet consequat pariatur id sunt sint consectetur quis ullamco elit.",
+          "date": "2024-02-20"
+        }
+      ]
     }
   ]
-} 
+}

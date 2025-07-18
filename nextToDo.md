@@ -7,7 +7,7 @@
 4. SCRUM-50 (Price Range Filtering) #DONE
 
 ## Phase 2: Event Details Enhancement
-5. SCRUM-55 (Reviews & Ratings Display)
+5. SCRUM-55 (Reviews & Ratings Display) #DONE
 
 ## Phase 3: Seating System
 6. SCRUM-56 (Venue Seating Layout)
