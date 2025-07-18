@@ -4,7 +4,7 @@
 1. SCRUM-49 (Venue Filtering) #DONE
 2. SCRUM-47 (Date Filtering) #DONE
 3. SCRUM-48 (Time Range Filtering) #DONE
-4. SCRUM-50 (Price Range Filtering)
+4. SCRUM-50 (Price Range Filtering) #DONE
 
 ## Phase 2: Event Details Enhancement
 5. SCRUM-55 (Reviews & Ratings Display)

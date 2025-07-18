@@ -67,6 +67,8 @@ const Events: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [fromTime, setFromTime] = useState<string>('');
   const [toTime, setToTime] = useState<string>('');
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
   const [events] = useState<Event[]>(eventsData.events);
 
   // Load filters from URL params or localStorage on mount
@@ -123,6 +125,8 @@ const Events: React.FC = () => {
       setSelectedDate('');
       setFromTime('');
       setToTime('');
+      setMinPrice('');
+      setMaxPrice('');
       localStorage.removeItem('selectedEventCategory');
       localStorage.removeItem('selectedEventLocation');
       
@@ -203,6 +207,17 @@ const Events: React.FC = () => {
       
       return eventTimeMinutes >= fromTimeMinutes && eventTimeMinutes <= toTimeMinutes;
     };
+
+    // Price range filtering
+    const matchesPriceRange = () => {
+      if (!minPrice && !maxPrice) return true;
+      
+      const eventPrice = event.price;
+      const minPriceValue = minPrice ? parseFloat(minPrice) : 0;
+      const maxPriceValue = maxPrice ? parseFloat(maxPrice) : Infinity;
+      
+      return eventPrice >= minPriceValue && eventPrice <= maxPriceValue;
+    };
     
     const matchesSearch = !searchTerm || 
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -210,7 +225,7 @@ const Events: React.FC = () => {
       event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.venue.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesDate && matchesTimeRange() && matchesSearch;
+    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesDate && matchesTimeRange() && matchesPriceRange() && matchesSearch;
   });
 
   const handleBackToCategories = () => {
@@ -285,6 +300,14 @@ const Events: React.FC = () => {
     setToTime(event.target.value);
   };
 
+  const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMinPrice(event.target.value);
+  };
+
+  const handleMaxPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMaxPrice(event.target.value);
+  };
+
   const handleClearFilter = () => {
     setSelectedCategory('');
     setSelectedLocation('');
@@ -294,6 +317,8 @@ const Events: React.FC = () => {
     setSelectedDate('');
     setFromTime('');
     setToTime('');
+    setMinPrice('');
+    setMaxPrice('');
     localStorage.removeItem('selectedEventCategory');
     localStorage.removeItem('selectedEventLocation');
     navigate('/events');
@@ -402,6 +427,30 @@ const Events: React.FC = () => {
               shrink: true,
             }}
           />
+
+          <TextField
+            type="number"
+            label="Min Price ($)"
+            value={minPrice}
+            onChange={handleMinPriceChange}
+            sx={{ minWidth: 120 }}
+            inputProps={{
+              min: 0,
+              step: 0.01,
+            }}
+          />
+
+          <TextField
+            type="number"
+            label="Max Price ($)"
+            value={maxPrice}
+            onChange={handleMaxPriceChange}
+            sx={{ minWidth: 120 }}
+            inputProps={{
+              min: 0,
+              step: 0.01,
+            }}
+          />
           
           <FormControl sx={{ minWidth: 180 }}>
             <InputLabel>Location</InputLabel>
@@ -477,7 +526,7 @@ const Events: React.FC = () => {
             </Select>
           </FormControl>
           
-          {(selectedCategory || selectedLocation || searchTerm || selectedGenre || selectedVenues.length > 0 || selectedDate || fromTime || toTime) && (
+          {(selectedCategory || selectedLocation || searchTerm || selectedGenre || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice) && (
             <Button
               variant="outlined"
               onClick={handleClearFilter}
@@ -494,13 +543,19 @@ const Events: React.FC = () => {
         <Box sx={{ textAlign: 'center', py: 8 }}>
           <LocationOn sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
           <Typography variant="h5" gutterBottom color="text.secondary">
-            {(fromTime || toTime)
-              ? `No events available ${fromTime && toTime 
-                  ? `between ${formatTimeForDisplay(fromTime)} and ${formatTimeForDisplay(toTime)}` 
-                  : fromTime 
-                    ? `after ${formatTimeForDisplay(fromTime)}` 
-                    : `before ${formatTimeForDisplay(toTime)}`}`
-              : selectedDate
+            {(minPrice || maxPrice)
+              ? `No events available ${minPrice && maxPrice 
+                  ? `between $${minPrice} and $${maxPrice}` 
+                  : minPrice 
+                    ? `above $${minPrice}` 
+                    : `below $${maxPrice}`}`
+              : (fromTime || toTime)
+                ? `No events available ${fromTime && toTime 
+                    ? `between ${formatTimeForDisplay(fromTime)} and ${formatTimeForDisplay(toTime)}` 
+                    : fromTime 
+                      ? `after ${formatTimeForDisplay(fromTime)}` 
+                      : `before ${formatTimeForDisplay(toTime)}`}`
+                : selectedDate
                 ? `No events available on ${new Date(selectedDate).toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`
                 : selectedVenues.length > 0
                   ? `No events available at ${selectedVenues.length === 1 ? selectedVenues[0] : 'selected venues'}`
@@ -514,13 +569,19 @@ const Events: React.FC = () => {
             }
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            {(fromTime || toTime)
-              ? `Try adjusting your time range or check back later for events ${fromTime && toTime 
-                  ? `between ${formatTimeForDisplay(fromTime)} and ${formatTimeForDisplay(toTime)}` 
-                  : fromTime 
-                    ? `after ${formatTimeForDisplay(fromTime)}` 
-                    : `before ${formatTimeForDisplay(toTime)}`}.`
-              : selectedDate
+            {(minPrice || maxPrice)
+              ? `Try adjusting your price range or check back later for events ${minPrice && maxPrice 
+                  ? `between $${minPrice} and $${maxPrice}` 
+                  : minPrice 
+                    ? `above $${minPrice}` 
+                    : `below $${maxPrice}`}.`
+              : (fromTime || toTime)
+                ? `Try adjusting your time range or check back later for events ${fromTime && toTime 
+                    ? `between ${formatTimeForDisplay(fromTime)} and ${formatTimeForDisplay(toTime)}` 
+                    : fromTime 
+                      ? `after ${formatTimeForDisplay(fromTime)}` 
+                      : `before ${formatTimeForDisplay(toTime)}`}.`
+                : selectedDate
                 ? `Try selecting a different date or check back later for events on ${new Date(selectedDate).toLocaleDateString('en-CA', { month: 'long', day: 'numeric' })}.`
                 : selectedVenues.length > 0
                   ? `Try selecting different venues or check back later for new events at ${selectedVenues.length === 1 ? selectedVenues[0] : 'your selected venues'}.`
@@ -534,7 +595,7 @@ const Events: React.FC = () => {
           
           <Button
             variant="contained"
-            onClick={selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime ? handleClearFilter : handleBackToCategories}
+            onClick={selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice ? handleClearFilter : handleBackToCategories}
             sx={{
               bgcolor: '#6a5acd',
               '&:hover': {
@@ -542,7 +603,7 @@ const Events: React.FC = () => {
               }
             }}
           >
-            {selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime ? 'Show All Events' : 'Explore Categories'}
+            {selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice ? 'Show All Events' : 'Explore Categories'}
           </Button>
         </Box>
       ) : (
