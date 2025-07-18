@@ -64,6 +64,7 @@ const Events: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<string>('');
   const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>('');
   const [events] = useState<Event[]>(eventsData.events);
 
   // Load filters from URL params or localStorage on mount
@@ -117,6 +118,7 @@ const Events: React.FC = () => {
       setSearchTerm('');
       setSelectedGenre('');
       setSelectedVenues([]);
+      setSelectedDate('');
       localStorage.removeItem('selectedEventCategory');
       localStorage.removeItem('selectedEventLocation');
       
@@ -165,19 +167,20 @@ const Events: React.FC = () => {
     new Set(movieEvents.map(movie => movie.genre?.split('/')[0]).filter(Boolean))
   );
 
-  // Filter events based on category, location, genre, venue, and search
+  // Filter events based on category, location, genre, venue, date, and search
   const filteredEvents = events.filter(event => {
     const matchesCategory = !selectedCategory || event.category === selectedCategory;
     const matchesLocation = !selectedLocation || event.location === selectedLocation;
     const matchesGenre = !selectedGenre || (event.category === 'movies' && event.genre?.includes(selectedGenre));
     const matchesVenues = selectedVenues.length === 0 || selectedVenues.includes(event.venue);
+    const matchesDate = !selectedDate || event.date === selectedDate;
     const matchesSearch = !searchTerm || 
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.venue.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesSearch;
+    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesDate && matchesSearch;
   });
 
   const handleBackToCategories = () => {
@@ -240,12 +243,17 @@ const Events: React.FC = () => {
     setSelectedVenues(typeof value === 'string' ? value.split(',') : value);
   };
 
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(event.target.value);
+  };
+
   const handleClearFilter = () => {
     setSelectedCategory('');
     setSelectedLocation('');
     setSearchTerm('');
     setSelectedGenre('');
     setSelectedVenues([]);
+    setSelectedDate('');
     localStorage.removeItem('selectedEventCategory');
     localStorage.removeItem('selectedEventLocation');
     navigate('/events');
@@ -319,6 +327,17 @@ const Events: React.FC = () => {
                   <Search />
                 </InputAdornment>
               ),
+            }}
+          />
+
+          <TextField
+            type="date"
+            label="Event Date"
+            value={selectedDate}
+            onChange={handleDateChange}
+            sx={{ minWidth: 180 }}
+            InputLabelProps={{
+              shrink: true,
             }}
           />
           
@@ -396,7 +415,7 @@ const Events: React.FC = () => {
             </Select>
           </FormControl>
           
-          {(selectedCategory || selectedLocation || searchTerm || selectedGenre || selectedVenues.length > 0) && (
+          {(selectedCategory || selectedLocation || searchTerm || selectedGenre || selectedVenues.length > 0 || selectedDate) && (
             <Button
               variant="outlined"
               onClick={handleClearFilter}
@@ -413,31 +432,35 @@ const Events: React.FC = () => {
         <Box sx={{ textAlign: 'center', py: 8 }}>
           <LocationOn sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
           <Typography variant="h5" gutterBottom color="text.secondary">
-            {selectedVenues.length > 0
-              ? `No events available at ${selectedVenues.length === 1 ? selectedVenues[0] : 'selected venues'}`
-              : selectedLocation 
-                ? `No events available in ${selectedLocation}` 
-                : selectedCategory 
-                  ? `No events available in ${categoryDetails?.name || 'this'} category` 
-                  : searchTerm 
-                    ? 'No events found matching your search'
-                    : 'No events available'
+            {selectedDate
+              ? `No events available on ${new Date(selectedDate).toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`
+              : selectedVenues.length > 0
+                ? `No events available at ${selectedVenues.length === 1 ? selectedVenues[0] : 'selected venues'}`
+                : selectedLocation 
+                  ? `No events available in ${selectedLocation}` 
+                  : selectedCategory 
+                    ? `No events available in ${categoryDetails?.name || 'this'} category` 
+                    : searchTerm 
+                      ? 'No events found matching your search'
+                      : 'No events available'
             }
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            {selectedVenues.length > 0
-              ? `Try selecting different venues or check back later for new events at ${selectedVenues.length === 1 ? selectedVenues[0] : 'your selected venues'}.`
-              : selectedLocation 
-                ? `Check back later for exciting events in ${selectedLocation}, or explore events in other cities.`
-                : selectedCategory 
-                  ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
-                  : 'Try adjusting your search criteria or explore different categories.'
+            {selectedDate
+              ? `Try selecting a different date or check back later for events on ${new Date(selectedDate).toLocaleDateString('en-CA', { month: 'long', day: 'numeric' })}.`
+              : selectedVenues.length > 0
+                ? `Try selecting different venues or check back later for new events at ${selectedVenues.length === 1 ? selectedVenues[0] : 'your selected venues'}.`
+                : selectedLocation 
+                  ? `Check back later for exciting events in ${selectedLocation}, or explore events in other cities.`
+                  : selectedCategory 
+                    ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
+                    : 'Try adjusting your search criteria or explore different categories.'
             }
           </Typography>
           
           <Button
             variant="contained"
-            onClick={selectedLocation || selectedCategory || selectedVenues.length > 0 ? handleClearFilter : handleBackToCategories}
+            onClick={selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate ? handleClearFilter : handleBackToCategories}
             sx={{
               bgcolor: '#6a5acd',
               '&:hover': {
@@ -445,7 +468,7 @@ const Events: React.FC = () => {
               }
             }}
           >
-            {selectedLocation || selectedCategory || selectedVenues.length > 0 ? 'Show All Events' : 'Explore Categories'}
+            {selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate ? 'Show All Events' : 'Explore Categories'}
           </Button>
         </Box>
       ) : (
