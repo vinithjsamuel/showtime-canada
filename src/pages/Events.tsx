@@ -70,6 +70,8 @@ const Events: React.FC = () => {
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
   const [events] = useState<Event[]>(eventsData.events);
+  const [hasInitialized, setHasInitialized] = useState(false);
+  const [isLocationLoading, setIsLocationLoading] = useState(true);
 
   // Load filters from URL params or localStorage on mount
   useEffect(() => {
@@ -89,36 +91,57 @@ const Events: React.FC = () => {
       }
     }
 
-    if (locationFromUrl) {
+    if (locationFromUrl !== null) {
+      // URL has explicit location parameter (including empty string for "All Locations")
       setSelectedLocation(locationFromUrl);
       localStorage.setItem('selectedEventLocation', locationFromUrl);
     } else {
-      // Check for saved location first, but always prefer user's current location
+      // No location in URL, check saved location or use user's location
       const savedLocation = localStorage.getItem('selectedEventLocation');
       
-      // If user has a location and it's different from saved, update to user's location
-      if (user?.location) {
-        const userLocation = user.location;
-        if (savedLocation !== userLocation) {
-          setSelectedLocation(userLocation);
-          localStorage.setItem('selectedEventLocation', userLocation);
-        } else if (savedLocation) {
-          setSelectedLocation(savedLocation);
-        } else {
-          setSelectedLocation(userLocation);
-          localStorage.setItem('selectedEventLocation', userLocation);
-        }
-      } else if (savedLocation) {
+      if (savedLocation !== null) {
+        // Use saved location (including empty string for "All Locations")
         setSelectedLocation(savedLocation);
+      } else if (user?.location) {
+        // No saved location, use user's location as default
+        const userLocation = user.location;
+        setSelectedLocation(userLocation);
+        localStorage.setItem('selectedEventLocation', userLocation);
       }
     }
-  }, [categoryId, searchParams, user?.location]);
+  }, [categoryId, searchParams]);
 
-  // Clear filters when navigating to plain /events, then set user location
+  // Set user location as default only once when everything is loaded
+  useEffect(() => {
+    if (!hasInitialized && user?.location) {
+      const locationFromUrl = searchParams.get('location');
+      const savedLocation = localStorage.getItem('selectedEventLocation');
+      
+      // Set user location as default unless there's an explicit choice in URL or localStorage
+      if (locationFromUrl === null && savedLocation === null && !selectedLocation) {
+        setSelectedLocation(user.location);
+        localStorage.setItem('selectedEventLocation', user.location);
+      }
+      setHasInitialized(true);
+      setIsLocationLoading(false);
+    } else if (!hasInitialized && !user?.location) {
+      // If no user location available, set to "All Locations"
+      const locationFromUrl = searchParams.get('location');
+      const savedLocation = localStorage.getItem('selectedEventLocation');
+      
+      if (locationFromUrl === null && savedLocation === null && !selectedLocation) {
+        setSelectedLocation('all');
+        localStorage.setItem('selectedEventLocation', 'all');
+      }
+      setHasInitialized(true);
+      setIsLocationLoading(false);
+    }
+  }, [user?.location, hasInitialized, selectedLocation]);
+
+  // Clear filters when navigating to plain /events, then set default location
   useEffect(() => {
     if (location.pathname === '/events' && !searchParams.get('category') && !searchParams.get('location') && !categoryId) {
       setSelectedCategory('');
-      setSelectedLocation('');
       setSearchTerm('');
       setSelectedGenre('');
       setSelectedVenues([]);
@@ -128,15 +151,14 @@ const Events: React.FC = () => {
       setMinPrice('');
       setMaxPrice('');
       localStorage.removeItem('selectedEventCategory');
-      localStorage.removeItem('selectedEventLocation');
       
-      // After clearing, set user's location if available
+      // Set user's location as default when clearing filters
       if (user?.location) {
-        const userLocation = user.location;
-        setTimeout(() => {
-          setSelectedLocation(userLocation);
-          localStorage.setItem('selectedEventLocation', userLocation);
-        }, 0);
+        setSelectedLocation(user.location);
+        localStorage.setItem('selectedEventLocation', user.location);
+      } else {
+        setSelectedLocation('all');
+        localStorage.setItem('selectedEventLocation', 'all');
       }
     }
   }, [location.pathname, searchParams, categoryId, user?.location]);
@@ -192,7 +214,7 @@ const Events: React.FC = () => {
   // Filter events based on category, location, genre, venue, date, time range, and search
   const filteredEvents = events.filter(event => {
     const matchesCategory = !selectedCategory || event.category === selectedCategory;
-    const matchesLocation = !selectedLocation || event.location === selectedLocation;
+    const matchesLocation = !selectedLocation || selectedLocation === 'all' || event.location === selectedLocation;
     const matchesGenre = !selectedGenre || (event.category === 'movies' && event.genre?.includes(selectedGenre));
     const matchesVenues = selectedVenues.length === 0 || selectedVenues.includes(event.venue);
     const matchesDate = !selectedDate || event.date === selectedDate;
@@ -244,39 +266,41 @@ const Events: React.FC = () => {
     if (newCategory) {
       const searchParams = new URLSearchParams();
       searchParams.set('category', newCategory);
-      if (selectedLocation) {
-        searchParams.set('location', selectedLocation);
-      }
+      // Always add location to URL, even if empty (All Locations)
+      searchParams.set('location', selectedLocation);
       navigate(`/events?${searchParams.toString()}`);
     } else {
       localStorage.removeItem('selectedEventCategory');
-      if (selectedLocation) {
-        navigate(`/events?location=${selectedLocation}`);
-      } else {
-        navigate('/events');
-      }
+      // Always preserve the current location selection, even if it's "All Locations"
+      const searchParams = new URLSearchParams();
+      searchParams.set('location', selectedLocation);
+      navigate(`/events?${searchParams.toString()}`);
     }
   };
 
   const handleLocationChange = (event: SelectChangeEvent<string>) => {
     const newLocation = event.target.value;
+    
+    // Temporarily disable to prevent rapid changes during navigation
+    setIsLocationLoading(true);
+    
     setSelectedLocation(newLocation);
     
-    if (newLocation) {
-      const searchParams = new URLSearchParams();
-      if (selectedCategory) {
-        searchParams.set('category', selectedCategory);
-      }
-      searchParams.set('location', newLocation);
-      navigate(`/events?${searchParams.toString()}`);
-    } else {
-      localStorage.removeItem('selectedEventLocation');
-      if (selectedCategory) {
-        navigate(`/events?category=${selectedCategory}`);
-      } else {
-        navigate('/events');
-      }
+    // Save user's explicit location choice to localStorage
+    localStorage.setItem('selectedEventLocation', newLocation);
+    
+    // Always navigate with both parameters to preserve user's explicit choices
+    const searchParams = new URLSearchParams();
+    if (selectedCategory) {
+      searchParams.set('category', selectedCategory);
     }
+    searchParams.set('location', newLocation);
+    navigate(`/events?${searchParams.toString()}`);
+    
+    // Re-enable after a short delay to allow navigation to complete
+    setTimeout(() => {
+      setIsLocationLoading(false);
+    }, 300);
   };
 
   const handleGenreChange = (event: SelectChangeEvent<string>) => {
@@ -310,7 +334,6 @@ const Events: React.FC = () => {
 
   const handleClearFilter = () => {
     setSelectedCategory('');
-    setSelectedLocation('');
     setSearchTerm('');
     setSelectedGenre('');
     setSelectedVenues([]);
@@ -320,8 +343,17 @@ const Events: React.FC = () => {
     setMinPrice('');
     setMaxPrice('');
     localStorage.removeItem('selectedEventCategory');
-    localStorage.removeItem('selectedEventLocation');
-    navigate('/events');
+    
+    // Clear filters should return to user's location as default
+    if (user?.location) {
+      setSelectedLocation(user.location);
+      localStorage.setItem('selectedEventLocation', user.location);
+      navigate(`/events?location=${user.location}`);
+    } else {
+      setSelectedLocation('all');
+      localStorage.setItem('selectedEventLocation', 'all');
+      navigate('/events?location=all');
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -380,161 +412,168 @@ const Events: React.FC = () => {
 
       {/* Filters Section */}
       <Box sx={{ mb: 4 }}>
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-          <TextField
-            fullWidth
-            placeholder="Search events by title, venue, or location"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-          />
+        <Stack spacing={2}>
+          {/* First Row: Search, Date, Time, Price */}
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+            <TextField
+              fullWidth
+              placeholder="Search events by title, venue, or location"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                ),
+              }}
+            />
 
-          <TextField
-            type="date"
-            label="Event Date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            sx={{ minWidth: 180 }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+            <TextField
+              type="date"
+              label="Event Date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              sx={{ minWidth: 180 }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
 
-          <TextField
-            type="time"
-            label="From Time"
-            value={fromTime}
-            onChange={handleFromTimeChange}
-            sx={{ minWidth: 140 }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+            <TextField
+              type="time"
+              label="From Time"
+              value={fromTime}
+              onChange={handleFromTimeChange}
+              sx={{ minWidth: 140 }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
 
-          <TextField
-            type="time"
-            label="To Time"
-            value={toTime}
-            onChange={handleToTimeChange}
-            sx={{ minWidth: 140 }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+            <TextField
+              type="time"
+              label="To Time"
+              value={toTime}
+              onChange={handleToTimeChange}
+              sx={{ minWidth: 140 }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
 
-          <TextField
-            type="number"
-            label="Min Price ($)"
-            value={minPrice}
-            onChange={handleMinPriceChange}
-            sx={{ minWidth: 120 }}
-            inputProps={{
-              min: 0,
-              step: 0.01,
-            }}
-          />
+            <TextField
+              type="number"
+              label="Min Price ($)"
+              value={minPrice}
+              onChange={handleMinPriceChange}
+              sx={{ minWidth: 120 }}
+              inputProps={{
+                min: 0,
+                step: 0.01,
+              }}
+            />
 
-          <TextField
-            type="number"
-            label="Max Price ($)"
-            value={maxPrice}
-            onChange={handleMaxPriceChange}
-            sx={{ minWidth: 120 }}
-            inputProps={{
-              min: 0,
-              step: 0.01,
-            }}
-          />
-          
-          <FormControl sx={{ minWidth: 180 }}>
-            <InputLabel>Location</InputLabel>
-            <Select
-              value={selectedLocation}
-              label="Location"
-              onChange={handleLocationChange}
-            >
-              <MenuItem value="">All Locations</MenuItem>
-              {uniqueLocations.map(location => (
-                <MenuItem key={location} value={location}>
-                  {location} {user?.location === location && '(Your City)'}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          
-          <FormControl sx={{ minWidth: 180 }}>
-            <InputLabel>Category</InputLabel>
-            <Select
-              value={selectedCategory}
-              label="Category"
-              onChange={handleCategoryChange}
-            >
-              <MenuItem value="">All Categories</MenuItem>
-              {eventCategoriesData.categories.map(category => (
-                <MenuItem key={category.id} value={category.id}>
-                  {category.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            <TextField
+              type="number"
+              label="Max Price ($)"
+              value={maxPrice}
+              onChange={handleMaxPriceChange}
+              sx={{ minWidth: 120 }}
+              inputProps={{
+                min: 0,
+                step: 0.01,
+              }}
+            />
+          </Stack>
 
-          {selectedCategory === 'movies' && (
-            <FormControl sx={{ minWidth: 160 }}>
-              <InputLabel>Genre</InputLabel>
+          {/* Second Row: Location, Category, Venues, Genre (if movies), Clear Filters */}
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+            <FormControl sx={{ minWidth: 180 }} disabled={isLocationLoading}>
+              <InputLabel>{isLocationLoading ? 'Loading...' : 'Location'}</InputLabel>
               <Select
-                value={selectedGenre}
-                label="Genre"
-                onChange={handleGenreChange}
+                value={selectedLocation}
+                label={isLocationLoading ? 'Loading...' : 'Location'}
+                onChange={handleLocationChange}
+                disabled={isLocationLoading}
               >
-                <MenuItem value="">All Genres</MenuItem>
-                {uniqueGenres.map(genre => (
-                  <MenuItem key={genre} value={genre}>
-                    {genre}
+                <MenuItem value="all">All Locations</MenuItem>
+                {uniqueLocations.map(location => (
+                  <MenuItem key={location} value={location}>
+                    {location} {user?.location === location && '(Your City)'}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-          )}
+            
+            <FormControl sx={{ minWidth: 180 }}>
+              <InputLabel>Category</InputLabel>
+              <Select
+                value={selectedCategory}
+                label="Category"
+                onChange={handleCategoryChange}
+              >
+                <MenuItem value="">All Categories</MenuItem>
+                {eventCategoriesData.categories.map(category => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-          <FormControl sx={{ minWidth: 180 }}>
-            <InputLabel>Venues</InputLabel>
-            <Select
-              multiple
-              value={selectedVenues}
-              label="Venues"
-              onChange={handleVenueChange}
-              renderValue={(selected) => 
-                selected.length === 0 
-                  ? 'All Venues' 
-                  : selected.length === 1 
-                    ? selected[0] 
-                    : `${selected.length} venues selected`
-              }
-            >
-              {uniqueVenues.map(venue => (
-                <MenuItem key={venue} value={venue}>
-                  <Checkbox checked={selectedVenues.indexOf(venue) > -1} />
-                  <ListItemText primary={venue} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          
-          {(selectedCategory || selectedLocation || searchTerm || selectedGenre || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice) && (
-            <Button
-              variant="outlined"
-              onClick={handleClearFilter}
-              sx={{ color: '#6a5acd', borderColor: '#6a5acd' }}
-            >
-              Clear Filters
-            </Button>
-          )}
+            <FormControl sx={{ minWidth: 180 }}>
+              <InputLabel>Venues</InputLabel>
+              <Select
+                multiple
+                value={selectedVenues}
+                label="Venues"
+                onChange={handleVenueChange}
+                renderValue={(selected) => 
+                  selected.length === 0 
+                    ? 'All Venues' 
+                    : selected.length === 1 
+                      ? selected[0] 
+                      : `${selected.length} venues selected`
+                }
+              >
+                {uniqueVenues.map(venue => (
+                  <MenuItem key={venue} value={venue}>
+                    <Checkbox checked={selectedVenues.indexOf(venue) > -1} />
+                    <ListItemText primary={venue} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            {selectedCategory === 'movies' && (
+              <FormControl sx={{ minWidth: 160 }}>
+                <InputLabel>Genre</InputLabel>
+                <Select
+                  value={selectedGenre}
+                  label="Genre"
+                  onChange={handleGenreChange}
+                >
+                  <MenuItem value="">All Genres</MenuItem>
+                  {uniqueGenres.map(genre => (
+                    <MenuItem key={genre} value={genre}>
+                      {genre}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+            
+            {(selectedCategory || (selectedLocation && selectedLocation !== 'all') || searchTerm || selectedGenre || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice) && (
+              <Button
+                variant="outlined"
+                onClick={handleClearFilter}
+                sx={{ color: '#6a5acd', borderColor: '#6a5acd' }}
+              >
+                Clear Filters
+              </Button>
+            )}
+          </Stack>
         </Stack>
       </Box>
 
@@ -559,7 +598,7 @@ const Events: React.FC = () => {
                 ? `No events available on ${new Date(selectedDate).toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`
                 : selectedVenues.length > 0
                   ? `No events available at ${selectedVenues.length === 1 ? selectedVenues[0] : 'selected venues'}`
-                  : selectedLocation 
+                  : selectedLocation && selectedLocation !== 'all'
                     ? `No events available in ${selectedLocation}` 
                     : selectedCategory 
                       ? `No events available in ${categoryDetails?.name || 'this'} category` 
@@ -585,7 +624,7 @@ const Events: React.FC = () => {
                 ? `Try selecting a different date or check back later for events on ${new Date(selectedDate).toLocaleDateString('en-CA', { month: 'long', day: 'numeric' })}.`
                 : selectedVenues.length > 0
                   ? `Try selecting different venues or check back later for new events at ${selectedVenues.length === 1 ? selectedVenues[0] : 'your selected venues'}.`
-                  : selectedLocation 
+                  : selectedLocation && selectedLocation !== 'all'
                     ? `Check back later for exciting events in ${selectedLocation}, or explore events in other cities.`
                     : selectedCategory 
                       ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
@@ -595,7 +634,7 @@ const Events: React.FC = () => {
           
           <Button
             variant="contained"
-            onClick={selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice ? handleClearFilter : handleBackToCategories}
+            onClick={(selectedLocation && selectedLocation !== 'all') || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice ? handleClearFilter : handleBackToCategories}
             sx={{
               bgcolor: '#6a5acd',
               '&:hover': {
@@ -603,7 +642,7 @@ const Events: React.FC = () => {
               }
             }}
           >
-            {selectedLocation || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice ? 'Show All Events' : 'Explore Categories'}
+            {(selectedLocation && selectedLocation !== 'all') || selectedCategory || selectedVenues.length > 0 || selectedDate || fromTime || toTime || minPrice || maxPrice ? 'Show All Events' : 'Explore Categories'}
           </Button>
         </Box>
       ) : (
