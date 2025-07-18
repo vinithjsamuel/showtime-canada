@@ -27,3 +27,4 @@
 | Epic | Feature | User Story ID | User Story | Status | Notes |
 |------|---------|---------------|------------|--------|-------|
 | 3.1 | Venue & Address Display | SCRUM-54 | As a user, I want to view the venue name and address, so that I know where the event is held. | ✅ | Venue name displayed prominently with full address and clickable Google Maps link |
+| 3.2 | Event Date & Time Display | SCRUM-53 | As a user, I want to see the event's date and time, so that I can plan my schedule. | ✅ | Date and time displayed with consistent formatting near event title, using 'en-CA' locale |
