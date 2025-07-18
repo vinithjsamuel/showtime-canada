@@ -17,7 +17,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  SelectChangeEvent
+  SelectChangeEvent,
+  Checkbox,
+  ListItemText
 } from '@mui/material';
 import { 
   ArrowBack, 
@@ -61,6 +63,7 @@ const Events: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<string>('');
+  const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
   const [events] = useState<Event[]>(eventsData.events);
 
   // Load filters from URL params or localStorage on mount
@@ -113,6 +116,7 @@ const Events: React.FC = () => {
       setSelectedLocation('');
       setSearchTerm('');
       setSelectedGenre('');
+      setSelectedVenues([]);
       localStorage.removeItem('selectedEventCategory');
       localStorage.removeItem('selectedEventLocation');
       
@@ -150,24 +154,30 @@ const Events: React.FC = () => {
     new Set(events.map(event => event.location))
   ).sort();
 
+  // Get unique venues from events data
+  const uniqueVenues = Array.from(
+    new Set(events.map(event => event.venue))
+  ).sort();
+
   // Get movie events for genre filtering
   const movieEvents = events.filter(event => event.category === 'movies');
   const uniqueGenres = Array.from(
     new Set(movieEvents.map(movie => movie.genre?.split('/')[0]).filter(Boolean))
   );
 
-  // Filter events based on category, location, genre, and search
+  // Filter events based on category, location, genre, venue, and search
   const filteredEvents = events.filter(event => {
     const matchesCategory = !selectedCategory || event.category === selectedCategory;
     const matchesLocation = !selectedLocation || event.location === selectedLocation;
     const matchesGenre = !selectedGenre || (event.category === 'movies' && event.genre?.includes(selectedGenre));
+    const matchesVenues = selectedVenues.length === 0 || selectedVenues.includes(event.venue);
     const matchesSearch = !searchTerm || 
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.venue.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesCategory && matchesLocation && matchesGenre && matchesSearch;
+    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesSearch;
   });
 
   const handleBackToCategories = () => {
@@ -225,11 +235,17 @@ const Events: React.FC = () => {
     setSelectedGenre(event.target.value);
   };
 
+  const handleVenueChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value;
+    setSelectedVenues(typeof value === 'string' ? value.split(',') : value);
+  };
+
   const handleClearFilter = () => {
     setSelectedCategory('');
     setSelectedLocation('');
     setSearchTerm('');
     setSelectedGenre('');
+    setSelectedVenues([]);
     localStorage.removeItem('selectedEventCategory');
     localStorage.removeItem('selectedEventLocation');
     navigate('/events');
@@ -355,8 +371,32 @@ const Events: React.FC = () => {
               </Select>
             </FormControl>
           )}
+
+          <FormControl sx={{ minWidth: 180 }}>
+            <InputLabel>Venues</InputLabel>
+            <Select
+              multiple
+              value={selectedVenues}
+              label="Venues"
+              onChange={handleVenueChange}
+              renderValue={(selected) => 
+                selected.length === 0 
+                  ? 'All Venues' 
+                  : selected.length === 1 
+                    ? selected[0] 
+                    : `${selected.length} venues selected`
+              }
+            >
+              {uniqueVenues.map(venue => (
+                <MenuItem key={venue} value={venue}>
+                  <Checkbox checked={selectedVenues.indexOf(venue) > -1} />
+                  <ListItemText primary={venue} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           
-          {(selectedCategory || selectedLocation || searchTerm || selectedGenre) && (
+          {(selectedCategory || selectedLocation || searchTerm || selectedGenre || selectedVenues.length > 0) && (
             <Button
               variant="outlined"
               onClick={handleClearFilter}
@@ -373,27 +413,31 @@ const Events: React.FC = () => {
         <Box sx={{ textAlign: 'center', py: 8 }}>
           <LocationOn sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
           <Typography variant="h5" gutterBottom color="text.secondary">
-            {selectedLocation 
-              ? `No events available in ${selectedLocation}` 
-              : selectedCategory 
-                ? `No events available in ${categoryDetails?.name || 'this'} category` 
-                : searchTerm 
-                  ? 'No events found matching your search'
-                  : 'No events available'
+            {selectedVenues.length > 0
+              ? `No events available at ${selectedVenues.length === 1 ? selectedVenues[0] : 'selected venues'}`
+              : selectedLocation 
+                ? `No events available in ${selectedLocation}` 
+                : selectedCategory 
+                  ? `No events available in ${categoryDetails?.name || 'this'} category` 
+                  : searchTerm 
+                    ? 'No events found matching your search'
+                    : 'No events available'
             }
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            {selectedLocation 
-              ? `Check back later for exciting events in ${selectedLocation}, or explore events in other cities.`
-              : selectedCategory 
-                ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
-                : 'Try adjusting your search criteria or explore different categories.'
+            {selectedVenues.length > 0
+              ? `Try selecting different venues or check back later for new events at ${selectedVenues.length === 1 ? selectedVenues[0] : 'your selected venues'}.`
+              : selectedLocation 
+                ? `Check back later for exciting events in ${selectedLocation}, or explore events in other cities.`
+                : selectedCategory 
+                  ? `Check back later for exciting ${categoryDetails?.name.toLowerCase() || 'entertainment'} experiences.`
+                  : 'Try adjusting your search criteria or explore different categories.'
             }
           </Typography>
           
           <Button
             variant="contained"
-            onClick={selectedLocation || selectedCategory ? handleClearFilter : handleBackToCategories}
+            onClick={selectedLocation || selectedCategory || selectedVenues.length > 0 ? handleClearFilter : handleBackToCategories}
             sx={{
               bgcolor: '#6a5acd',
               '&:hover': {
@@ -401,7 +445,7 @@ const Events: React.FC = () => {
               }
             }}
           >
-            {selectedLocation || selectedCategory ? 'Show All Events' : 'Explore Categories'}
+            {selectedLocation || selectedCategory || selectedVenues.length > 0 ? 'Show All Events' : 'Explore Categories'}
           </Button>
         </Box>
       ) : (

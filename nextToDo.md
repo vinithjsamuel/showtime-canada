@@ -1,7 +1,7 @@
 # Next Features To Implement - Priority Order
 
 ## Phase 1: Complete Event Filtering System
-1. SCRUM-49 (Venue Filtering)
+1. SCRUM-49 (Venue Filtering) #DONE
 2. SCRUM-47 (Date Filtering) 
 3. SCRUM-48 (Time Range Filtering)
 4. SCRUM-50 (Price Range Filtering)
