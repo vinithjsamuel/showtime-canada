@@ -21,3 +21,9 @@
 | 2.1 | Event Categories | SCRUM-43 | As a user, I want to select a category (e.g., Movies, Music), so that I only see events of that type. | ✅ | Category filtering implemented in Events.tsx with persistent selection |
 | 2.2 | Location-Based Filtering | SCRUM-44 | As a user, I want to set my city or location, so that I only see events happening near me. | ✅ | Location filtering implemented with user preference persistence and smart defaults |
 | 2.2 | Location-Based Filtering | SCRUM-45 | As a user, I want to change my location manually, so that I can check events in other cities. | ✅ | Manual location selection integrated with SCRUM-44 implementation |
+
+## Epic 3: Event Details & Information Display
+
+| Epic | Feature | User Story ID | User Story | Status | Notes |
+|------|---------|---------------|------------|--------|-------|
+| 3.1 | Venue & Address Display | SCRUM-54 | As a user, I want to view the venue name and address, so that I know where the event is held. | ✅ | Venue name displayed prominently with full address and clickable Google Maps link |

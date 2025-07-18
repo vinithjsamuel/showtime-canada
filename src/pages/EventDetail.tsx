@@ -153,9 +153,29 @@ const EventDetail: React.FC = () => {
 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <LocationOnIcon sx={{ color: '#6a5acd', mr: 1 }} />
-                  <Typography variant="body1">
-                    {event.venue}, {event.location}
-                  </Typography>
+                  <Box>
+                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                      {event.venue}
+                    </Typography>
+                    <Typography 
+                      variant="body2" 
+                      component="a"
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venue}, ${event.location}, Canada`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ 
+                        color: '#6a5acd', 
+                        textDecoration: 'none',
+                        '&:hover': {
+                          textDecoration: 'underline'
+                        }
+                      }}
+                    >
+                      {event.location}, Canada
+                      <br />
+                      📍 View on Google Maps
+                    </Typography>
+                  </Box>
                 </Box>
 
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
