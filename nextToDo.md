@@ -18,7 +18,7 @@
 9. SCRUM-59 (Checkout Review) #DONE
 10. SCRUM-60 (Payment Methods) #DONE
 11. SCRUM-66 (Payment Gateway Integration) #DONE
-12. SCRUM-61 (Payment Confirmation)
+12. SCRUM-61 (Payment Confirmation) #DONE
 
 ## Phase 5: Ticket Management
 13. SCRUM-62 (My Tickets Section)

@@ -219,39 +219,27 @@ const PaymentMethods: React.FC = () => {
       // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 3000));
       
-      if (selectedMethod === 'bankwire') {
-        // Bank wire specific success message
-        alert(`Bank wire transfer recorded! 
-        
-Your transfer details have been recorded and will be verified within 6 hours during business hours.
-
-Order Reference: #${event?.id}${selectedSeats.join('')}
-Amount: $${totalAmount.toFixed(2)} CAD
-
-You will receive a confirmation email once payment is verified.
-Your tickets will be available after payment confirmation.`);
-      } else if (['applepay', 'googlepay', 'samsungpay'].includes(selectedMethod)) {
-        // Digital wallet success message
-        const walletName = selectedMethod === 'applepay' ? 'Apple Pay' : 
-                          selectedMethod === 'googlepay' ? 'Google Pay' : 'Samsung Pay';
-        alert(`${walletName} payment successful! 
-
-Your tickets have been booked and sent to your email.
-Payment processed securely through ${walletName}.
-
-Method: ${walletName}
-Total: $${totalAmount.toFixed(2)}
-Transaction ID: ${Date.now()}-${selectedMethod.toUpperCase()}`);
-      } else {
-        // Regular payment success message
-        alert(`Payment successful! Your tickets have been booked.\nMethod: ${selectedMethod}\nTotal: $${totalAmount.toFixed(2)}`);
-      }
+      // Generate unique booking ID
+      const bookingId = `BC${Date.now()}${Math.floor(Math.random() * 1000)}`;
       
-      // Clear selected seats
-      sessionStorage.removeItem('selectedSeats');
+      // Generate transaction ID for digital wallets
+      const transactionId = ['applepay', 'googlepay', 'samsungpay'].includes(selectedMethod) 
+        ? `${Date.now()}-${selectedMethod.toUpperCase()}`
+        : undefined;
       
-      // Navigate back to events or confirmation page
-      navigate('/events');
+      // Store booking details in session storage
+      const bookingDetails = {
+        bookingId,
+        paymentMethod: selectedMethod,
+        totalAmount,
+        selectedSeats,
+        timestamp: new Date().toISOString(),
+        transactionId
+      };
+      sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+      
+      // Navigate to confirmation page
+      navigate(`/booking/confirmation/${id}`);
       
     } catch (error) {
       alert('Payment failed. Please try again.');
