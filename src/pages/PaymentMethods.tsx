@@ -34,6 +34,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import LockIcon from '@mui/icons-material/Lock';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { getUpdatedEvent } from '../utils/fileUpdater';
 import { saveTicket } from '../utils/ticketStorage';
 import { useAuth } from '../contexts/AuthContext';
@@ -469,72 +470,21 @@ const PaymentMethods: React.FC = () => {
                 <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
                   Credit Card Information
                 </Typography>
-                <Stack spacing={3}>
-                  <TextField
-                    fullWidth
-                    label="Card Number"
-                    value={formData.cardNumber}
-                    onChange={(e) => handleInputChange('cardNumber', formatCardNumber(e.target.value))}
-                    error={!!errors.cardNumber}
-                    helperText={errors.cardNumber}
-                    placeholder="1234 5678 9012 3456"
-                    inputProps={{ maxLength: 19 }}
-                  />
-                  
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <FormControl error={!!errors.expiryMonth} sx={{ minWidth: 120 }}>
-                      <InputLabel>Month</InputLabel>
-                      <Select
-                        value={formData.expiryMonth}
-                        onChange={(e) => handleInputChange('expiryMonth', e.target.value)}
-                        label="Month"
-                      >
-                        {Array.from({ length: 12 }, (_, i) => (
-                          <MenuItem key={i + 1} value={String(i + 1).padStart(2, '0')}>
-                            {String(i + 1).padStart(2, '0')}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    
-                    <FormControl error={!!errors.expiryYear} sx={{ minWidth: 120 }}>
-                      <InputLabel>Year</InputLabel>
-                      <Select
-                        value={formData.expiryYear}
-                        onChange={(e) => handleInputChange('expiryYear', e.target.value)}
-                        label="Year"
-                      >
-                        {Array.from({ length: 10 }, (_, i) => {
-                          const year = new Date().getFullYear() + i;
-                          return (
-                            <MenuItem key={year} value={String(year)}>
-                              {year}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
-                    
-                    <TextField
-                      label="CVV"
-                      value={formData.cvv}
-                      onChange={(e) => handleInputChange('cvv', e.target.value.replace(/\D/g, ''))}
-                      error={!!errors.cvv}
-                      helperText={errors.cvv}
-                      inputProps={{ maxLength: 4 }}
-                      sx={{ width: 100 }}
-                    />
-                  </Box>
-                  
-                  <TextField
-                    fullWidth
-                    label="Cardholder Name"
-                    value={formData.cardName}
-                    onChange={(e) => handleInputChange('cardName', e.target.value)}
-                    error={!!errors.cardName}
-                    helperText={errors.cardName}
-                  />
-                </Stack>
+
+                <Paper elevation={2} sx={{ p: 4, textAlign: 'center', bgcolor: '#f8f9fa', border: '1px solid #6a5acd' }}>
+                  <>
+                      <CreditCardIcon sx={{ fontSize: 60, color: '#000', mb: 2 }} />
+                      <Typography variant="h6" gutterBottom>
+                        Credit Card Information Goes Here
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                        <LockIcon sx={{ color: '#4caf50' }} />
+                        <Typography variant="body2" sx={{ color: '#4caf50' }}>
+                          Secured
+                        </Typography>
+                      </Box>
+                    </>
+                </Paper>
               </Box>
             </Collapse>
 
@@ -544,26 +494,20 @@ const PaymentMethods: React.FC = () => {
                 <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
                   PayPal Account
                 </Typography>
-                <Stack spacing={3}>
-                  <TextField
-                    fullWidth
-                    label="PayPal Email"
-                    type="email"
-                    value={formData.paypalEmail}
-                    onChange={(e) => handleInputChange('paypalEmail', e.target.value)}
-                    error={!!errors.paypalEmail}
-                    helperText={errors.paypalEmail}
-                  />
-                  <TextField
-                    fullWidth
-                    label="PayPal Password"
-                    type="password"
-                    value={formData.paypalPassword}
-                    onChange={(e) => handleInputChange('paypalPassword', e.target.value)}
-                    error={!!errors.paypalPassword}
-                    helperText={errors.paypalPassword}
-                  />
-                </Stack>
+                <Paper elevation={2} sx={{ p: 4, textAlign: 'center', bgcolor: '#f8f9fa', border: '1px solid #6a5acd' }}>
+                  <>
+                      <MonetizationOnIcon sx={{ fontSize: 60, color: '#000', mb: 2 }} />
+                      <Typography variant="h6" gutterBottom>
+                        PayPal Account Login Information Goes Here
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                        <LockIcon sx={{ color: '#4caf50' }} />
+                        <Typography variant="body2" sx={{ color: '#4caf50' }}>
+                          Secured
+                        </Typography>
+                      </Box>
+                    </>
+                </Paper>
               </Box>
             </Collapse>
 
@@ -644,110 +588,24 @@ const PaymentMethods: React.FC = () => {
 
             {/* Bank Wire Form */}
             <Collapse in={selectedMethod === 'bankwire'}>
-              <Box sx={{ mt: 3 }}>
+            <Box sx={{ mt: 3 }}>
                 <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  Bank Wire Transfer Instructions
+                  Bank Wire Transfer
                 </Typography>
-                
-                {/* Company Bank Information */}
-                <Paper elevation={2} sx={{ p: 3, mb: 3, bgcolor: '#f8f9fa', border: '1px solid #6a5acd' }}>
-                  <Typography variant="h6" gutterBottom sx={{ color: '#6a5acd', fontWeight: 'bold' }}>
-                    Showtime Canada Bank Details
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    Please transfer the total amount to the following account:
-                  </Typography>
-                  
-                  <Box sx={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 1, rowGap: 2 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Bank Name:</Typography>
-                    <Typography variant="body2">Royal Bank of Canada (RBC)</Typography>
-                    
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Account Name:</Typography>
-                    <Typography variant="body2">Showtime Canada Inc.</Typography>
-                    
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Account Number:</Typography>
-                    <Typography variant="body2">1234567890</Typography>
-                    
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Transit Number:</Typography>
-                    <Typography variant="body2">12345</Typography>
-                    
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Institution Number:</Typography>
-                    <Typography variant="body2">003</Typography>
-                    
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>SWIFT Code:</Typography>
-                    <Typography variant="body2">ROYCCAT2</Typography>
-                    
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Transfer Amount:</Typography>
-                    <Typography variant="body2" sx={{ color: '#6a5acd', fontWeight: 'bold' }}>
-                      ${totalAmount.toFixed(2)} CAD
-                    </Typography>
-                  </Box>
-                  
-                  <Alert severity="warning" sx={{ mt: 2 }}>
-                    <Typography variant="body2">
-                      <strong>Important:</strong> Please include your order reference number in the transfer description: 
-                      <strong> #{event?.id}${selectedSeats.join('')}</strong>
-                    </Typography>
-                  </Alert>
+                <Paper elevation={2} sx={{ p: 4, textAlign: 'center', bgcolor: '#f8f9fa', border: '1px solid #6a5acd' }}>
+                  <>
+                      <AccountBalanceIcon sx={{ fontSize: 60, color: '#000', mb: 2 }} />
+                      <Typography variant="h6" gutterBottom>
+                        Bank Wire Transfer Information Goes Here
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                        <LockIcon sx={{ color: '#4caf50' }} />
+                        <Typography variant="body2" sx={{ color: '#4caf50' }}>
+                          Secured
+                        </Typography>
+                      </Box>
+                    </>
                 </Paper>
-
-                <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-                  Your Banking Information (for verification)
-                </Typography>
-                <Stack spacing={3}>
-                  <TextField
-                    fullWidth
-                    label="Your Bank Name"
-                    value={formData.bankName}
-                    onChange={(e) => handleInputChange('bankName', e.target.value)}
-                    error={!!errors.bankName}
-                    helperText={errors.bankName}
-                  />
-                  <TextField
-                    fullWidth
-                    label="Your Account Number"
-                    value={formData.accountNumber}
-                    onChange={(e) => handleInputChange('accountNumber', e.target.value.replace(/\D/g, ''))}
-                    error={!!errors.accountNumber}
-                    helperText={errors.accountNumber}
-                  />
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField
-                      label="Transit Number"
-                      value={formData.transitNumber}
-                      onChange={(e) => handleInputChange('transitNumber', e.target.value.replace(/\D/g, ''))}
-                      error={!!errors.transitNumber}
-                      helperText={errors.transitNumber}
-                      inputProps={{ maxLength: 5 }}
-                      sx={{ flex: 1 }}
-                    />
-                    <TextField
-                      label="Institution Number"
-                      value={formData.institutionNumber}
-                      onChange={(e) => handleInputChange('institutionNumber', e.target.value.replace(/\D/g, ''))}
-                      error={!!errors.institutionNumber}
-                      helperText={errors.institutionNumber}
-                      inputProps={{ maxLength: 3 }}
-                      sx={{ flex: 1 }}
-                    />
-                  </Box>
-                  <TextField
-                    fullWidth
-                    label="Account Holder Name"
-                    value={formData.accountHolder}
-                    onChange={(e) => handleInputChange('accountHolder', e.target.value)}
-                    error={!!errors.accountHolder}
-                    helperText={errors.accountHolder}
-                  />
-                </Stack>
-
-                {/* Processing Time Information */}
-                <Alert severity="info" sx={{ mt: 3 }}>
-                  <Typography variant="body2">
-                    <strong>Processing Time:</strong> Bank wire transfers are processed within 6 hours during business hours. 
-                    You will receive a confirmation email once the payment is verified. Your tickets will be sent after payment confirmation.
-                  </Typography>
-                </Alert>
               </Box>
             </Collapse>
           </CardContent>
