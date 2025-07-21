@@ -23,7 +23,7 @@
 ## Phase 5: Ticket Management
 13. SCRUM-62 (My Tickets Section) #DONE
 14. SCRUM-63 (Ticket Download) #DONE
-15. SCRUM-67 (Transaction History)
+15. SCRUM-67 (Transaction History) #DONE
 
 ## Phase 6: Email Notifications
 16. SCRUM-64 (Confirmation Email)

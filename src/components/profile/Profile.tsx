@@ -24,8 +24,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { UserPreferences } from '../../types/user';
 import { CANADIAN_CITIES, MOVIE_GENRES } from '../../utils/constants';
 import MyTickets from './MyTickets';
+import TransactionHistory from './TransactionHistory';
 import PersonIcon from '@mui/icons-material/Person';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 const profileSchema = Yup.object({
   firstName: Yup.string().required('First name is required'),
@@ -140,13 +142,18 @@ const Profile: React.FC = () => {
               icon={<PersonIcon />}
               iconPosition="start"
             />
-            <Tab 
-              label="My Tickets"
-              icon={<ConfirmationNumberIcon />}
-              iconPosition="start"
-            />
-          </Tabs>
-        </Box>
+                            <Tab 
+                  label="My Tickets"
+                  icon={<ConfirmationNumberIcon />}
+                  iconPosition="start"
+                />
+                <Tab 
+                  label="Transaction History"
+                  icon={<ReceiptIcon />}
+                  iconPosition="start"
+                />
+              </Tabs>
+            </Box>
 
         <TabPanel value={selectedTab} index={0}>
           {updateSuccess && (
@@ -293,6 +300,10 @@ const Profile: React.FC = () => {
 
         <TabPanel value={selectedTab} index={1}>
           <MyTickets />
+        </TabPanel>
+        
+        <TabPanel value={selectedTab} index={2}>
+          <TransactionHistory />
         </TabPanel>
       </Paper>
     </Container>
