@@ -303,6 +303,14 @@ const EventDetail: React.FC = () => {
                   variant="contained"
                   startIcon={<ConfirmationNumberIcon />}
                   fullWidth={isMobile}
+                  onClick={() => {
+                    const savedSeats = sessionStorage.getItem('selectedSeats');
+                    if (savedSeats && JSON.parse(savedSeats).length > 0) {
+                      navigate(`/checkout/review/${event.id}`);
+                    } else {
+                      alert('Please select seats first before booking tickets.');
+                    }
+                  }}
                   sx={{
                     mt: 2,
                     bgcolor: '#6a5acd',

@@ -15,7 +15,7 @@
 8. SCRUM-57 (Seat Selection) #DONE
 
 ## Phase 4: Booking & Payment System  
-9. SCRUM-59 (Checkout Review)
+9. SCRUM-59 (Checkout Review) #DONE
 10. SCRUM-60 (Payment Methods)
 11. SCRUM-66 (Payment Gateway Integration)
 12. SCRUM-61 (Payment Confirmation)

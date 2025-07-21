@@ -21,6 +21,7 @@ import MovieDetail from './pages/MovieDetail';
 import Events from './pages/Events';
 import EventCategories from './pages/EventCategories';
 import EventDetail from './pages/EventDetail';
+import CheckoutReview from './pages/CheckoutReview';
 
 // Auth Route Guard
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -93,6 +94,7 @@ const App: React.FC = () => {
               <Route path="events/categories" element={<EventCategories />} />
               <Route path="events/category/:categoryId" element={<Events />} />
               <Route path="events/:id" element={<EventDetail />} />
+              <Route path="checkout/review/:id" element={<CheckoutReview />} />
 
               {/* Protected Routes */}
               <Route 
