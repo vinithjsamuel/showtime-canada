@@ -137,9 +137,7 @@ const CheckoutReview: React.FC = () => {
   };
 
   const handleConfirmAndProceed = () => {
-    // For now, just show an alert - this would normally proceed to payment
-    alert(`Proceeding to payment for ${selectedSeats.length} seats totaling $${totalPrice.toFixed(2)}`);
-    // navigate('/checkout/payment'); // This would be the next step
+    navigate(`/checkout/payment/${id}`);
   };
 
   return (
