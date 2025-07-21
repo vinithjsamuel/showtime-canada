@@ -23,7 +23,7 @@
 14. Seat Booking Management System #DONE
 
 ## Phase 5: Ticket Management
-13. SCRUM-62 (My Tickets Section)
+13. SCRUM-62 (My Tickets Section) #DONE
 14. SCRUM-63 (Ticket Download)
 15. SCRUM-67 (Transaction History)
 
