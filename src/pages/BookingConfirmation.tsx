@@ -22,7 +22,7 @@ import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
 import ReceiptIcon from '@mui/icons-material/Receipt';
-import eventsData from '../data/events.json';
+import { getUpdatedEvent } from '../utils/fileUpdater';
 
 interface Event {
   id: number;
@@ -62,7 +62,7 @@ const BookingConfirmation: React.FC = () => {
     }, 2000); // 2 seconds to ensure within 5 second requirement
 
     // Load event data
-    const foundEvent = eventsData.events.find(e => e.id === Number(id));
+    const foundEvent = getUpdatedEvent(Number(id));
     if (foundEvent) {
       setEvent(foundEvent);
     }

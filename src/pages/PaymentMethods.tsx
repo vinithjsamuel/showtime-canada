@@ -34,10 +34,11 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import LockIcon from '@mui/icons-material/Lock';
-import eventsData from '../data/events.json';
+import { getUpdatedEvent } from '../utils/fileUpdater';
 import { saveTicket } from '../utils/ticketStorage';
 import { useAuth } from '../contexts/AuthContext';
 import { markSeatsAsBooked } from '../utils/seatBookingManager';
+import { markSeatsAsBookedInData } from '../utils/fileUpdater';
 
 interface PaymentFormData {
   // Credit Card
@@ -89,7 +90,7 @@ const PaymentMethods: React.FC = () => {
 
   useEffect(() => {
     // Load event data
-    const foundEvent = eventsData.events.find(e => e.id === Number(id));
+    const foundEvent = getUpdatedEvent(Number(id));
     if (foundEvent) {
       setEvent(foundEvent);
     }
@@ -242,9 +243,11 @@ const PaymentMethods: React.FC = () => {
       };
       sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
 
-      // Mark seats as booked globally
+      // Mark seats as booked globally (localStorage tracking)
       if (event) {
         markSeatsAsBooked(event.id, selectedSeats, bookingId, user?.id);
+        // Also update the persistent data layer (simulates events.json update)
+        markSeatsAsBookedInData(event.id, selectedSeats);
       }
 
       // Save ticket to persistent storage if user is logged in

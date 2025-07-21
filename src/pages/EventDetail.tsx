@@ -20,7 +20,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import eventsData from '../data/events.json';
+import { getUpdatedEvent } from '../utils/fileUpdater';
 import eventCategoriesData from '../data/eventCategories.json';
 import SeatingLayout from '../components/common/SeatingLayout';
 
@@ -36,7 +36,7 @@ const EventDetail: React.FC = () => {
   useEffect(() => {
     // Simulate API call to fetch event
     const timer = setTimeout(() => {
-      const foundEvent = eventsData.events.find(e => e.id === Number(id));
+      const foundEvent = getUpdatedEvent(Number(id));
       if (foundEvent) {
         setEvent(foundEvent);
       }

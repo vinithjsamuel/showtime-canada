@@ -13,6 +13,7 @@ import EventSeatIcon from '@mui/icons-material/EventSeat';
 import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
 import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import { getMergedSeatAvailability } from '../../utils/seatBookingManager';
+import { getSeatAvailabilityWithUpdates } from '../../utils/fileUpdater';
 
 interface SeatingLayoutProps {
   seating: {
@@ -42,11 +43,14 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, eventId, venueTy
       }
     }
 
-    // Merge original availability with dynamically booked seats
+    // Get updated seat availability (events.json updates + localStorage bookings)
     if (seating?.availability && eventId) {
-      const merged = getMergedSeatAvailability(eventId, seating.availability);
+      // First get the updated availability from persistent data layer
+      const updatedAvailability = getSeatAvailabilityWithUpdates(eventId) || seating.availability;
+      // Then merge with localStorage bookings
+      const merged = getMergedSeatAvailability(eventId, updatedAvailability);
       setMergedAvailability(merged);
-      console.log('Merged seat availability for event', eventId, merged);
+      console.log('Final merged seat availability for event', eventId, merged);
     }
   }, [seating?.availability, eventId]);
 

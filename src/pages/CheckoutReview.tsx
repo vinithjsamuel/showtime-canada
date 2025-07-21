@@ -22,7 +22,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import eventsData from '../data/events.json';
+import { getUpdatedEvent } from '../utils/fileUpdater';
 import eventCategoriesData from '../data/eventCategories.json';
 
 const CheckoutReview: React.FC = () => {
@@ -37,7 +37,7 @@ const CheckoutReview: React.FC = () => {
   useEffect(() => {
     // Load event data
     const timer = setTimeout(() => {
-      const foundEvent = eventsData.events.find(e => e.id === Number(id));
+      const foundEvent = getUpdatedEvent(Number(id));
       if (foundEvent) {
         setEvent(foundEvent);
       }
