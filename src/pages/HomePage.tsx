@@ -79,7 +79,7 @@ const HomePage: React.FC = () => {
               <Button
                 variant="contained"
                 size="large"
-                onClick={() => navigate('/movies')}
+                onClick={() => navigate('/events')}
                 sx={{
                   mt: 2,
                   bgcolor: '#6a5acd',
@@ -90,7 +90,7 @@ const HomePage: React.FC = () => {
                   py: 1.5
                 }}
               >
-                Browse Movies
+                Browse Events
               </Button>
             )}
           </Box>

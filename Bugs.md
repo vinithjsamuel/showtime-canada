@@ -1,2 +1,1 @@
-- Events listing page issue: switching Categories from movies (along with genres) to other Categories empty results. Genres filter must be used only for movies category. #FIXED
-- 404 Page not found, hard reload on pages other than home. #FIXED
+- Date & Time selection is missing in events page
