@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Box,
   Card,
@@ -15,7 +15,11 @@ import {
   Alert,
   Tab,
   Tabs,
-  CircularProgress
+  CircularProgress,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText
 } from '@mui/material';
 import {
   QrCode as QrCodeIcon,
@@ -27,8 +31,14 @@ import {
   Close as CloseIcon,
   ConfirmationNumber as TicketIcon
 } from '@mui/icons-material';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserTickets, UserTicket, updateTicketStatus } from '../../utils/ticketStorage';
+import TicketTemplate from '../common/TicketTemplate';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -49,6 +59,10 @@ const MyTickets: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<UserTicket | null>(null);
+  const [downloadMenuAnchor, setDownloadMenuAnchor] = useState<null | HTMLElement>(null);
+  const [downloadingTicket, setDownloadingTicket] = useState<UserTicket | null>(null);
+  const [isGeneratingDownload, setIsGeneratingDownload] = useState(false);
+  const ticketRef = useRef<HTMLDivElement>(null);
 
   const loadTickets = useCallback(async () => {
     if (!user?.id) return;
@@ -114,35 +128,211 @@ const MyTickets: React.FC = () => {
     setQrDialogOpen(true);
   };
 
-  const handleDownloadTicket = (ticket: UserTicket) => {
-    // Create a simple text-based ticket for download
-    const ticketContent = `
-SHOWTIME CANADA - E-TICKET
+  const handleDownloadMenu = (event: React.MouseEvent<HTMLElement>, ticket: UserTicket) => {
+    setDownloadMenuAnchor(event.currentTarget);
+    setDownloadingTicket(ticket);
+  };
 
-Booking ID: ${ticket.bookingId}
-Event: ${ticket.eventTitle}
-Date: ${formatDate(ticket.date)}
-Time: ${ticket.time}
-Venue: ${ticket.venue}
-Location: ${ticket.location}
-Seats: ${ticket.selectedSeats.join(', ')}
-Total Amount: $${ticket.totalAmount.toFixed(2)} CAD
+  const handleCloseDownloadMenu = () => {
+    setDownloadMenuAnchor(null);
+    setDownloadingTicket(null);
+  };
 
-QR Code Data: ${ticket.qrCode}
+  const handleDownloadPDF = async () => {
+    if (!downloadingTicket) return;
+    
+    setIsGeneratingDownload(true);
+    handleCloseDownloadMenu();
 
-Please present this ticket at the venue.
-Valid ID may be required.
-`;
+    try {
+      // Wait a moment for menu to close and focus to settle
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Create a temporary visible container matching mobile dialog size
+      const tempContainer = document.createElement('div');
+      tempContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 600px;
+        height: auto;
+        min-height: 800px;
+        background: white;
+        z-index: 9999;
+        padding: 24px;
+        box-sizing: border-box;
+        overflow: visible;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      `;
+      
+      document.body.appendChild(tempContainer);
+      
+      // Create React element and render it
+      const React = await import('react');
+      const ReactDOM = await import('react-dom/client');
+      const TicketTemplate = (await import('../common/TicketTemplate')).default;
+      
+      const root = ReactDOM.createRoot(tempContainer);
+      
+      // Render the ticket with a promise to wait for completion
+      await new Promise<void>((resolve) => {
+        root.render(
+          React.createElement(TicketTemplate, {
+            ticket: downloadingTicket,
+            isDownloadVersion: false, // Use mobile screenshot version
+            ref: (ref: HTMLDivElement) => {
+              if (ref) {
+                // Wait for images and fonts to load
+                setTimeout(async () => {
+                  try {
+                    const canvas = await html2canvas(ref, {
+                      scale: 2,
+                      useCORS: true,
+                      allowTaint: true,
+                      backgroundColor: '#ffffff',
+                      logging: false,
+                      height: ref.scrollHeight,
+                      width: ref.scrollWidth
+                    });
 
-    const blob = new Blob([ticketContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `ticket-${ticket.bookingId}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF({
+                      orientation: 'portrait',
+                      unit: 'mm',
+                      format: [canvas.width * 0.264583, canvas.height * 0.264583] // Convert px to mm
+                    });
+
+                    // Add image to fit the PDF dimensions
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save(`ticket-${downloadingTicket.bookingId}.pdf`);
+                    
+                    resolve();
+                  } catch (error) {
+                    console.error('Error in PDF generation:', error);
+                    resolve();
+                  }
+                }, 1000); // Wait for fonts and QR code to load
+              }
+            }
+          })
+        );
+      });
+      
+      // Cleanup
+      root.unmount();
+      document.body.removeChild(tempContainer);
+      
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Error generating PDF. Please try again.');
+    } finally {
+      setIsGeneratingDownload(false);
+    }
+  };
+
+  const handleDownloadImage = async () => {
+    if (!downloadingTicket) return;
+    
+    setIsGeneratingDownload(true);
+    handleCloseDownloadMenu();
+
+    try {
+      // Wait a moment for menu to close and focus to settle
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Create a temporary visible container matching mobile dialog size
+      const tempContainer = document.createElement('div');
+      tempContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 600px;
+        height: auto;
+        min-height: 800px;
+        background: white;
+        z-index: 9999;
+        padding: 24px;
+        box-sizing: border-box;
+        overflow: visible;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      `;
+      
+      document.body.appendChild(tempContainer);
+      
+      // Create React element and render it
+      const React = await import('react');
+      const ReactDOM = await import('react-dom/client');
+      const TicketTemplate = (await import('../common/TicketTemplate')).default;
+      
+      const root = ReactDOM.createRoot(tempContainer);
+      
+      // Render the ticket with a promise to wait for completion
+      await new Promise<void>((resolve) => {
+        root.render(
+          React.createElement(TicketTemplate, {
+            ticket: downloadingTicket,
+            isDownloadVersion: false, // Use mobile screenshot version
+            ref: (ref: HTMLDivElement) => {
+              if (ref) {
+                // Wait for images and fonts to load
+                setTimeout(async () => {
+                  try {
+                    const canvas = await html2canvas(ref, {
+                      scale: 2,
+                      useCORS: true,
+                      allowTaint: true,
+                      backgroundColor: '#ffffff',
+                      logging: false,
+                      height: ref.scrollHeight,
+                      width: ref.scrollWidth
+                    });
+
+                    canvas.toBlob((blob) => {
+                      if (blob) {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `ticket-${downloadingTicket.bookingId}.png`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                      }
+                      resolve();
+                    });
+                    
+                  } catch (error) {
+                    console.error('Error in image generation:', error);
+                    resolve();
+                  }
+                }, 1000); // Wait for fonts and QR code to load
+              }
+            }
+          })
+        );
+      });
+      
+      // Cleanup
+      root.unmount();
+      document.body.removeChild(tempContainer);
+      
+    } catch (error) {
+      console.error('Error generating image:', error);
+      alert('Error generating image. Please try again.');
+    } finally {
+      setIsGeneratingDownload(false);
+    }
+  };
+
+  const handleScreenshotMode = () => {
+    if (!downloadingTicket) return;
+    
+    setSelectedTicket(downloadingTicket);
+    setQrDialogOpen(true);
+    handleCloseDownloadMenu();
   };
 
   const handleMarkAsUsed = async (ticket: UserTicket) => {
@@ -292,7 +482,9 @@ Valid ID may be required.
                         <Button
                           variant="outlined"
                           startIcon={<DownloadIcon />}
-                          onClick={() => handleDownloadTicket(ticket)}
+                          endIcon={<ArrowDropDownIcon />}
+                          onClick={(e) => handleDownloadMenu(e, ticket)}
+                          disabled={isGeneratingDownload}
                           sx={{
                             borderColor: '#6a5acd',
                             color: '#6a5acd',
@@ -373,11 +565,13 @@ Valid ID may be required.
                       <Button
                         variant="text"
                         startIcon={<DownloadIcon />}
-                        onClick={() => handleDownloadTicket(ticket)}
+                        endIcon={<ArrowDropDownIcon />}
+                        onClick={(e) => handleDownloadMenu(e, ticket)}
+                        disabled={isGeneratingDownload}
                         sx={{ mt: 1, color: '#6a5acd' }}
                         size="small"
                       >
-                        Download Receipt
+                        Download Ticket
                       </Button>
                     </Box>
                   </Box>
@@ -388,92 +582,90 @@ Valid ID may be required.
         )}
       </TabPanel>
 
-      {/* QR Code Dialog */}
+      {/* Download Menu */}
+      <Menu
+        anchorEl={downloadMenuAnchor}
+        open={Boolean(downloadMenuAnchor)}
+        onClose={handleCloseDownloadMenu}
+        sx={{ mt: 1 }}
+      >
+        <MenuItem onClick={handleDownloadPDF} disabled={isGeneratingDownload}>
+          <ListItemIcon>
+            <PictureAsPdfIcon />
+          </ListItemIcon>
+          <ListItemText primary="Download as PDF" />
+        </MenuItem>
+        <MenuItem onClick={handleDownloadImage} disabled={isGeneratingDownload}>
+          <ListItemIcon>
+            <CameraAltIcon />
+          </ListItemIcon>
+          <ListItemText primary="Download as Image" />
+        </MenuItem>
+        <MenuItem onClick={handleScreenshotMode} disabled={isGeneratingDownload}>
+          <ListItemIcon>
+            <CameraAltIcon />
+          </ListItemIcon>
+          <ListItemText primary="Mobile Screenshot View" />
+        </MenuItem>
+      </Menu>
+
+      {/* Note: Ticket template now rendered dynamically for PDF/Image generation */}
+
+      {/* QR Code Dialog - Mobile Optimized for Screenshots */}
       <Dialog
         open={qrDialogOpen}
         onClose={() => setQrDialogOpen(false)}
         maxWidth="sm"
         fullWidth
+        sx={{ '& .MuiDialog-paper': { m: 1 } }}
       >
-        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6">Ticket QR Code</Typography>
-          <IconButton onClick={() => setQrDialogOpen(false)}>
-            <CloseIcon />
-          </IconButton>
+        <DialogTitle sx={{ 
+          textAlign: 'center', 
+          bgcolor: '#6a5acd', 
+          color: 'white',
+          fontSize: { xs: '1.25rem', sm: '1.5rem' }
+        }}>
+          📱 Mobile Ticket View
         </DialogTitle>
-        <DialogContent sx={{ textAlign: 'center', py: 4 }}>
+        <DialogContent sx={{ p: { xs: 2, sm: 3 } }}>
           {selectedTicket && (
-            <>
-              <Typography variant="h6" gutterBottom sx={{ color: '#6a5acd' }}>
-                {selectedTicket.eventTitle}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                {formatDate(selectedTicket.date)} at {selectedTicket.time}
-              </Typography>
-              
-              {/* QR Code Placeholder */}
-              <Box
-                sx={{
-                  width: 200,
-                  height: 200,
-                  bgcolor: '#f5f5f5',
-                  border: '2px solid #6a5acd',
-                  borderRadius: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  mx: 'auto',
-                  my: 3,
-                  position: 'relative'
-                }}
-              >
-                <QrCodeIcon sx={{ fontSize: 60, color: '#6a5acd' }} />
-                <Typography
-                  variant="caption"
-                  sx={{
-                    position: 'absolute',
-                    bottom: 8,
-                    fontSize: '10px',
-                    color: '#666',
-                    textAlign: 'center',
-                    px: 1
-                  }}
-                >
-                  {selectedTicket.bookingId}
-                </Typography>
-              </Box>
-              
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Show this QR code at the venue entrance
-              </Typography>
-              
-              <Alert severity="info" sx={{ textAlign: 'left' }}>
-                <Typography variant="body2">
-                  <strong>Instructions:</strong>
-                  <br />• Arrive 15 minutes before showtime
-                  <br />• Have valid ID ready
-                  <br />• Keep this QR code accessible on your device
-                </Typography>
-              </Alert>
-            </>
+            <TicketTemplate
+              ticket={selectedTicket}
+              isDownloadVersion={false}
+            />
           )}
+          
+          {/* Screenshot Instructions */}
+          <Alert severity="info" sx={{ mt: 2, borderRadius: 2 }}>
+            <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 1 }}>
+              📸 How to take a screenshot:
+            </Typography>
+            <Typography variant="body2" component="div">
+              <strong>iPhone/iPad:</strong> Press Home + Power buttons<br />
+              <strong>Android:</strong> Press Volume Down + Power buttons<br />
+              <strong>Desktop:</strong> Use Snipping Tool or Print Screen
+            </Typography>
+          </Alert>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setQrDialogOpen(false)}>Close</Button>
+        <DialogActions sx={{ p: 2, gap: 1 }}>
+          <Button onClick={() => setQrDialogOpen(false)} sx={{ color: '#6a5acd' }}>
+            Close
+          </Button>
           {selectedTicket && (
             <Button
               variant="contained"
-              startIcon={<DownloadIcon />}
+              startIcon={<CameraAltIcon />}
               onClick={() => {
-                handleDownloadTicket(selectedTicket);
                 setQrDialogOpen(false);
+                // Take a screenshot or navigate to screenshot view
+                alert('Take a screenshot of this screen for your ticket!');
               }}
               sx={{
                 bgcolor: '#6a5acd',
                 '&:hover': { bgcolor: '#5a4fcf' }
               }}
             >
-              Download Ticket
+              Take Screenshot
             </Button>
           )}
         </DialogActions>

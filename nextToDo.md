@@ -19,12 +19,10 @@
 10. SCRUM-60 (Payment Methods) #DONE
 11. SCRUM-66 (Payment Gateway Integration) #DONE
 12. SCRUM-61 (Payment Confirmation) #DONE
-13. SCRUM-62 (My Tickets in Profile) #DONE
-14. Seat Booking Management System #DONE
 
 ## Phase 5: Ticket Management
 13. SCRUM-62 (My Tickets Section) #DONE
-14. SCRUM-63 (Ticket Download)
+14. SCRUM-63 (Ticket Download) #DONE
 15. SCRUM-67 (Transaction History)
 
 ## Phase 6: Email Notifications

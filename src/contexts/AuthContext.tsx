@@ -5,15 +5,24 @@ import { openDB } from 'idb';
 
 // Database setup
 const DB_NAME = 'cinema-tickets-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Updated to match ticketStorage version
 
 const initDB = async () => {
   const db = await openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
+    upgrade(db, oldVersion) {
       // Create users store if it doesn't exist
       if (!db.objectStoreNames.contains('users')) {
         const userStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
         userStore.createIndex('email', 'email', { unique: true });
+      }
+      
+      // Create tickets store if it doesn't exist (for compatibility with ticketStorage)
+      if (!db.objectStoreNames.contains('tickets')) {
+        const ticketStore = db.createObjectStore('tickets', { keyPath: 'id' });
+        ticketStore.createIndex('userId', 'userId', { unique: false });
+        ticketStore.createIndex('bookingId', 'bookingId', { unique: true });
+        ticketStore.createIndex('eventId', 'eventId', { unique: false });
+        ticketStore.createIndex('status', 'status', { unique: false });
       }
     },
   });
