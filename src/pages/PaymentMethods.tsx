@@ -35,6 +35,9 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import LockIcon from '@mui/icons-material/Lock';
 import eventsData from '../data/events.json';
+import { saveTicket } from '../utils/ticketStorage';
+import { useAuth } from '../contexts/AuthContext';
+import { markSeatsAsBooked } from '../utils/seatBookingManager';
 
 interface PaymentFormData {
   // Credit Card
@@ -59,6 +62,7 @@ interface PaymentFormData {
 const PaymentMethods: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
@@ -227,7 +231,7 @@ const PaymentMethods: React.FC = () => {
         ? `${Date.now()}-${selectedMethod.toUpperCase()}`
         : undefined;
       
-      // Store booking details in session storage
+      // Store booking details in session storage for confirmation page
       const bookingDetails = {
         bookingId,
         paymentMethod: selectedMethod,
@@ -237,6 +241,42 @@ const PaymentMethods: React.FC = () => {
         transactionId
       };
       sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+
+      // Mark seats as booked globally
+      if (event) {
+        markSeatsAsBooked(event.id, selectedSeats, bookingId, user?.id);
+      }
+
+      // Save ticket to persistent storage if user is logged in
+      if (user && event) {
+        try {
+          await saveTicket({
+            userId: user.id,
+            eventId: event.id,
+            bookingId,
+            eventTitle: event.title,
+            eventDescription: event.description,
+            eventImage: event.image,
+            venue: event.venue,
+            location: event.location,
+            date: event.date,
+            time: event.time,
+            selectedSeats,
+            totalAmount,
+            paymentMethod: selectedMethod,
+            transactionId,
+            bookingDate: new Date().toISOString(),
+            status: 'active',
+            category: event.category
+          });
+        } catch (error) {
+          console.error('Error saving ticket:', error);
+          // Continue with flow even if ticket saving fails
+        }
+      }
+      
+      // Clear selected seats from session storage now that they're booked
+      sessionStorage.removeItem('selectedSeats');
       
       // Navigate to confirmation page
       navigate(`/booking/confirmation/${id}`);

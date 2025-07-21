@@ -207,6 +207,7 @@ const EventDetail: React.FC = () => {
                 <Box sx={{ mb: 4 }}>
                   <SeatingLayout 
                     seating={event.seating}
+                    eventId={event.id}
                     venueType={
                       event.category === 'movies' ? 'cinema' :
                       event.category === 'theater' ? 'theater' :

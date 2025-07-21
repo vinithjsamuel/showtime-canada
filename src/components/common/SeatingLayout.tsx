@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -12,20 +12,43 @@ import {
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
 import ScreenShareIcon from '@mui/icons-material/ScreenShare';
+import { getMergedSeatAvailability } from '../../utils/seatBookingManager';
 
 interface SeatingLayoutProps {
   seating: {
     layout: any;
     availability: Record<string, string>;
   };
+  eventId: number;
   venueType?: 'cinema' | 'arena' | 'theater';
 }
 
-const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cinema' }) => {
+const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, eventId, venueType = 'cinema' }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [hoveredSeat, setHoveredSeat] = useState<string | null>(null);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [mergedAvailability, setMergedAvailability] = useState<Record<string, string>>({});
+
+  // Load selected seats from session storage and merge with booked seats
+  useEffect(() => {
+    // Load selected seats from session storage
+    const savedSeats = sessionStorage.getItem('selectedSeats');
+    if (savedSeats) {
+      try {
+        setSelectedSeats(JSON.parse(savedSeats));
+      } catch (error) {
+        console.error('Error loading selected seats:', error);
+      }
+    }
+
+    // Merge original availability with dynamically booked seats
+    if (seating?.availability && eventId) {
+      const merged = getMergedSeatAvailability(eventId, seating.availability);
+      setMergedAvailability(merged);
+      console.log('Merged seat availability for event', eventId, merged);
+    }
+  }, [seating?.availability, eventId]);
 
   const getSeatColor = (status: string, isHovered: boolean = false, isSelected: boolean = false) => {
     if (isSelected) return '#2196f3'; // Blue for selected seats
@@ -62,18 +85,6 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
       return newSelection;
     });
   };
-
-  // Load selected seats from session storage on component mount
-  React.useEffect(() => {
-    const savedSeats = sessionStorage.getItem('selectedSeats');
-    if (savedSeats) {
-      try {
-        setSelectedSeats(JSON.parse(savedSeats));
-      } catch (error) {
-        console.error('Error loading selected seats:', error);
-      }
-    }
-  }, []);
 
   const renderCinemaSeating = () => {
     const { rows, seatsPerRow, aisles } = seating.layout;
@@ -137,14 +148,15 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
               {Array.from({ length: seatsPerRow }, (_, seatIndex) => {
                 const seatNumber = seatIndex + 1;
                 const seatId = `${row}${seatNumber}`;
-                const seatStatus = seating.availability[seatId] || 'available';
+                // Use merged availability instead of original
+                const seatStatus = mergedAvailability[seatId] || 'available';
                 
                 // Add aisle space
                 const shouldAddAisle = aisles && aisles.includes(seatNumber);
                 
                 return (
                   <React.Fragment key={seatId}>
-                                        <Tooltip
+                    <Tooltip
                       title={
                         seatStatus === 'available' 
                           ? `${seatId} - ${selectedSeats.includes(seatId) ? 'Selected (Click to deselect)' : 'Available (Click to select)'}`
