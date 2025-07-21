@@ -12,7 +12,7 @@
 ## Phase 3: Seating System
 6. SCRUM-56 (Venue Seating Layout) #DONE
 7. SCRUM-58 (Mark Unavailable Seats) #DONE
-8. SCRUM-57 (Seat Selection)
+8. SCRUM-57 (Seat Selection) #DONE
 
 ## Phase 4: Booking & Payment System  
 9. SCRUM-59 (Checkout Review)

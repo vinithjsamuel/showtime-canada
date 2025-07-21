@@ -25,27 +25,55 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [hoveredSeat, setHoveredSeat] = useState<string | null>(null);
+  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
 
-  const getSeatColor = (status: string, isHovered: boolean = false) => {
+  const getSeatColor = (status: string, isHovered: boolean = false, isSelected: boolean = false) => {
+    if (isSelected) return '#2196f3'; // Blue for selected seats
+    
     const colors = {
       available: isHovered ? '#4caf50' : '#66bb6a',
       booked: '#bdbdbd', // Grey color for booked seats
-      selected: '#2196f3'
     };
     return colors[status as keyof typeof colors] || colors.available;
   };
 
-  const getSeatIcon = (status: string, isHovered: boolean = false) => {
+  const getSeatIcon = (status: string, isHovered: boolean = false, isSelected: boolean = false) => {
     return (
       <EventSeatIcon
         sx={{
           fontSize: isMobile ? 16 : 20,
-          color: getSeatColor(status, isHovered),
+          color: getSeatColor(status, isHovered, isSelected),
           opacity: status === 'booked' ? 0.7 : 1
         }}
       />
     );
   };
+
+  const handleSeatClick = (seatId: string, seatStatus: string) => {
+    if (seatStatus !== 'available') return;
+    
+    setSelectedSeats(prev => {
+      const newSelection = prev.includes(seatId)
+        ? prev.filter(id => id !== seatId) // Remove if already selected
+        : [...prev, seatId]; // Add if not selected
+      
+      // Store in session storage
+      sessionStorage.setItem('selectedSeats', JSON.stringify(newSelection));
+      return newSelection;
+    });
+  };
+
+  // Load selected seats from session storage on component mount
+  React.useEffect(() => {
+    const savedSeats = sessionStorage.getItem('selectedSeats');
+    if (savedSeats) {
+      try {
+        setSelectedSeats(JSON.parse(savedSeats));
+      } catch (error) {
+        console.error('Error loading selected seats:', error);
+      }
+    }
+  }, []);
 
   const renderCinemaSeating = () => {
     const { rows, seatsPerRow, aisles } = seating.layout;
@@ -116,31 +144,37 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
                 
                 return (
                   <React.Fragment key={seatId}>
-                    <Tooltip
-                      title={seatStatus === 'available' ? `${seatId} - Available` : `${seatId} - Seat already booked`}
+                                        <Tooltip
+                      title={
+                        seatStatus === 'available' 
+                          ? `${seatId} - ${selectedSeats.includes(seatId) ? 'Selected (Click to deselect)' : 'Available (Click to select)'}`
+                          : `${seatId} - Seat already booked`
+                      }
                       arrow
                     >
                       <span>
                         <IconButton
                           size="small"
                           disabled={seatStatus === 'booked'}
+                          onClick={() => handleSeatClick(seatId, seatStatus)}
                           onMouseEnter={() => seatStatus === 'available' && setHoveredSeat(seatId)}
                           onMouseLeave={() => setHoveredSeat(null)}
-                                                      sx={{
-                              p: 0.2,
-                              minWidth: 'auto',
-                              cursor: seatStatus === 'available' ? 'pointer' : 'not-allowed',
-                              '&:disabled': {
-                                opacity: 1,
-                                backgroundColor: 'transparent',
-                                '& .MuiSvgIcon-root': {
-                                  color: '#bdbdbd !important',
-                                  opacity: 0.7
-                                }
+                          sx={{
+                            p: 0.2,
+                            minWidth: 'auto',
+                            cursor: seatStatus === 'available' ? 'pointer' : 'not-allowed',
+                            backgroundColor: selectedSeats.includes(seatId) ? 'rgba(33, 150, 243, 0.1)' : 'transparent',
+                            '&:disabled': {
+                              opacity: 1,
+                              backgroundColor: 'transparent',
+                              '& .MuiSvgIcon-root': {
+                                color: '#bdbdbd !important',
+                                opacity: 0.7
                               }
-                            }}
+                            }
+                          }}
                         >
-                          {getSeatIcon(seatStatus, hoveredSeat === seatId)}
+                          {getSeatIcon(seatStatus, hoveredSeat === seatId, selectedSeats.includes(seatId))}
                         </IconButton>
                       </span>
                     </Tooltip>
@@ -249,21 +283,27 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
                       const seatStatus = seating.availability[seatId] || 'available';
                       
                       return (
-                                              <Tooltip
+                                                                    <Tooltip
                         key={seatId}
-                        title={seatStatus === 'available' ? `${seatId} - Available` : `${seatId} - Seat already booked`}
+                        title={
+                          seatStatus === 'available' 
+                            ? `${seatId} - ${selectedSeats.includes(seatId) ? 'Selected (Click to deselect)' : 'Available (Click to select)'}`
+                            : `${seatId} - Seat already booked`
+                        }
                         arrow
                       >
                         <span>
                           <IconButton
                             size="small"
                             disabled={seatStatus === 'booked'}
+                            onClick={() => handleSeatClick(seatId, seatStatus)}
                             onMouseEnter={() => seatStatus === 'available' && setHoveredSeat(seatId)}
                             onMouseLeave={() => setHoveredSeat(null)}
-                                                                                      sx={{
+                            sx={{
                               p: 0.1,
                               minWidth: 'auto',
                               cursor: seatStatus === 'available' ? 'pointer' : 'not-allowed',
+                              backgroundColor: selectedSeats.includes(seatId) ? 'rgba(33, 150, 243, 0.1)' : 'transparent',
                               '&:disabled': {
                                 opacity: 1,
                                 backgroundColor: 'transparent',
@@ -274,13 +314,13 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
                               }
                             }}
                           >
-                                                          <EventSeatIcon
-                                sx={{
-                                  fontSize: isMobile ? 12 : 16,
-                                  color: getSeatColor(seatStatus, hoveredSeat === seatId),
-                                  opacity: seatStatus === 'booked' ? 0.7 : 1
-                                }}
-                              />
+                            <EventSeatIcon
+                              sx={{
+                                fontSize: isMobile ? 12 : 16,
+                                color: getSeatColor(seatStatus, hoveredSeat === seatId, selectedSeats.includes(seatId)),
+                                opacity: seatStatus === 'booked' ? 0.7 : 1
+                              }}
+                            />
                           </IconButton>
                         </span>
                       </Tooltip>
@@ -375,21 +415,27 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
                       const seatStatus = seating.availability[seatId] || 'available';
                       
                       return (
-                        <Tooltip
+                                                <Tooltip
                           key={seatId}
-                          title={seatStatus === 'available' ? `${seatId} - Available` : `${seatId} - Seat already booked`}
+                          title={
+                            seatStatus === 'available' 
+                              ? `${seatId} - ${selectedSeats.includes(seatId) ? 'Selected (Click to deselect)' : 'Available (Click to select)'}`
+                              : `${seatId} - Seat already booked`
+                          }
                           arrow
                         >
                           <span>
                             <IconButton
                               size="small"
                               disabled={seatStatus === 'booked'}
+                              onClick={() => handleSeatClick(seatId, seatStatus)}
                               onMouseEnter={() => seatStatus === 'available' && setHoveredSeat(seatId)}
                               onMouseLeave={() => setHoveredSeat(null)}
                               sx={{
                                 p: 0.1,
                                 minWidth: 'auto',
                                 cursor: seatStatus === 'available' ? 'pointer' : 'not-allowed',
+                                backgroundColor: selectedSeats.includes(seatId) ? 'rgba(33, 150, 243, 0.1)' : 'transparent',
                                 '&:disabled': {
                                   opacity: 1,
                                   backgroundColor: 'transparent',
@@ -400,13 +446,13 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
                                 }
                               }}
                             >
-                                                              <EventSeatIcon
-                                  sx={{
-                                    fontSize: isMobile ? 14 : 18,
-                                    color: getSeatColor(seatStatus, hoveredSeat === seatId),
-                                    opacity: seatStatus === 'booked' ? 0.7 : 1
-                                  }}
-                                />
+                              <EventSeatIcon
+                                sx={{
+                                  fontSize: isMobile ? 14 : 18,
+                                  color: getSeatColor(seatStatus, hoveredSeat === seatId, selectedSeats.includes(seatId)),
+                                  opacity: seatStatus === 'booked' ? 0.7 : 1
+                                }}
+                              />
                             </IconButton>
                           </span>
                         </Tooltip>
@@ -467,6 +513,15 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
           }}
         />
         <Chip
+          icon={<EventSeatIcon sx={{ color: '#2196f3 !important' }} />}
+          label="Selected"
+          variant="outlined"
+          sx={{
+            borderColor: '#2196f3',
+            color: '#2196f3'
+          }}
+        />
+        <Chip
           icon={<EventSeatIcon sx={{ color: '#bdbdbd !important', filter: 'grayscale(100%)' }} />}
           label="Booked"
           variant="outlined"
@@ -477,6 +532,40 @@ const SeatingLayout: React.FC<SeatingLayoutProps> = ({ seating, venueType = 'cin
           }}
         />
       </Box>
+
+      {/* Selected Seats Summary */}
+      {selectedSeats.length > 0 && (
+        <Paper
+          elevation={2}
+          sx={{
+            p: 3,
+            borderRadius: 2,
+            bgcolor: '#e3f2fd',
+            border: '1px solid #2196f3',
+            mb: 3
+          }}
+        >
+          <Typography variant="h6" sx={{ color: '#1976d2', fontWeight: 'bold', mb: 2 }}>
+            Selected Seats ({selectedSeats.length})
+          </Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            {selectedSeats.map(seatId => (
+              <Chip
+                key={seatId}
+                label={seatId}
+                onDelete={() => handleSeatClick(seatId, 'available')}
+                sx={{
+                  bgcolor: '#2196f3',
+                  color: 'white',
+                  '& .MuiChip-deleteIcon': {
+                    color: 'white'
+                  }
+                }}
+              />
+            ))}
+          </Box>
+        </Paper>
+      )}
 
       {/* Seating Chart */}
       <Paper
