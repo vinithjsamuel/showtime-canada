@@ -10,6 +10,7 @@ import {
   Stack,
   Card,
   CardContent,
+  Chip,
   TextField,
   FormControl,
   InputLabel,
@@ -30,6 +31,9 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PaymentIcon from '@mui/icons-material/Payment';
 import SecurityIcon from '@mui/icons-material/Security';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import LockIcon from '@mui/icons-material/Lock';
 import eventsData from '../data/events.json';
 
 interface PaymentFormData {
@@ -61,6 +65,7 @@ const PaymentMethods: React.FC = () => {
   const [event, setEvent] = useState<any>(null);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [selectedMethod, setSelectedMethod] = useState<string>('creditcard');
+  const [deviceSupportsDigitalWallet, setDeviceSupportsDigitalWallet] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<PaymentFormData>({
     cardNumber: '',
@@ -93,6 +98,16 @@ const PaymentMethods: React.FC = () => {
       } catch (error) {
         console.error('Error loading selected seats:', error);
       }
+    }
+
+    // Detect device capabilities for digital wallets
+    const userAgent = navigator.userAgent;
+    if (userAgent.includes('iPhone') || userAgent.includes('iPad') || userAgent.includes('Mac')) {
+      setDeviceSupportsDigitalWallet(true);
+    } else if (userAgent.includes('Android')) {
+      setDeviceSupportsDigitalWallet(true);
+    } else if (userAgent.includes('Chrome')) {
+      setDeviceSupportsDigitalWallet(true);
     }
   }, [id]);
 
@@ -215,6 +230,18 @@ Amount: $${totalAmount.toFixed(2)} CAD
 
 You will receive a confirmation email once payment is verified.
 Your tickets will be available after payment confirmation.`);
+      } else if (['applepay', 'googlepay', 'samsungpay'].includes(selectedMethod)) {
+        // Digital wallet success message
+        const walletName = selectedMethod === 'applepay' ? 'Apple Pay' : 
+                          selectedMethod === 'googlepay' ? 'Google Pay' : 'Samsung Pay';
+        alert(`${walletName} payment successful! 
+
+Your tickets have been booked and sent to your email.
+Payment processed securely through ${walletName}.
+
+Method: ${walletName}
+Total: $${totalAmount.toFixed(2)}
+Transaction ID: ${Date.now()}-${selectedMethod.toUpperCase()}`);
       } else {
         // Regular payment success message
         alert(`Payment successful! Your tickets have been booked.\nMethod: ${selectedMethod}\nTotal: $${totalAmount.toFixed(2)}`);
@@ -364,6 +391,45 @@ Your tickets will be available after payment confirmation.`);
                   </Box>
                 }
               />
+              
+              {/* Digital Wallets */}
+              {deviceSupportsDigitalWallet && (
+                <>
+                  <FormControlLabel
+                    value="applepay"
+                    control={<Radio sx={{ color: '#6a5acd', '&.Mui-checked': { color: '#6a5acd' } }} />}
+                    label={
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <PhoneAndroidIcon sx={{ mr: 1, color: '#000' }} />
+                        Apple Pay
+                        <Chip label="Touch ID" size="small" sx={{ ml: 1, bgcolor: '#000', color: 'white' }} />
+                      </Box>
+                    }
+                  />
+                  <FormControlLabel
+                    value="googlepay"
+                    control={<Radio sx={{ color: '#6a5acd', '&.Mui-checked': { color: '#6a5acd' } }} />}
+                    label={
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <TouchAppIcon sx={{ mr: 1, color: '#4285f4' }} />
+                        Google Pay
+                        <Chip label="One Touch" size="small" sx={{ ml: 1, bgcolor: '#4285f4', color: 'white' }} />
+                      </Box>
+                    }
+                  />
+                  <FormControlLabel
+                    value="samsungpay"
+                    control={<Radio sx={{ color: '#6a5acd', '&.Mui-checked': { color: '#6a5acd' } }} />}
+                    label={
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <PhoneAndroidIcon sx={{ mr: 1, color: '#1428a0' }} />
+                        Samsung Pay
+                        <Chip label="Secure" size="small" sx={{ ml: 1, bgcolor: '#1428a0', color: 'white' }} />
+                      </Box>
+                    }
+                  />
+                </>
+              )}
             </RadioGroup>
 
             {/* Credit Card Form */}
@@ -467,6 +533,81 @@ Your tickets will be available after payment confirmation.`);
                     helperText={errors.paypalPassword}
                   />
                 </Stack>
+              </Box>
+            </Collapse>
+
+            {/* Digital Wallet Forms */}
+            <Collapse in={selectedMethod === 'applepay' || selectedMethod === 'googlepay' || selectedMethod === 'samsungpay'}>
+              <Box sx={{ mt: 3 }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  {selectedMethod === 'applepay' && 'Apple Pay'}
+                  {selectedMethod === 'googlepay' && 'Google Pay'}
+                  {selectedMethod === 'samsungpay' && 'Samsung Pay'}
+                  {' '}Authentication
+                </Typography>
+                
+                <Paper elevation={2} sx={{ p: 4, textAlign: 'center', bgcolor: '#f8f9fa', border: '1px solid #6a5acd' }}>
+                  {selectedMethod === 'applepay' && (
+                    <>
+                      <PhoneAndroidIcon sx={{ fontSize: 60, color: '#000', mb: 2 }} />
+                      <Typography variant="h6" gutterBottom>
+                        Touch ID or Face ID Required
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                        Use your fingerprint or face to authenticate this ${totalAmount.toFixed(2)} payment
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                        <LockIcon sx={{ color: '#4caf50' }} />
+                        <Typography variant="body2" sx={{ color: '#4caf50' }}>
+                          Secured by Apple Pay
+                        </Typography>
+                      </Box>
+                    </>
+                  )}
+                  
+                  {selectedMethod === 'googlepay' && (
+                    <>
+                      <TouchAppIcon sx={{ fontSize: 60, color: '#4285f4', mb: 2 }} />
+                      <Typography variant="h6" gutterBottom>
+                        Google Pay Authentication
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                        Confirm your payment of ${totalAmount.toFixed(2)} with your Google account
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                        <LockIcon sx={{ color: '#4285f4' }} />
+                        <Typography variant="body2" sx={{ color: '#4285f4' }}>
+                          Secured by Google
+                        </Typography>
+                      </Box>
+                    </>
+                  )}
+                  
+                  {selectedMethod === 'samsungpay' && (
+                    <>
+                      <PhoneAndroidIcon sx={{ fontSize: 60, color: '#1428a0', mb: 2 }} />
+                      <Typography variant="h6" gutterBottom>
+                        Samsung Pay Verification
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                        Authenticate your ${totalAmount.toFixed(2)} payment using Samsung Knox security
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                        <LockIcon sx={{ color: '#1428a0' }} />
+                        <Typography variant="body2" sx={{ color: '#1428a0' }}>
+                          Samsung Knox Secured
+                        </Typography>
+                      </Box>
+                    </>
+                  )}
+                </Paper>
+                
+                <Alert severity="info" sx={{ mt: 2 }}>
+                  <Typography variant="body2">
+                    Your payment information is encrypted and processed securely through {selectedMethod === 'applepay' ? 'Apple Pay' : selectedMethod === 'googlepay' ? 'Google Pay' : 'Samsung Pay'}. 
+                    No card details are stored on this device.
+                  </Typography>
+                </Alert>
               </Box>
             </Collapse>
 
@@ -581,13 +722,41 @@ Your tickets will be available after payment confirmation.`);
           </CardContent>
         </Card>
 
-        {/* Security Notice */}
-        <Alert severity="info" icon={<SecurityIcon />} sx={{ borderRadius: 2 }}>
-          <Typography variant="body2">
-            <strong>Secure Payment:</strong> This is a demo application. All payment information is simulated for educational purposes only. 
-            Check paymentInformation.md for test credentials.
-          </Typography>
-        </Alert>
+        {/* Security and Compliance Information */}
+        <Stack spacing={2}>
+          <Paper elevation={1} sx={{ p: 3, borderRadius: 2, bgcolor: '#f8fffe', border: '1px solid #4caf50' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <LockIcon sx={{ color: '#4caf50', mr: 1 }} />
+              <Typography variant="h6" sx={{ color: '#4caf50', fontWeight: 'bold' }}>
+                PCI DSS Compliant & SSL Secured
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: 2 }}>
+              <Box sx={{ textAlign: 'center' }}>
+                <SecurityIcon sx={{ fontSize: 30, color: '#4caf50', mb: 1 }} />
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>256-bit SSL</Typography>
+                <Typography variant="caption" color="text.secondary">Bank-level encryption</Typography>
+              </Box>
+              <Box sx={{ textAlign: 'center' }}>
+                <CheckCircleIcon sx={{ fontSize: 30, color: '#4caf50', mb: 1 }} />
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>PCI Compliant</Typography>
+                <Typography variant="caption" color="text.secondary">Industry standard</Typography>
+              </Box>
+              <Box sx={{ textAlign: 'center' }}>
+                <LockIcon sx={{ fontSize: 30, color: '#4caf50', mb: 1 }} />
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>Secure Tokens</Typography>
+                <Typography variant="caption" color="text.secondary">No data stored</Typography>
+              </Box>
+            </Box>
+          </Paper>
+          
+          <Alert severity="info" icon={<SecurityIcon />} sx={{ borderRadius: 2 }}>
+            <Typography variant="body2">
+              <strong>Demo Application:</strong> This is a demonstration for educational purposes. All payments are simulated. 
+              In production, real payment gateways would process transactions securely.
+            </Typography>
+          </Alert>
+        </Stack>
 
         {/* Action Buttons */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, justifyContent: 'center' }}>
@@ -629,7 +798,13 @@ Your tickets will be available after payment confirmation.`);
             {loading 
               ? 'Processing...' 
               : selectedMethod === 'bankwire' 
-                ? 'I Have Made the Payment' 
+                ? 'I Have Made the Payment'
+                : selectedMethod === 'applepay'
+                  ? 'Pay with Touch ID'
+                : selectedMethod === 'googlepay'
+                  ? 'Pay with Google Pay'
+                : selectedMethod === 'samsungpay'
+                  ? 'Pay with Samsung Pay'
                 : `Pay $${totalAmount.toFixed(2)}`
             }
           </Button>
