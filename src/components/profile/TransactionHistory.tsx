@@ -577,7 +577,10 @@ const TransactionHistory: React.FC = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                           <DateRangeIcon sx={{ color: '#6a5acd', mr: 1, fontSize: 18 }} />
                           <Typography variant="body2">
-                            <strong>Event Date:</strong> {formatDate(transaction.eventDate)} at {transaction.eventTime}
+                            <strong>Event Date:</strong> {transaction.category === 'movies' && transaction.selectedDate && transaction.selectedTime
+                              ? `${formatDate(transaction.selectedDate)} at ${transaction.selectedTime}`
+                              : `${formatDate(transaction.eventDate)} at ${transaction.eventTime}`
+                            }
                           </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>

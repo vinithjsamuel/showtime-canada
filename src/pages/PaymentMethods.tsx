@@ -97,13 +97,19 @@ const PaymentMethods: React.FC = () => {
         : undefined;
       
       // Store booking details in session storage for confirmation page
+      // Get selected date and time for movie events (for confirmation page)
+      const selectedMovieDate = sessionStorage.getItem(`selectedMovieDate_${event.id}`);
+      const selectedMovieTime = sessionStorage.getItem(`selectedMovieTime_${event.id}`);
+      
       const bookingDetails = {
         bookingId,
         paymentMethod: selectedMethod,
         totalAmount,
         selectedSeats,
         timestamp: new Date().toISOString(),
-        transactionId
+        transactionId,
+        selectedDate: selectedMovieDate || undefined,
+        selectedTime: selectedMovieTime || undefined
       };
       sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
 
@@ -117,6 +123,10 @@ const PaymentMethods: React.FC = () => {
       // Save ticket to persistent storage if user is logged in
       if (user && event) {
         try {
+          // Get selected date and time for movie events
+          const selectedMovieDate = sessionStorage.getItem(`selectedMovieDate_${event.id}`);
+          const selectedMovieTime = sessionStorage.getItem(`selectedMovieTime_${event.id}`);
+          
           await saveTicket({
             userId: user.id,
             eventId: event.id,
@@ -126,8 +136,10 @@ const PaymentMethods: React.FC = () => {
             eventImage: event.image,
             venue: event.venue,
             location: event.location,
-            date: event.date,
-            time: event.time,
+            date: event.dateList ? event.dateList[0] : event.date, // Use first date for non-movie events or fallback
+            time: event.timeList ? event.timeList[0] : event.time, // Use first time for non-movie events or fallback
+            selectedDate: selectedMovieDate || undefined, // Only for movie events
+            selectedTime: selectedMovieTime || undefined, // Only for movie events
             selectedSeats,
             totalAmount,
             paymentMethod: selectedMethod,
@@ -144,6 +156,12 @@ const PaymentMethods: React.FC = () => {
       
       // Clear selected seats from session storage now that they're booked
       sessionStorage.removeItem('selectedSeats');
+      
+      // Clear movie-specific session storage if this is a movie event
+      if (event.category === 'movies') {
+        sessionStorage.removeItem(`selectedMovieDate_${id}`);
+        sessionStorage.removeItem(`selectedMovieTime_${id}`);
+      }
       
       // Navigate to confirmation page
       navigate(`/booking/confirmation/${id}`);

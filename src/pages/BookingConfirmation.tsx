@@ -24,18 +24,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import { getUpdatedEvent } from '../utils/fileUpdater';
 
-interface Event {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  location: string;
-  venue: string;
-  date: string;
-  time: string;
-  price: number;
-  image: string;
-}
+
 
 interface BookingDetails {
   bookingId: string;
@@ -44,12 +33,14 @@ interface BookingDetails {
   selectedSeats: string[];
   timestamp: string;
   transactionId?: string;
+  selectedDate?: string;
+  selectedTime?: string;
 }
 
 const BookingConfirmation: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [event, setEvent] = useState<Event | null>(null);
+  const [event, setEvent] = useState<any>(null);
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -191,7 +182,12 @@ const BookingConfirmation: React.FC = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <AccessTimeIcon sx={{ mr: 1, color: '#666' }} />
                   <Typography variant="body2">
-                    {formatDate(event.date)} at {event.time}
+                    {(() => {
+                      if (event.category === 'movies' && bookingDetails?.selectedDate && bookingDetails?.selectedTime) {
+                        return `${formatDate(bookingDetails.selectedDate)} at ${bookingDetails.selectedTime}`;
+                      }
+                      return event.date && event.time ? `${formatDate(event.date)} at ${event.time}` : 'Date TBA';
+                    })()}
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>

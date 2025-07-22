@@ -29,8 +29,8 @@ const TicketTemplate = forwardRef<HTMLDivElement, TicketTemplateProps>(
             bookingId: ticket.bookingId,
             userId: ticket.userId,
             eventTitle: ticket.eventTitle,
-            date: ticket.date,
-            time: ticket.time,
+            date: ticket.category === 'movies' && ticket.selectedDate ? ticket.selectedDate : ticket.date,
+            time: ticket.category === 'movies' && ticket.selectedTime ? ticket.selectedTime : ticket.time,
             seats: ticket.selectedSeats,
             venue: ticket.venue
           });
@@ -127,7 +127,10 @@ const TicketTemplate = forwardRef<HTMLDivElement, TicketTemplateProps>(
                   📅 EVENT DATE & TIME
                 </Typography>
                 <Typography variant={isDownloadVersion ? "h6" : "body1"} sx={{ fontWeight: 'bold' }}>
-                  {formatDate(ticket.date)} at {ticket.time}
+                  {ticket.category === 'movies' && ticket.selectedDate && ticket.selectedTime
+                    ? `${formatDate(ticket.selectedDate)} at ${ticket.selectedTime}`
+                    : `${formatDate(ticket.date)} at ${ticket.time}`
+                  }
                 </Typography>
               </Box>
 

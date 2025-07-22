@@ -442,7 +442,10 @@ const MyTickets: React.FC = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <AccessTimeIcon sx={{ color: '#666', fontSize: 20 }} />
                           <Typography variant="body2">
-                            {formatDate(ticket.date)} at {ticket.time}
+                            {ticket.category === 'movies' && ticket.selectedDate && ticket.selectedTime
+                              ? `${formatDate(ticket.selectedDate)} at ${ticket.selectedTime}`
+                              : `${formatDate(ticket.date)} at ${ticket.time}`
+                            }
                           </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

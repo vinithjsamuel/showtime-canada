@@ -16,6 +16,8 @@ export interface UserTicket {
   location: string;
   date: string;
   time: string;
+  selectedDate?: string; // For movie events with multiple dates
+  selectedTime?: string; // For movie events with multiple times
   selectedSeats: string[];
   totalAmount: number;
   paymentMethod: string;

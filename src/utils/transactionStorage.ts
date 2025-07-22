@@ -11,6 +11,8 @@ export interface Transaction {
   location: string;
   eventDate: string;
   eventTime: string;
+  selectedDate?: string; // For movie events with multiple dates
+  selectedTime?: string; // For movie events with multiple times
   purchaseDate: string;
   totalAmount: number;
   paymentMethod: string;
@@ -45,6 +47,8 @@ const ticketToTransaction = (ticket: UserTicket): Transaction => {
     location: ticket.location,
     eventDate: ticket.date,
     eventTime: ticket.time,
+    selectedDate: ticket.selectedDate,
+    selectedTime: ticket.selectedTime,
     purchaseDate: ticket.bookingDate,
     totalAmount: ticket.totalAmount,
     paymentMethod: ticket.paymentMethod,

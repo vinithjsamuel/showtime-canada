@@ -12,12 +12,18 @@ import {
   Rating,
   CircularProgress,
   useMediaQuery,
-  useTheme
+  useTheme,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Alert
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PersonIcon from '@mui/icons-material/Person';
 import TheatersIcon from '@mui/icons-material/Theaters';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import eventsData from '../data/events.json';
 
 const MovieDetail: React.FC = () => {
@@ -27,20 +33,75 @@ const MovieDetail: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [loading, setLoading] = useState(true);
   const [movie, setMovie] = useState<any>(null);
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedTime, setSelectedTime] = useState<string>('');
 
   useEffect(() => {
+    // Clear any previous movie session selections when switching movies
+    // Clear all movie-specific selections
+    Object.keys(sessionStorage).forEach(key => {
+      if (key.startsWith('selectedMovieDate_') || key.startsWith('selectedMovieTime_')) {
+        sessionStorage.removeItem(key);
+      }
+    });
+    
+    // Reset state
+    setSelectedDate('');
+    setSelectedTime('');
+    setMovie(null);
+    setLoading(true);
+    
     // Simulate API call to fetch movie
     const timer = setTimeout(() => {
-      const moviesData = eventsData.events.filter(event => event.category === 'movies');
-      const foundMovie = moviesData.find((m: any) => m.id === Number(id));
+      const foundMovie = eventsData.events.find((event: any) => 
+        event.id === Number(id) && event.category === 'movies'
+      );
       if (foundMovie) {
         setMovie(foundMovie);
+        // Set default date and time
+        if (foundMovie.dateList && foundMovie.dateList.length > 0) {
+          setSelectedDate(foundMovie.dateList[0]);
+        }
+        if (foundMovie.timeList && foundMovie.timeList.length > 0) {
+          setSelectedTime(foundMovie.timeList[0]);
+        }
       }
       setLoading(false);
     }, 500);
 
     return () => clearTimeout(timer);
   }, [id]);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-CA', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const formatTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+  };
+
+  const handleBookTickets = () => {
+    if (!selectedDate || !selectedTime) {
+      alert('Please select both date and showtime before booking.');
+      return;
+    }
+
+    // Store selected date and time in session storage for the booking process (movie-specific)
+    sessionStorage.setItem(`selectedMovieDate_${id}`, selectedDate);
+    sessionStorage.setItem(`selectedMovieTime_${id}`, selectedTime);
+    
+    // Navigate to event detail with the movie ID
+    navigate(`/events/${id}`);
+  };
 
   if (loading) {
     return (
@@ -77,17 +138,8 @@ const MovieDetail: React.FC = () => {
     );
   }
 
-  // Generate fake showtimes
-  const generateShowtimes = () => {
-    const times = ['10:30 AM', '1:15 PM', '4:00 PM', '6:45 PM', '9:30 PM'];
-    return times;
-  };
-
-  const showtimes = generateShowtimes();
-
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-
       <Paper
         elevation={3}
         sx={{
@@ -134,7 +186,7 @@ const MovieDetail: React.FC = () => {
                 />
               </Stack>
 
-              <Rating value={3.5} readOnly precision={0.5} sx={{ mb: 2 }} />
+              <Rating value={movie.userRating || 3.5} readOnly precision={0.1} sx={{ mb: 2 }} />
 
               <Typography variant="body1" paragraph>
                 {movie.description}
@@ -161,53 +213,89 @@ const MovieDetail: React.FC = () => {
                     Director: {movie.director}
                   </Typography>
                 </Box>
+
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <LocationOnIcon sx={{ color: '#6a5acd', mr: 1 }} />
+                  <Typography variant="body1">
+                    Location: {movie.venue}, {movie.location}
+                  </Typography>
+                </Box>
               </Stack>
 
               <Divider sx={{ my: 3 }} />
 
+              {/* Date and Time Selection */}
               <Box>
                 <Typography variant="h6" gutterBottom sx={{ color: '#6a5acd' }}>
-                  Today's Showtimes in Canada
+                  Select Date & Showtime
                 </Typography>
 
-                <Stack
-                  direction={{ xs: 'column', sm: 'row' }}
-                  spacing={2}
-                  flexWrap="wrap"
-                  sx={{ mb: 3 }}
-                >
-                  {showtimes.map((time, index) => (
-                    <Button
-                      key={index}
-                      variant="outlined"
-                      sx={{
-                        color: '#6a5acd',
-                        borderColor: '#6a5acd',
-                        '&:hover': {
-                          borderColor: '#5b4cbb',
-                          bgcolor: 'rgba(106, 90, 205, 0.04)'
-                        }
-                      }}
+                <Stack spacing={2} sx={{ mb: 3 }}>
+                  {/* Date Selection */}
+                  <FormControl fullWidth>
+                    <InputLabel>Select Date</InputLabel>
+                    <Select
+                      value={selectedDate}
+                      label="Select Date"
+                      onChange={(e) => setSelectedDate(e.target.value)}
                     >
-                      {time}
-                    </Button>
-                  ))}
+                      {movie.dateList?.map((date: string) => (
+                        <MenuItem key={date} value={date}>
+                          {formatDate(date)}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {/* Time Selection */}
+                  <FormControl fullWidth>
+                    <InputLabel>Select Showtime</InputLabel>
+                    <Select
+                      value={selectedTime}
+                      label="Select Showtime"
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                      disabled={!selectedDate}
+                    >
+                      {movie.timeList?.map((time: string) => (
+                        <MenuItem key={time} value={time}>
+                          {formatTime(time)}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Stack>
+
+                {/* Selected Session Info */}
+                {selectedDate && selectedTime && (
+                  <Alert severity="info" sx={{ mb: 3 }}>
+                    <Typography variant="body2">
+                      <strong>Selected Session:</strong> {formatDate(selectedDate)} at {formatTime(selectedTime)}
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>Price:</strong> ${movie.price} per ticket
+                    </Typography>
+                  </Alert>
+                )}
 
                 <Button
                   variant="contained"
                   startIcon={<TheatersIcon />}
                   fullWidth={isMobile}
+                  onClick={handleBookTickets}
+                  disabled={!selectedDate || !selectedTime}
                   sx={{
                     mt: 2,
                     bgcolor: '#6a5acd',
                     '&:hover': {
                       bgcolor: '#5b4cbb'
                     },
+                    '&:disabled': {
+                      bgcolor: '#ccc'
+                    },
                     px: 4
                   }}
                 >
-                  Book Tickets
+                  Book Tickets - ${movie.price}
                 </Button>
               </Box>
             </Box>

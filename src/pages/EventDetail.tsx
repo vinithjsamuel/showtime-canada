@@ -13,7 +13,8 @@ import {
   useMediaQuery,
   useTheme,
   Rating,
-  Avatar
+  Avatar,
+  Alert
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -32,6 +33,8 @@ const EventDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [event, setEvent] = useState<any>(null);
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [selectedMovieDate, setSelectedMovieDate] = useState<string>('');
+  const [selectedMovieTime, setSelectedMovieTime] = useState<string>('');
 
   useEffect(() => {
     // Simulate API call to fetch event
@@ -39,12 +42,52 @@ const EventDetail: React.FC = () => {
       const foundEvent = getUpdatedEvent(Number(id));
       if (foundEvent) {
         setEvent(foundEvent);
+        
+        // For movie events, get selected date and time from session storage
+        if (foundEvent.category === 'movies') {
+          const savedDate = sessionStorage.getItem(`selectedMovieDate_${id}`);
+          const savedTime = sessionStorage.getItem(`selectedMovieTime_${id}`);
+          
+          if (savedDate && savedTime) {
+            setSelectedMovieDate(savedDate);
+            setSelectedMovieTime(savedTime);
+          } else {
+            // If no session data, redirect back to movie detail for selection
+            navigate(`/movies/${id}`);
+            return;
+          }
+        }
       }
       setLoading(false);
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [id]);
+  }, [id, navigate]);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-CA', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const formatTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+  };
+
+  // Get seating data based on event type
+  const getSeatingData = () => {
+    if (event.category === 'movies' && selectedMovieDate && selectedMovieTime) {
+      return event.seatingByDateTime?.[selectedMovieDate]?.[selectedMovieTime];
+    }
+    return event.seating;
+  };
 
   if (loading) {
     return (
@@ -82,16 +125,7 @@ const EventDetail: React.FC = () => {
   }
 
   const categoryInfo = eventCategoriesData.categories.find(cat => cat.id === event.category);
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-CA', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
+  const seatingData = getSeatingData();
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -148,10 +182,14 @@ const EventDetail: React.FC = () => {
               </Typography>
 
               <Stack spacing={2} sx={{ mt: 3 }}>
+                {/* Date and Time Display */}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <CalendarTodayIcon sx={{ color: '#6a5acd', mr: 1 }} />
                   <Typography variant="body1">
-                    {formatDate(event.date)} at {event.time}
+                    {event.category === 'movies' && selectedMovieDate && selectedMovieTime
+                      ? `${formatDate(selectedMovieDate)} at ${formatTime(selectedMovieTime)}`
+                      : `${formatDate(event.date)} at ${event.time}`
+                    }
                   </Typography>
                 </Box>
 
@@ -200,13 +238,29 @@ const EventDetail: React.FC = () => {
                 )}
               </Stack>
 
+              {/* Movie Session Info Alert */}
+              {event.category === 'movies' && selectedMovieDate && selectedMovieTime && (
+                <Alert severity="info" sx={{ mt: 2, mb: 3 }}>
+                  <Typography variant="body2">
+                    <strong>Selected Session:</strong> {formatDate(selectedMovieDate)} at {formatTime(selectedMovieTime)}
+                  </Typography>
+                  <Button
+                    size="small"
+                    onClick={() => navigate(`/movies/${id}`)}
+                    sx={{ mt: 1, color: '#6a5acd' }}
+                  >
+                    Change Session
+                  </Button>
+                </Alert>
+              )}
+
               <Divider sx={{ my: 3 }} />
 
               {/* Seating Layout Section */}
-              {event.seating && (
+              {seatingData && (
                 <Box sx={{ mb: 4 }}>
                   <SeatingLayout 
-                    seating={event.seating}
+                    seating={seatingData}
                     eventId={event.id}
                     venueType={
                       event.category === 'movies' ? 'cinema' :

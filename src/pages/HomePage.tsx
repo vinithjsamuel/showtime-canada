@@ -207,7 +207,7 @@ const HomePage: React.FC = () => {
                   borderRadius: 2
                 }}
               >
-                <CardActionArea onClick={() => navigate(`/events/${event.id}`)}>
+                <CardActionArea onClick={() => navigate(event.category === 'movies' ? `/movies/${event.id}` : `/events/${event.id}`)}>
                   <CardMedia
                     component="img"
                     height="300"
@@ -223,10 +223,20 @@ const HomePage: React.FC = () => {
                       {categoryInfo?.name} • {event.location}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                      {new Date(event.date).toLocaleDateString('en-CA', { 
-                        month: 'short', 
-                        day: 'numeric' 
-                      })} • ${event.price}
+                      {(() => {
+                        if (event.category === 'movies' && event.dateList && event.dateList.length > 0) {
+                          return `${new Date(event.dateList[0]).toLocaleDateString('en-CA', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })} (+ ${event.dateList.length - 1} more) • $${event.price}`;
+                        }
+                        return event.date 
+                          ? `${new Date(event.date!).toLocaleDateString('en-CA', { 
+                              month: 'short', 
+                              day: 'numeric' 
+                            })} • $${event.price}`
+                          : `$${event.price}`;
+                      })()}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       {event.description.substring(0, 100)}...

@@ -39,8 +39,10 @@ interface Event {
   category: string;
   location: string;
   venue: string;
-  date: string;
-  time: string;
+  date?: string;
+  time?: string;
+  dateList?: string[];
+  timeList?: string[];
   price: number;
   image: string;
   featured: boolean;
@@ -69,7 +71,7 @@ const Events: React.FC = () => {
   const [toTime, setToTime] = useState<string>('');
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
-  const [events] = useState<Event[]>(eventsData.events);
+  const [events] = useState<any[]>(eventsData.events);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [isLocationLoading, setIsLocationLoading] = useState(true);
 
@@ -217,16 +219,33 @@ const Events: React.FC = () => {
     const matchesLocation = !selectedLocation || selectedLocation === 'all' || event.location === selectedLocation;
     const matchesGenre = !selectedGenre || (event.category === 'movies' && event.genre?.includes(selectedGenre));
     const matchesVenues = selectedVenues.length === 0 || selectedVenues.includes(event.venue);
-    const matchesDate = !selectedDate || event.date === selectedDate;
     
-    // Time range filtering
+    // Date filtering - handle both single date and dateList for movies
+    const matchesDate = () => {
+      if (!selectedDate) return true;
+      
+      if (event.category === 'movies' && event.dateList) {
+        return event.dateList.includes(selectedDate);
+      }
+      
+      return event.date === selectedDate;
+    };
+    
+    // Time range filtering - handle both single time and timeList for movies
     const matchesTimeRange = () => {
       if (!fromTime && !toTime) return true;
       
-      const eventTimeMinutes = timeToMinutes(event.time);
       const fromTimeMinutes = fromTime ? timeToMinutes(fromTime) : 0;
       const toTimeMinutes = toTime ? timeToMinutes(toTime) : 24 * 60;
       
+      if (event.category === 'movies' && event.timeList) {
+        return event.timeList.some((time: string) => {
+          const eventTimeMinutes = timeToMinutes(time);
+          return eventTimeMinutes >= fromTimeMinutes && eventTimeMinutes <= toTimeMinutes;
+        });
+      }
+      
+      const eventTimeMinutes = timeToMinutes(event.time);
       return eventTimeMinutes >= fromTimeMinutes && eventTimeMinutes <= toTimeMinutes;
     };
 
@@ -247,7 +266,7 @@ const Events: React.FC = () => {
       event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.venue.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesDate && matchesTimeRange() && matchesPriceRange() && matchesSearch;
+    return matchesCategory && matchesLocation && matchesGenre && matchesVenues && matchesDate() && matchesTimeRange() && matchesPriceRange() && matchesSearch;
   });
 
   const handleBackToCategories = () => {
@@ -667,7 +686,7 @@ const Events: React.FC = () => {
               }}
             >
               <CardActionArea 
-                onClick={() => navigate(`/events/${event.id}`)}
+                onClick={() => navigate(event.category === 'movies' ? `/movies/${event.id}` : `/events/${event.id}`)}
                 sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
               >
                 <CardMedia
@@ -706,7 +725,12 @@ const Events: React.FC = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <AccessTime sx={{ fontSize: 16, color: 'text.secondary', mr: 1 }} />
                       <Typography variant="body2" color="text.secondary">
-                        {formatDate(event.date)} at {event.time}
+                        {event.category === 'movies' && event.dateList && event.timeList
+                          ? `${event.dateList.length} dates, ${event.timeList.length} showtimes`
+                          : event.date && event.time 
+                            ? `${formatDate(event.date)} at ${event.time}`
+                            : 'Schedule TBA'
+                        }
                       </Typography>
                     </Box>
                     
