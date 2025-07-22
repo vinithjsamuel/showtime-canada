@@ -109,7 +109,7 @@ const Events: React.FC = () => {
         localStorage.setItem('selectedEventLocation', userLocation);
       }
     }
-  }, [categoryId, searchParams]);
+  }, [categoryId, searchParams, user?.location]);
 
   // Set user location as default only once when everything is loaded
   useEffect(() => {
@@ -136,7 +136,7 @@ const Events: React.FC = () => {
       setHasInitialized(true);
       setIsLocationLoading(false);
     }
-  }, [user?.location, hasInitialized, selectedLocation]);
+  }, [user?.location, hasInitialized, selectedLocation, searchParams]);
 
   // Clear filters when navigating to plain /events, then set default location
   useEffect(() => {

@@ -11,18 +11,11 @@ import {
   Card,
   CardContent,
   Chip,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   RadioGroup,
   FormControlLabel,
   Radio,
   CircularProgress,
   Alert,
-  useMediaQuery,
-  useTheme,
   Collapse
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -41,53 +34,19 @@ import { useAuth } from '../contexts/AuthContext';
 import { markSeatsAsBooked } from '../utils/seatBookingManager';
 import { markSeatsAsBookedInData } from '../utils/fileUpdater';
 
-interface PaymentFormData {
-  // Credit Card
-  cardNumber: string;
-  expiryMonth: string;
-  expiryYear: string;
-  cvv: string;
-  cardName: string;
-  
-  // PayPal
-  paypalEmail: string;
-  paypalPassword: string;
-  
-  // Bank Wire
-  bankName: string;
-  accountNumber: string;
-  transitNumber: string;
-  institutionNumber: string;
-  accountHolder: string;
-}
+
 
 const PaymentMethods: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [event, setEvent] = useState<any>(null);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [selectedMethod, setSelectedMethod] = useState<string>('creditcard');
   const [deviceSupportsDigitalWallet, setDeviceSupportsDigitalWallet] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<PaymentFormData>({
-    cardNumber: '',
-    expiryMonth: '',
-    expiryYear: '',
-    cvv: '',
-    cardName: '',
-    paypalEmail: '',
-    paypalPassword: '',
-    bankName: '',
-    accountNumber: '',
-    transitNumber: '',
-    institutionNumber: '',
-    accountHolder: ''
-  });
-  const [errors, setErrors] = useState<Partial<PaymentFormData>>({});
+
 
   useEffect(() => {
     // Load event data
@@ -117,92 +76,11 @@ const PaymentMethods: React.FC = () => {
     }
   }, [id]);
 
-  const validateCreditCard = () => {
-    const newErrors: Partial<PaymentFormData> = {};
-    
-    if (!formData.cardNumber || formData.cardNumber.replace(/\s/g, '').length < 13) {
-      newErrors.cardNumber = 'Please enter a valid card number';
-    }
-    if (!formData.expiryMonth) {
-      newErrors.expiryMonth = 'Please select expiry month';
-    }
-    if (!formData.expiryYear) {
-      newErrors.expiryYear = 'Please select expiry year';
-    }
-    if (!formData.cvv || formData.cvv.length < 3) {
-      newErrors.cvv = 'Please enter a valid CVV';
-    }
-    if (!formData.cardName.trim()) {
-      newErrors.cardName = 'Please enter cardholder name';
-    }
-    
-    return newErrors;
-  };
 
-  const validatePayPal = () => {
-    const newErrors: Partial<PaymentFormData> = {};
-    
-    if (!formData.paypalEmail || !/\S+@\S+\.\S+/.test(formData.paypalEmail)) {
-      newErrors.paypalEmail = 'Please enter a valid email';
-    }
-    if (!formData.paypalPassword || formData.paypalPassword.length < 6) {
-      newErrors.paypalPassword = 'Please enter your PayPal password';
-    }
-    
-    return newErrors;
-  };
-
-  const validateBankWire = () => {
-    const newErrors: Partial<PaymentFormData> = {};
-    
-    if (!formData.bankName.trim()) {
-      newErrors.bankName = 'Please enter bank name';
-    }
-    if (!formData.accountNumber || formData.accountNumber.length < 7) {
-      newErrors.accountNumber = 'Please enter a valid account number';
-    }
-    if (!formData.transitNumber || formData.transitNumber.length !== 5) {
-      newErrors.transitNumber = 'Transit number must be 5 digits';
-    }
-    if (!formData.institutionNumber || formData.institutionNumber.length !== 3) {
-      newErrors.institutionNumber = 'Institution number must be 3 digits';
-    }
-    if (!formData.accountHolder.trim()) {
-      newErrors.accountHolder = 'Please enter account holder name';
-    }
-    
-    return newErrors;
-  };
 
   const handlePayment = async () => {
-    // Skip validation for placeholder payment methods
-    // Only validate if we have actual form fields (currently only digital wallets work)
-    let validationErrors: Partial<PaymentFormData> = {};
-    
-    // For now, skip validation for credit card, paypal, and bank wire
-    // since they use placeholder UI without actual form fields
-    if (['creditcard', 'paypal', 'bankwire'].includes(selectedMethod)) {
-      // No validation needed for placeholder methods
-      validationErrors = {};
-    } else {
-      // Keep validation for any future form implementations
-      switch (selectedMethod) {
-        case 'creditcard':
-          validationErrors = validateCreditCard();
-          break;
-        case 'paypal':
-          validationErrors = validatePayPal();
-          break;
-        case 'bankwire':
-          validationErrors = validateBankWire();
-          break;
-      }
-    }
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    // Skip validation for placeholder payment methods since they use placeholder UI
+    // No validation needed for current implementation
 
     setLoading(true);
     
