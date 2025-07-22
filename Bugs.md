@@ -1,1 +1,2 @@
-- Events page data & time is now hardcoded, an option to select date & time for the end user before seat selection.
+- Events page data & time is now hardcoded, an option to select date & time for the end user before seat selection. #DONE
+- Seat selections should differ based on date and time.
