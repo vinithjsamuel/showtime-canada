@@ -1,1 +1,1 @@
-- Date & Time selection is missing in events page #I don't understand this.
+- Events page data & time is now hardcoded, an option to select date & time for the end user before seat selection.
