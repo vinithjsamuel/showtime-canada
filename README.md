@@ -2,6 +2,10 @@
 
 ShowTime Canada is a modern movie browsing and booking platform designed for Canadian cinema enthusiasts. It provides an intuitive interface for users to discover movies, view details, and book tickets at various cinema locations across Canada. The application features a responsive design that works seamlessly across desktop and mobile devices.
 
+## Demo
+
+[https://showtimecanada.netlify.app/](https://showtimecanada.netlify.app/)
+
 ### Features
 - User Authentication (Login, Register, Password Recovery)
 - Movie Browsing with Search and Filter Functionality
